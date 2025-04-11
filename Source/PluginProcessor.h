@@ -60,7 +60,7 @@ public:
 
 private:
     //==============================================================================
-    SharedPluginState sharedState;
+    PluginStateMessageQueue stateMessageQueue;
     PluginState localState;
 
     JUCE_DECLARE_NON_COPYABLE_WITH_LEAK_DETECTOR (SuperModularAudioProcessor)

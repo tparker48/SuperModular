@@ -31,13 +31,44 @@
 #include <JuceHeader.h>
 
 
+enum PLUGIN_STATE_MESSAGE_OP_CODE {
+    ADD,
+    UPDATE,
+    DELETE
+};
+
+
+// The full state of a module
 class ModuleState {
 public:
     ValueTree state;
 
-    ModuleState(int id, String moduleType) : state("module") {
+    ModuleState() {}
+
+    ModuleState(int id, String moduleType, Rectangle<int> bounds, int numCvInputs=0, int numCvOutputs=0) : state("module") {
+        setBounds(bounds);
         state.setProperty("id", id, nullptr);
         state.setProperty("type", moduleType, nullptr);
+
+        // init cv ports
+        auto ins = ValueTree("cv_in");
+        for (int i = 0; i < numCvInputs; i++) {
+            auto cv = ValueTree(Identifier(std::to_string(i)));
+            cv.setProperty("module", -1, nullptr);
+            cv.setProperty("cv", -1, nullptr);
+            ins.appendChild(cv, nullptr);
+        }
+        state.appendChild(ins, nullptr);
+
+        // init cv ports
+        auto outs = ValueTree("cv_out");
+        for (int i = 0; i < numCvOutputs; i++) {
+            auto cv = ValueTree(Identifier(std::to_string(i)));
+            cv.setProperty("module", -1, nullptr);
+            cv.setProperty("cv", -1, nullptr);
+            ins.appendChild(cv, nullptr);
+        }
+        state.appendChild(outs, nullptr);
     }
 
     ModuleState(XmlElement& xml) {
@@ -47,110 +78,201 @@ public:
     XmlElement* toXml() {
         return state.createXml().release();
     }
-};
 
-class PatchCableState {
-public:
-    ValueTree state;
-
-    PatchCableState(int inputModuleId, int inputCVId, int outputModuleId, int outputCVId) : state("cable") {
-        setState(inputModuleId, inputCVId, outputModuleId, outputCVId);
+    int getId() const {
+        return state["id"];
     }
 
-    PatchCableState(XmlElement& xml) {
-        state = ValueTree::fromXml(xml);
+    void setBounds(Rectangle<int> bounds) {
+        state.setProperty("x", bounds.getX(), nullptr);
+        state.setProperty("y", bounds.getY(), nullptr);
+        state.setProperty("w", bounds.getWidth(), nullptr);
+        state.setProperty("h", bounds.getHeight(), nullptr);
     }
 
-    XmlElement* toXml() {
-        return state.createXml().release();
+    Rectangle<int> getBounds() {
+        return Rectangle<int>(state["x"], state["y"], state["w"], state["h"]);
+    }
+    std::pair<int, int> getInputCvConnection(int cvId) {
+        return getCvConnection(cvId, "cv_in");
+    }
+    std::pair<int, int> getOutputCvConnection(int cvId) {
+        return getCvConnection(cvId, "cv_out");
     }
 
-    void setState(int inputModuleId, int inputCVId, int outputModuleId, int outputCVId) {
-        state.setProperty("input.module", inputModuleId, nullptr);
-        state.setProperty("input.cv", inputCVId, nullptr);
-        state.setProperty("output.module", outputModuleId, nullptr);
-        state.setProperty("output.cv", outputCVId, nullptr);
+    void setInputCvConnection(int cvId, int otherModuleId, int otherCvId) {
+        setCvConnection(cvId, otherModuleId, otherCvId, "cv_in");
+    }
+    void setOutputCvConnection(int cvId, int otherModuleId, int otherCvId) {
+        setCvConnection(cvId, otherModuleId, otherCvId, "cv_out");
     }
 
 private:
+    std::pair<int, int> getCvConnection(int cvId, Identifier cvTagName) {
+        auto cvJacks = state.getChildWithName(cvTagName);
+        if (!cvJacks.isValid()) {
+            return { -1,-1 };
+        }
+
+        auto cvJack = cvJacks.getChildWithName(Identifier(std::to_string(cvId)));
+        if (!cvJack.isValid()) {
+            return { -1,-1 };
+        }
+        else {
+            return { cvJack["module"], cvJack["cv"] };
+        }
+    }
+    void setCvConnection(int cvId, int otherModuleId, int otherCvId, Identifier cvTagName) {
+        auto cvJacks = state.getChildWithName(cvTagName);
+        if (!cvJacks.isValid()) {
+            return;
+        }
+        auto cvJack = cvJacks.getChildWithName(Identifier(std::to_string(cvId)));
+        if (!cvJack.isValid()) {
+            return;
+        }
+
+        cvJack.setProperty("module", otherModuleId, nullptr);
+        cvJack.setProperty("cv", otherCvId, nullptr);
+    }
 };
 
+
+// The full state of the plugin, maintained on the processor side
 class PluginState {
 public:
     std::vector<ModuleState> moduleStates;
-    std::vector<PatchCableState> cableStates;
 
     PluginState() {}
 
     PluginState(XmlElement* xml) {
         auto modules = xml->getChildByName("modules");
-        auto cables = xml->getChildByName("cables");
 
         if (modules) {
             for (auto* element : modules->getChildIterator()) {
                 moduleStates.push_back(ModuleState(*element));
             }
         }
-        if (cables) {
-            for (auto* element : cables->getChildIterator()) {
-                cableStates.push_back(PatchCableState(*element));
-            }
-        }
     }
 
     XmlElement* toXml() {
         auto* xml = new XmlElement("SuperModularPluginState");
-
         auto modules = new XmlElement("modules");
         for (auto moduleState : moduleStates) {
             modules->addChildElement(moduleState.toXml());
         }
-
-        auto cables = new XmlElement("cables");
-        for (auto cableState : cableStates) {
-            cables->addChildElement(cableState.toXml());
-        }
-
         xml->addChildElement(modules);
-        xml->addChildElement(cables);
         return xml;
+    }
+
+    ModuleState* getModule(int id) {
+        auto module = std::find_if(moduleStates.begin(), moduleStates.end(), [id](ModuleState m) {return m.getId() == id; });
+        if (module == moduleStates.end()) {
+            return nullptr;
+        }
+        else {
+            return &(*module);
+        }
     }
 };
 
-class SharedPluginState {
+
+// Contains a list of changes to make
+class PluginStateUpdateMessage {
 public:
-    SharedPluginState() {
-        shareFlags = 0b00000000;
-        alreadyRead[0] = true;
-        alreadyRead[1] = true;
+    PLUGIN_STATE_MESSAGE_OP_CODE op;
+    ModuleState state;
+
+    PluginStateUpdateMessage(ModuleState& state, PLUGIN_STATE_MESSAGE_OP_CODE opCode) {
+        op = opCode;
+        this->state = state;
     }
 
-    void write(PluginState& pluginState) {
-        // write to the no-read state
+    void applyMessage(PluginState& pluginState) {
+        switch (op) {
+        case ADD:
+            pluginState.moduleStates.push_back(state);
+            break;
+        case UPDATE:
+            std::replace_if(
+                pluginState.moduleStates.begin(),
+                pluginState.moduleStates.end(),
+                [this](ModuleState other) { return state.getId() == other.getId(); },
+                state
+            );
+            break;
+        case DELETE:
+            std::remove_if(
+                pluginState.moduleStates.begin(),
+                pluginState.moduleStates.end(),
+                [this](ModuleState other) { return state.getId() == other.getId(); }
+            );
+            break;
+        }
+    }
+};
+
+
+// designed for message passing between threads, with emphasis on never locking up the reader
+// used to signal module/patch updates from UI to processor.
+class PluginStateMessageQueue {
+public:
+
+    void send_messages(std::vector<PluginStateUpdateMessage> messages) {
         auto writeIdx = getWriteIdx();
-        states[writeIdx] = pluginState;
-        alreadyRead[writeIdx] = false;
+
+        // push messages to the no-read buffer
+        messageBuffers[writeIdx].insert(
+            messageBuffers[writeIdx].end(), 
+            messages.begin(), 
+            messages.end());
 
         auto flagToWaitFor = writeIdx;
         auto flagToWrite = (~writeIdx) & 0b00000001;
         while (!shareFlags.compareAndSetBool(flagToWrite, flagToWaitFor)) {}
     }
 
-    void read(PluginState& pluginState) {
+    void send_message(PluginStateUpdateMessage message) {
+        std::vector<PluginStateUpdateMessage> messages;
+        messages.push_back(message);
+        send_messages(messages);
+    }
+
+    void recieve_messages(std::vector<PluginStateUpdateMessage> &messages) {
         startRead();
+
+        // load message from the read buffer and clear it
         auto readIdx = getReadIdx();
-        if (!alreadyRead[readIdx]) {
-            pluginState = states[readIdx];
-            alreadyRead[readIdx] = true;
-        }
+        messages = messageBuffers[readIdx];
+        messageBuffers[readIdx].clear();
+
         endRead();
     }
 
+    void writeFullState(PluginState& state) {
+        stateLock.lock();
+        this->state = state;
+        shouldReloadState = true;
+        stateLock.unlock();
+
+    }
+    void readFullState(PluginState& state) {
+        // call this on timer in GUI
+        stateLock.lock();
+        if (shouldReloadState) {
+            state = this->state;
+            shouldReloadState = false;
+        }
+        stateLock.unlock();
+    }
+
 private:
-    Atomic<char> shareFlags;
-    PluginState states[2];
-    bool alreadyRead[2];
-    int lastReadFlag = 0;
+    Atomic<char> shareFlags = 0b00000000;
+    std::vector<PluginStateUpdateMessage> messageBuffers[2];
+
+    std::mutex stateLock;
+    bool shouldReloadState = false;
+    PluginState state;
 
     void startRead() {
         shareFlags += 0b00000010;
@@ -166,42 +288,58 @@ private:
     }
 };
 
-class SharedPluginStateWriter {
+
+class PluginStateWriteHandler {
 public:
-    SharedPluginStateWriter(SharedPluginState* sharedStatePtr): sharedState(sharedStatePtr) {}
+    PluginStateWriteHandler(PluginStateMessageQueue* messageQueuePtr) : stateMessageQueue(messageQueuePtr) {}
 
-    void addPatchCable(int inputModuleId, int inputCVId, int outputModuleId, int outputCVId) {
-        localState.cableStates.push_back(PatchCableState(inputModuleId, inputCVId, outputModuleId, outputCVId));
-        updateSharedState();
+    void addModule(ModuleState newModule) {
+        localState.moduleStates.push_back(newModule);
+
+        std::vector<PluginStateUpdateMessage> messages({
+            PluginStateUpdateMessage(newModule, ADD)
+        });
+        
     }
 
-    void removePatchCable(int inputModuleId, int inputCVId, int outputModuleId, int outputCVId) {
-        std::remove(
-            localState.cableStates.begin(), 
-            localState.cableStates.end(), 
-            PatchCableState(inputModuleId, inputCVId, outputModuleId, outputCVId));
-        updateSharedState();
+    void addPatchCable(int inputModuleId, int inputCvId, int outputModuleId, int outputCvId) {
+        auto inputModule = localState.getModule(inputModuleId);
+        auto outputModule = localState.getModule(outputModuleId);
+
+        inputModule->setInputCvConnection(inputCvId, outputModuleId, outputCvId);
+        outputModule->setOutputCvConnection(outputCvId, inputModuleId, inputCvId);
+
+        // create messages with new states
+        std::vector<PluginStateUpdateMessage> messages({
+            PluginStateUpdateMessage(*inputModule, UPDATE),
+            PluginStateUpdateMessage(*outputModule, UPDATE)
+        });
+
+        stateMessageQueue->send_messages(messages);
+
     }
 
-    void addModule(ModuleState& module) {
-        localState.moduleStates.push_back(module);
-        updateSharedState();
-    }
+    void removePatchCable(int inputModuleId, int inputCvId, int outputModuleId, int outputCvId) {
+        auto inputModule = localState.getModule(inputModuleId);
+        auto outputModule = localState.getModule(outputModuleId);
 
-    void removeModule(int moduleId) {
-        std::remove_if(
-            localState.cableStates.begin(),
-            localState.cableStates.end(),
-            [moduleId](ModuleState m) { (int)m.state["id"] == moduleId; });
-;        updateSharedState();
+        inputModule->setInputCvConnection(inputCvId, -1, -1);
+        outputModule->setOutputCvConnection(outputCvId, -1, -1);
 
+        // create messages with new states
+        std::vector<PluginStateUpdateMessage> messages({
+            PluginStateUpdateMessage(*inputModule, UPDATE),
+            PluginStateUpdateMessage(*outputModule, UPDATE)
+        });
+
+        stateMessageQueue->send_messages(messages);
     }
 
 private:
-    SharedPluginState* sharedState = nullptr;
     PluginState localState;
+    PluginStateMessageQueue* stateMessageQueue;
+};
 
-    void updateSharedState() {
-        sharedState->write(localState);
-    }
+class PluginStateReadHandler {
+
 };

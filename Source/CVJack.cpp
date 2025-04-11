@@ -12,8 +12,8 @@
 #include "PatchCableManager.h"
 
 
-CVJack::CVJack(CVJackType type, int id, int parentId, PatchCableManager* cm, SharedPluginState* sharedStatePtr):
-        sharedState(sharedStatePtr) {
+CVJack::CVJack(CVJackType type, int id, int parentId, PatchCableManager* cm, PluginStateWriteHandler* stateWriterPtr):
+        stateWriter(stateWriterPtr) {
     cableManager = cm;
     jackId = id;
     moduleId = parentId;
@@ -58,8 +58,7 @@ void CVJack::mouseUp(const MouseEvent& e) {
         return;
     }
     if (source->getConnection() && 
-        target->getConnection() &&
-        source->getConnection() == target->getConnection()) {
+        source->getConnection() == target) {
         // input and output jacks are already connected
         return;
     }
@@ -73,12 +72,22 @@ void CVJack::mouseUp(const MouseEvent& e) {
         input = source;
         output = target;
     }
+    
+    // Update Shared State
+    if (input->connection) {
+        stateWriter->removePatchCable(input->getModuleId(), input->getId(), input->connection->getModuleId(), input->connection->getId());
+    }
+    if (output->connection) {
+        stateWriter->removePatchCable(output->connection->getModuleId(), output->connection->getId(), output->getModuleId(), output->getId());
+    }
+    stateWriter->addPatchCable(input->getModuleId(), input->getId(), output->getModuleId(), output->getId());
 
+    // Update UI state
     output->clearConnection();
     input->clearConnection();
     output->setConnection(input);
     input->setConnection(output);
-    auto cableState = PatchCableState(input->getModuleId(), input->getId(), output->getModuleId(), output->getId());
+
 
 }
 

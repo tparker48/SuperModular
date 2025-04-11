@@ -10,9 +10,8 @@
 #include "PluginEditor.h"
 
 //==============================================================================
-SuperModularAudioProcessorEditor::SuperModularAudioProcessorEditor (SuperModularAudioProcessor& p, SharedPluginState* sharedStatePtr)
-    : AudioProcessorEditor (&p), audioProcessor (p), sharedState(sharedStatePtr)
-{
+SuperModularAudioProcessorEditor::SuperModularAudioProcessorEditor (SuperModularAudioProcessor& p, PluginStateMessageQueue* messageQueuePtr)
+    : AudioProcessorEditor (&p), audioProcessor (p), pluginStateMessageQueue(messageQueuePtr), stateWriter(messageQueuePtr) {
     // Make sure that before the constructor has finished, you've set the
     // editor's size to whatever you need it to be.
     double ratio = double(hpPerRow) / (double(numRows) * 5.0);
@@ -124,10 +123,11 @@ void SuperModularAudioProcessorEditor::addNewModule() {
         ModuleBounds(0, 0, hpWidth * M::hp, moduleHeight));
 
     if (bounds.getX() != -1) {
-        localState.moduleStates.push_back(ModuleState(123, "TestModule"));
-        sharedState->write(localState);
+        auto module = ModuleState(nextModuleId, "TestModule", bounds, 1, 1);
+        stateWriter.addModule(module);
 
-        auto newModule = new M(nextModuleId++, &moduleGrid, &cableManager, sharedState);
+
+        auto newModule = new M(nextModuleId++, &moduleGrid, &cableManager, &stateWriter);
         newModule->setBounds(bounds);
         moduleGrid.placeModule(newModule->getId(), bounds);
         addAndMakeVisible(newModule);

@@ -29,7 +29,7 @@ public:
 class SuperModularAudioProcessorEditor  : public AudioProcessorEditor
 {
 public:
-    SuperModularAudioProcessorEditor (SuperModularAudioProcessor&, SharedPluginState* sharedStatePtr);
+    SuperModularAudioProcessorEditor (SuperModularAudioProcessor&, PluginStateMessageQueue* messageQueuePtr);
     ~SuperModularAudioProcessorEditor() override;
 
     //==============================================================================
@@ -45,8 +45,8 @@ private:
     ModuleGrid moduleGrid;
     PatchCableManager cableManager;
 
-    SharedPluginState* sharedState;
-    PluginState localState;
+    PluginStateMessageQueue* pluginStateMessageQueue;
+    PluginStateWriteHandler stateWriter;
 
     int hpPerRow = 20;
     int numRows = 3;

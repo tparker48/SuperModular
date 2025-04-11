@@ -43,7 +43,7 @@ class ModuleUIComponent : public Component {
 public:
     static const int hp = 1;
 
-    ModuleUIComponent(MODULE_ID id, ModuleGrid* mg, PatchCableManager* cm, SharedPluginState* sharedState) :
+    ModuleUIComponent(MODULE_ID id, ModuleGrid* mg, PatchCableManager* cm, PluginStateWriteHandler* stateWriter) :
         id(id), 
         moduleGrid(mg),
         moduleDragRules(mg),
@@ -91,10 +91,10 @@ class TestModule : public ModuleUIComponent {
 public:
     static const int hp = 4;
 
-    TestModule(int id, ModuleGrid* mg, PatchCableManager* cm, SharedPluginState* sharedState) : 
-        ModuleUIComponent(id, mg, cm, sharedState),
-        jack1(CVInput, 1, id, cm, sharedState), 
-        jack2(CVOutput, 2, id, cm, sharedState) {
+    TestModule(int id, ModuleGrid* mg, PatchCableManager* cm, PluginStateWriteHandler* stateWriter) : 
+        ModuleUIComponent(id, mg, cm, stateWriter),
+        jack1(CVInput, 1, id, cm, stateWriter),
+        jack2(CVOutput, 2, id, cm, stateWriter) {
         addAndMakeVisible(jack1);
         addAndMakeVisible(jack2);
     }
