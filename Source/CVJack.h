@@ -13,21 +13,26 @@
 #include <JuceHeader.h>
 
 #include "PatchCable.h"
+#include "PatchCableManager.h"
+#include "SharedComponentState.h"
 
 enum CVJackType {
     CVInput,
     CVOutput
 };
 
-class CVJack : public juce::Component {
+class CVJack : public Component {
 public:
-    CVJack(CVJackType type);
+    CVJack(CVJackType type, int id, int parentId, PatchCableManager* cm, SharedPluginState* sharedStatePtr);
+
+    int getId() { return jackId; }
+    int getModuleId() { return moduleId; }
 
     CVJackType getType() { return jackType; }
 
+
     bool isConnected() {
         return connection != nullptr;
-
     }
 
     CVJack* getConnection() {
@@ -54,14 +59,17 @@ public:
         connection = nullptr;
     }
 
-    void mouseDown(const juce::MouseEvent& e);
-    void mouseUp(const juce::MouseEvent& e);
-    void mouseDrag(const juce::MouseEvent& e);
-    juce::Line<float> getPatchLine();
-    void paint(juce::Graphics& g);
+    void mouseDown(const MouseEvent& e);
+    void mouseUp(const MouseEvent& e);
+    void mouseDrag(const MouseEvent& e);
+    Line<float> getPatchLine();
+    void paint(Graphics& g);
 
 private:
+    int jackId, moduleId;
     CVJackType jackType;
     CVJack* connection = nullptr;
+    PatchCableManager* cableManager;
     PatchCable cable;
+    SharedPluginState* sharedState;
 };

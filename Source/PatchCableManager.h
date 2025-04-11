@@ -13,28 +13,25 @@
 #include <JuceHeader.h>
 
 #include "PatchCable.h"
-#include "CVJack.h"
 
 class PatchCableManager {
 public:
-    JUCE_DECLARE_SINGLETON(PatchCableManager, true);
-
     PatchCableManager() {
-        liveDragCable.setColour(juce::Colour(0x88FFFFFF));
-        liveDragCable.setEndColour(juce::Colour(0xFFFFFFFF));
+        liveDragCable.setColour(Colour(0x88FFFFFF));
+        liveDragCable.setEndColour(Colour(0xFFFFFFFF));
         liveDragCable.setAsDraggerCable();
     }
-    ~PatchCableManager() { clearSingletonInstance(); }
+    ~PatchCableManager() {}
 
     bool isDraggingCable() {
         return dragSource != nullptr;
     }
 
-    CVJack* getDraggedCable() {
+    Component* getDraggedCable() {
         return dragSource;
     }
 
-    void setDraggedCable(CVJack* source) {
+    void setDraggedCable(Component* source) {
         if (dragSource == nullptr) {
             dragSource = source;
         }
@@ -45,7 +42,7 @@ public:
         liveDragCable.setBounds(-1, -1, -1, -1);
     }
 
-    void updateDraggedCablePosition(const juce::MouseEvent& e) {
+    void updateDraggedCablePosition(const MouseEvent& e) {
         if (dragSource != nullptr) {
             liveDragCable.setPoints(dragSource, e);
         }
@@ -54,6 +51,6 @@ public:
     PatchCable* getDragCable() { return &liveDragCable; }
 
 private:
-    CVJack* dragSource = nullptr;
+    Component* dragSource = nullptr;
     PatchCable liveDragCable;
 };

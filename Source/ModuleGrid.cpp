@@ -10,8 +10,6 @@
 
 #include "ModuleGrid.h"
 
-JUCE_IMPLEMENT_SINGLETON(ModuleGrid);
-
 void ModuleGrid::setRackDimensions(int rackCount, int moduleHeight, int hpSize, int hpPerRow) {
     numRacks = rackCount;
     rackHeight = moduleHeight;

@@ -18,14 +18,15 @@
 #include "ModuleGrid.h"
 
 
-class ModuleDragRules : public juce::ComponentBoundsConstrainer {
+class ModuleDragRules : public ComponentBoundsConstrainer {
 public:
+    ModuleDragRules(ModuleGrid* mg) : ComponentBoundsConstrainer(), moduleGrid(mg) {}
+
     void checkBounds(
-        juce::Rectangle< int >& bounds,
-        const juce::Rectangle< int >& previousBounds,
-        const juce::Rectangle< int >& limits,
+        Rectangle< int >& bounds,
+        const Rectangle< int >& previousBounds,
+        const Rectangle< int >& limits,
         bool sTop, bool sLeft, bool sBottom, bool sRight) {
-        auto moduleGrid = ModuleGrid::getInstance();
         ModuleBounds newBounds = moduleGrid->closestAvailablePosition(bounds);
         if (newBounds.getX() == -1) {
             bounds = previousBounds;
@@ -34,13 +35,21 @@ public:
             bounds = newBounds;
         }
     }
+private:
+    ModuleGrid* moduleGrid;
 };
 
-class Module : public juce::Component {
+class ModuleUIComponent : public Component {
 public:
     static const int hp = 1;
 
-    Module() : id(nextModuleId) { nextModuleId++;}
+    ModuleUIComponent(MODULE_ID id, ModuleGrid* mg, PatchCableManager* cm, SharedPluginState* sharedState) :
+        id(id), 
+        moduleGrid(mg),
+        moduleDragRules(mg),
+        cableManager(cm)
+    {}
+
     MODULE_ID getId() { return id; }
 
     void parentHierarchyChanged() {
@@ -62,39 +71,44 @@ public:
         }
     }
 
-    void mouseDown(const juce::MouseEvent& e);
-    void mouseUp(const juce::MouseEvent& e);
-    void mouseDrag(const juce::MouseEvent& e);
+    void mouseDown(const MouseEvent& e);
+    void mouseUp(const MouseEvent& e);
+    void mouseDrag(const MouseEvent& e);
 
     // Must implement per Module type
-    virtual void paint(juce::Graphics& g) = 0;
+    virtual void paint(Graphics& g) = 0;
     virtual void resized() = 0;
     
 private:
     MODULE_ID id = -1;
-    juce::ComponentDragger myDragger;
+    ModuleGrid* moduleGrid;
+    ComponentDragger myDragger;
     ModuleDragRules moduleDragRules;
+    PatchCableManager* cableManager;
 };
 
-class TestModule : public Module {
+class TestModule : public ModuleUIComponent {
 public:
     static const int hp = 4;
 
-    TestModule() : Module(), jack1(CVInput), jack2(CVOutput) {
+    TestModule(int id, ModuleGrid* mg, PatchCableManager* cm, SharedPluginState* sharedState) : 
+        ModuleUIComponent(id, mg, cm, sharedState),
+        jack1(CVInput, 1, id, cm, sharedState), 
+        jack2(CVOutput, 2, id, cm, sharedState) {
         addAndMakeVisible(jack1);
         addAndMakeVisible(jack2);
     }
 
-    void paint(juce::Graphics& g) override {
+    void paint(Graphics& g) override {
         switch (getId() % 3) {
         case 0:
-            g.setColour(juce::Colours::red);
+            g.setColour(Colours::red);
             break;
         case 1:
-            g.setColour(juce::Colours::blue);
+            g.setColour(Colours::blue);
             break;
         case 2:
-            g.setColour(juce::Colours::green);
+            g.setColour(Colours::green);
             break;
         }
         
@@ -108,26 +122,4 @@ public:
     
 private:
     CVJack jack1, jack2;
-};
-
-class TestModule2 : public TestModule {
-public:
-    TestModule2() : TestModule(), njack1(CVInput), njack2(CVOutput) {
-        addAndMakeVisible(njack1);
-        addAndMakeVisible(njack2);
-    }
-
-    void paint(juce::Graphics& g) override {
-        g.setColour(juce::Colours::cyan);
-        g.fillAll();
-    }
-
-    void resized() override {
-        TestModule::resized();
-        njack1.setBounds(10, getHeight()-10-25, 25, 25);
-        njack2.setBounds(getWidth() - 10 - 25, getHeight()-10-25, 25, 25);
-    }
-
-private:
-    CVJack njack1, njack2;
 };

@@ -10,37 +10,43 @@
 
 #include <JuceHeader.h>
 #include "PluginProcessor.h"
-#include "Module.h"
+#include "ModuleUIComponent.h"
 
 //==============================================================================
 /**
 */
 
-class OtherLookAndFeel : public juce::LookAndFeel_V4
+typedef ValueTreeState AudioProcessorValueTreeState;
+
+class OtherLookAndFeel : public LookAndFeel_V4
 {
 public:
     OtherLookAndFeel() {
-        setColour(juce::ResizableWindow::backgroundColourId, juce::Colour(0xff070707));
+        setColour(ResizableWindow::backgroundColourId, Colour(0xff070707));
     }
 };
 
-
-class SuperModularAudioProcessorEditor  : public juce::AudioProcessorEditor
+class SuperModularAudioProcessorEditor  : public AudioProcessorEditor
 {
 public:
-    SuperModularAudioProcessorEditor (SuperModularAudioProcessor&);
+    SuperModularAudioProcessorEditor (SuperModularAudioProcessor&, SharedPluginState* sharedStatePtr);
     ~SuperModularAudioProcessorEditor() override;
 
     //==============================================================================
-    void paint (juce::Graphics&) override;
+    void paint (Graphics&) override;
     void resized() override;
-    void mouseUp(const juce::MouseEvent& e) override;
+    void mouseUp(const MouseEvent& e) override;
 private:
     // This reference is provided as a quick way for your editor to
     // access the processor object that created it.
     SuperModularAudioProcessor& audioProcessor;
-
     OtherLookAndFeel customLookAndFeel;
+
+    ModuleGrid moduleGrid;
+    PatchCableManager cableManager;
+
+    SharedPluginState* sharedState;
+    PluginState localState;
 
     int hpPerRow = 20;
     int numRows = 3;

@@ -8,20 +8,19 @@
   ==============================================================================
 */
 
-#include "Module.h"
+#include "ModuleUIComponent.h"
 
-void Module::mouseDown(const juce::MouseEvent& e) {
+void ModuleUIComponent::mouseDown(const MouseEvent& e) {
     myDragger.startDraggingComponent(this, e);
-    auto moduleGrid = ModuleGrid::getInstance();
     moduleGrid->yankModule(id);
 }
 
-void Module::mouseUp(const juce::MouseEvent& e) {
+void ModuleUIComponent::mouseUp(const MouseEvent& e) {
     if (e.mods.isRightButtonDown()) {
         // right click
-        juce::PopupMenu m;
+        PopupMenu m;
         m.addItem(1, "delete");
-        m.showMenuAsync(juce::PopupMenu::Options(),
+        m.showMenuAsync(PopupMenu::Options(),
             [this](int result)
             {
                 if (result == 0)
@@ -30,7 +29,6 @@ void Module::mouseUp(const juce::MouseEvent& e) {
                 }
                 else if (result == 1)
                 {
-                    auto moduleGrid = ModuleGrid::getInstance();
                     moduleGrid->yankModule(getId());
 
                     // clear patch cable connections
@@ -50,13 +48,12 @@ void Module::mouseUp(const juce::MouseEvent& e) {
     }
     else {
         // left click
-        auto moduleGrid = ModuleGrid::getInstance();
         moduleGrid->placeModule(id, this->getBounds());
     }
     
 }
 
-void Module::mouseDrag(const juce::MouseEvent& e) {
+void ModuleUIComponent::mouseDrag(const MouseEvent& e) {
     myDragger.dragComponent(this, e, &moduleDragRules);
 
     for (auto child : getChildren()) {

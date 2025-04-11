@@ -12,7 +12,11 @@
 #include "PatchCableManager.h"
 
 
-CVJack::CVJack(CVJackType type) {
+CVJack::CVJack(CVJackType type, int id, int parentId, PatchCableManager* cm, SharedPluginState* sharedStatePtr):
+        sharedState(sharedStatePtr) {
+    cableManager = cm;
+    jackId = id;
+    moduleId = parentId;
     jackType = type;
     if (jackType == CVInput) {
         cable.setBounds(0, 0, 0, 0);
@@ -21,17 +25,14 @@ CVJack::CVJack(CVJackType type) {
     }
 }
 
-void CVJack::mouseDown(const juce::MouseEvent& e) {
-    auto cableManager = PatchCableManager::getInstance();
-
+void CVJack::mouseDown(const MouseEvent& e) {
     if (!cableManager->isDraggingCable()) {
         cableManager->setDraggedCable(this);
         return;
     }
 }
 
-void CVJack::mouseUp(const juce::MouseEvent& e) {
-    auto cableManager = PatchCableManager::getInstance();
+void CVJack::mouseUp(const MouseEvent& e) {
     cableManager->clearDraggedCable();
 
     CVJack* source = this;
@@ -42,15 +43,24 @@ void CVJack::mouseUp(const juce::MouseEvent& e) {
     auto event = e.getEventRelativeTo(editor);
     Component* componentUnderMouse = editor->getComponentAt(event.getPosition());
     CVJack* target = dynamic_cast<CVJack*>(componentUnderMouse);
+
     if (!target) {
+        // did not end drag on another CV jack
         return;
     }
-
     if (source == target) {
+        // started and ended on same CV jack
         clearConnection();
+        return;
     }
-
     if (source->getType() == target->getType()) {
+        // invalid CV jack connection (input to input) (output to output)
+        return;
+    }
+    if (source->getConnection() && 
+        target->getConnection() &&
+        source->getConnection() == target->getConnection()) {
+        // input and output jacks are already connected
         return;
     }
 
@@ -63,20 +73,22 @@ void CVJack::mouseUp(const juce::MouseEvent& e) {
         input = source;
         output = target;
     }
+
     output->clearConnection();
     input->clearConnection();
     output->setConnection(input);
     input->setConnection(output);
+    auto cableState = PatchCableState(input->getModuleId(), input->getId(), output->getModuleId(), output->getId());
+
 }
 
-void CVJack::mouseDrag(const juce::MouseEvent& e) {
-    auto cableManager = PatchCableManager::getInstance();
+void CVJack::mouseDrag(const MouseEvent& e) {
     cableManager->updateDraggedCablePosition(e);
 }
 
-juce::Line<float> CVJack::getPatchLine() {
+Line<float> CVJack::getPatchLine() {
     if (isConnected()) {
-        return juce::Line<float>(
+        return Line<float>(
             getScreenPosition().getX(),
             getScreenPosition().getY(),
             connection->getScreenPosition().getX(),
@@ -84,11 +96,11 @@ juce::Line<float> CVJack::getPatchLine() {
         );
     }
     else {
-        return juce::Line<float>(-1.0, -1.0, -1.0, -1.0);
+        return Line<float>(-1.0, -1.0, -1.0, -1.0);
     }
 }
 
-void CVJack::paint(juce::Graphics& g) {
+void CVJack::paint(Graphics& g) {
     float scale = 0.8;
     auto w = getWidth() * scale;
     auto h = getHeight() * scale;

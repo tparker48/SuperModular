@@ -10,8 +10,8 @@
 #include "PluginEditor.h"
 
 //==============================================================================
-SuperModularAudioProcessorEditor::SuperModularAudioProcessorEditor (SuperModularAudioProcessor& p)
-    : AudioProcessorEditor (&p), audioProcessor (p)
+SuperModularAudioProcessorEditor::SuperModularAudioProcessorEditor (SuperModularAudioProcessor& p, SharedPluginState* sharedStatePtr)
+    : AudioProcessorEditor (&p), audioProcessor (p), sharedState(sharedStatePtr)
 {
     // Make sure that before the constructor has finished, you've set the
     // editor's size to whatever you need it to be.
@@ -20,20 +20,21 @@ SuperModularAudioProcessorEditor::SuperModularAudioProcessorEditor (SuperModular
     setSize(size, size / ratio);
     setLookAndFeel(&customLookAndFeel);
 
-    auto cableManager = PatchCableManager::getInstance();
-    addAndMakeVisible(cableManager->getDragCable());
+    addAndMakeVisible(cableManager.getDragCable());
+
+    hpWidth = (float)getWidth() / (float)hpPerRow;
+    moduleHeight = (float)getHeight() / (float)numRows;
+
 }
 
 SuperModularAudioProcessorEditor::~SuperModularAudioProcessorEditor()
 {
     setLookAndFeel(nullptr);
-    PatchCableManager::deleteInstance();
-    ModuleGrid::deleteInstance();
-
+    
     // delete all leftover modules
-    std::vector<Module*> modules;
+    std::vector<ModuleUIComponent*> modules;
     for (auto child : getChildren()) {
-        Module* module = dynamic_cast<Module*>(child);
+        ModuleUIComponent* module = dynamic_cast<ModuleUIComponent*>(child);
         if (module) {
             modules.push_back(module);
         }
@@ -44,10 +45,10 @@ SuperModularAudioProcessorEditor::~SuperModularAudioProcessorEditor()
 }
 
 //==============================================================================
-void SuperModularAudioProcessorEditor::paint (juce::Graphics& g)
+void SuperModularAudioProcessorEditor::paint (Graphics& g)
 {
     // (Our component is opaque, so we must completely fill the background with a solid colour)
-    g.fillAll (getLookAndFeel().findColour(juce::ResizableWindow::backgroundColourId));
+    g.fillAll (getLookAndFeel().findColour(ResizableWindow::backgroundColourId));
 
 
     for (int i = 0; i < numRows+1; i++) {
@@ -55,12 +56,12 @@ void SuperModularAudioProcessorEditor::paint (juce::Graphics& g)
         int barH = getHeight() / 40;
         int barY = i * moduleHeight;
 
-        g.setColour(juce::Colour(0xff1f1f1f));
+        g.setColour(Colour(0xff1f1f1f));
         g.fillRect(0, barY, getWidth(), barH);
         g.fillRect(0, barY + moduleHeight - barH, getWidth(), barH);
 
         if (i < numRows) {
-            g.setColour(juce::Colour(0xff050505));
+            g.setColour(Colour(0xff050505));
             g.fillRect(0, barY - 1, getWidth(), 2);
         }
 
@@ -80,11 +81,10 @@ void SuperModularAudioProcessorEditor::resized()
     hpWidth = (float)getWidth() / (float)hpPerRow;
     moduleHeight = (float)getHeight() / (float)numRows;
 
-    auto mg = ModuleGrid::getInstance();
-    mg->setRackDimensions(numRows, moduleHeight, hpWidth, hpPerRow);
+    moduleGrid.setRackDimensions(numRows, moduleHeight, hpWidth, hpPerRow);
 }
 
-void SuperModularAudioProcessorEditor::mouseUp(const juce::MouseEvent& e) {
+void SuperModularAudioProcessorEditor::mouseUp(const MouseEvent& e) {
     if (e.mods.isRightButtonDown()) {
         showPopupMenu();
     } 
@@ -92,10 +92,11 @@ void SuperModularAudioProcessorEditor::mouseUp(const juce::MouseEvent& e) {
 
 void SuperModularAudioProcessorEditor::showPopupMenu() {
     // right click
-    juce::PopupMenu m;
+    PopupMenu m;
     m.addItem(1, "TestModule");
-    m.addItem(2, "TestModule2");
-    m.showMenuAsync(juce::PopupMenu::Options(),
+    m.addItem(2, "Increment comp state");
+    m.addItem(3, "Decrement comp state");
+    m.showMenuAsync(PopupMenu::Options(),
         [this](int result)
         {
             switch (result) {
@@ -103,7 +104,10 @@ void SuperModularAudioProcessorEditor::showPopupMenu() {
                 addNewModule<TestModule>();
                 break;
             case 2:
-                addNewModule<TestModule2>();
+
+                break;
+            case 3:
+
                 break;
             default:
                 break;
@@ -112,16 +116,20 @@ void SuperModularAudioProcessorEditor::showPopupMenu() {
 
 }
 
+static int nextModuleId = 0;
+
 template <typename M>
 void SuperModularAudioProcessorEditor::addNewModule() {
-    auto moduleGrid = ModuleGrid::getInstance();
-    auto bounds = moduleGrid->closestAvailablePosition(
+    auto bounds = moduleGrid.closestAvailablePosition(
         ModuleBounds(0, 0, hpWidth * M::hp, moduleHeight));
 
     if (bounds.getX() != -1) {
-        auto newModule = new M();
+        localState.moduleStates.push_back(ModuleState(123, "TestModule"));
+        sharedState->write(localState);
+
+        auto newModule = new M(nextModuleId++, &moduleGrid, &cableManager, sharedState);
         newModule->setBounds(bounds);
-        moduleGrid->placeModule(newModule->getId(), bounds);
+        moduleGrid.placeModule(newModule->getId(), bounds);
         addAndMakeVisible(newModule);
     }
 }

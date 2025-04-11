@@ -13,17 +13,13 @@
 #include <JuceHeader.h>
 
 
-typedef juce::Rectangle<int> ModuleBounds;
+typedef Rectangle<int> ModuleBounds;
 typedef int MODULE_ID;
-
-static MODULE_ID nextModuleId = 0;
 
 class ModuleGrid {
 public:
-    JUCE_DECLARE_SINGLETON(ModuleGrid, true);
-
     ModuleGrid() {}
-    ~ModuleGrid() { clearSingletonInstance(); }
+    ~ModuleGrid() {}
 
     void setRackDimensions(int rackCount, int moduleHeight, int hpSize, int hpPerRow);
     bool moduleIsPlaced(MODULE_ID id);
@@ -34,7 +30,7 @@ public:
 private:
     bool isOverlap(ModuleBounds bounds);
 
-    std::map<MODULE_ID, juce::Rectangle<int>> placedModules;
+    std::map<MODULE_ID, ModuleBounds> placedModules;
 
     int rackHeight = -1;
     int hpWidth = -1;
