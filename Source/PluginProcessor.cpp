@@ -144,9 +144,6 @@ void SuperModularAudioProcessor::processBlock (AudioBuffer<float>& buffer, MidiB
     std::vector<PluginStateUpdateMessage> messages;
     stateMessageQueue.recieve_messages(messages);
     for (auto message : messages) {
-        message.applyMessage(localState);
-
-        // update DSP state stuff accordingly
         int x;
         switch (message.op) {
         case ADD:

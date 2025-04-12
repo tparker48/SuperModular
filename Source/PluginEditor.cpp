@@ -29,7 +29,9 @@ SuperModularAudioProcessorEditor::SuperModularAudioProcessorEditor (SuperModular
 SuperModularAudioProcessorEditor::~SuperModularAudioProcessorEditor()
 {
     setLookAndFeel(nullptr);
-    
+  
+    stateWriter.saveStateToShared();
+
     // delete all leftover modules
     std::vector<ModuleUIComponent*> modules;
     for (auto child : getChildren()) {

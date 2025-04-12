@@ -45,6 +45,10 @@ public:
 
     ModuleState() {}
 
+    ModuleState(int id) {
+        state.setProperty("id", id, nullptr);
+    }
+
     ModuleState(int id, String moduleType, Rectangle<int> bounds, int numCvInputs=0, int numCvOutputs=0) : state("module") {
         setBounds(bounds);
         state.setProperty("id", id, nullptr);
@@ -174,6 +178,12 @@ public:
             return &(*module);
         }
     }
+    void removeModule(int id) {
+        std::remove_if(
+            moduleStates.begin(), 
+            moduleStates.end(), 
+            [id](ModuleState m) {return m.getId() == id; });
+    }
 };
 
 
@@ -291,7 +301,9 @@ private:
 
 class PluginStateWriteHandler {
 public:
-    PluginStateWriteHandler(PluginStateMessageQueue* messageQueuePtr) : stateMessageQueue(messageQueuePtr) {}
+    PluginStateWriteHandler(PluginStateMessageQueue* messageQueuePtr) : stateMessageQueue(messageQueuePtr) {
+        messageQueuePtr->readFullState(localState);
+    }
 
     void addModule(ModuleState newModule) {
         localState.moduleStates.push_back(newModule);
@@ -299,7 +311,27 @@ public:
         std::vector<PluginStateUpdateMessage> messages({
             PluginStateUpdateMessage(newModule, ADD)
         });
-        
+    }
+
+    void setModuleProperty(int moduleId, Identifier propertyName, var value) {
+        auto module = localState.getModule(moduleId);
+        if (module) {
+            module->state.setProperty(propertyName, value, nullptr);
+            stateMessageQueue->send_message(PluginStateUpdateMessage(*module, UPDATE));
+        }
+    }
+
+    void moveModule(int moduleId, Rectangle<int> newBounds) {
+        auto module = localState.getModule(moduleId);
+        if (module) {
+            module->setBounds(newBounds);
+            stateMessageQueue->send_message(PluginStateUpdateMessage(*module, UPDATE));
+        }
+    }
+
+    void deleteModule(int moduleId) {
+        localState.removeModule(moduleId);
+        stateMessageQueue->send_message(PluginStateUpdateMessage(ModuleState(moduleId), DELETE));
     }
 
     void addPatchCable(int inputModuleId, int inputCvId, int outputModuleId, int outputCvId) {
@@ -316,7 +348,6 @@ public:
         });
 
         stateMessageQueue->send_messages(messages);
-
     }
 
     void removePatchCable(int inputModuleId, int inputCvId, int outputModuleId, int outputCvId) {
@@ -335,11 +366,11 @@ public:
         stateMessageQueue->send_messages(messages);
     }
 
+    void saveStateToShared() {
+        stateMessageQueue->writeFullState(localState);
+    }
+
 private:
     PluginState localState;
     PluginStateMessageQueue* stateMessageQueue;
-};
-
-class PluginStateReadHandler {
-
 };
