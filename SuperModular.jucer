@@ -6,6 +6,9 @@
   <MAINGROUP id="Fqzt31" name="SuperModular">
     <GROUP id="{0C7E7290-A30B-36B9-5B86-6E4BA2E3F5B0}" name="Source">
       <GROUP id="{AE79F385-34AA-EB2F-F17C-6E10DA89A45E}" name="UI">
+        <FILE id="p8h5iG" name="ModuleFactory.cpp" compile="1" resource="0"
+              file="Source/ModuleFactory.cpp"/>
+        <FILE id="boB2IM" name="ModuleFactory.h" compile="0" resource="0" file="Source/ModuleFactory.h"/>
         <FILE id="LQ9lvC" name="PatchCableManager.cpp" compile="1" resource="0"
               file="Source/PatchCableManager.cpp"/>
         <FILE id="l8qsJg" name="PatchCableManager.h" compile="0" resource="0"
@@ -23,15 +26,27 @@
         <FILE id="YezmWy" name="PluginEditor.cpp" compile="1" resource="0"
               file="Source/PluginEditor.cpp"/>
         <FILE id="tsXVwn" name="PluginEditor.h" compile="0" resource="0" file="Source/PluginEditor.h"/>
+        <FILE id="e8OXF7" name="SharedStateWriter.cpp" compile="1" resource="0"
+              file="Source/SharedStateWriter.cpp"/>
+        <FILE id="duKqV6" name="SharedStateWriter.h" compile="0" resource="0"
+              file="Source/SharedStateWriter.h"/>
       </GROUP>
+      <FILE id="tXzne2" name="ModuleState.cpp" compile="1" resource="0" file="Source/ModuleState.cpp"/>
+      <FILE id="hJ9y5S" name="ModuleState.h" compile="0" resource="0" file="Source/ModuleState.h"/>
+      <FILE id="v0hxaC" name="PluginState.cpp" compile="1" resource="0" file="Source/PluginState.cpp"/>
+      <FILE id="NxlOGj" name="PluginState.h" compile="0" resource="0" file="Source/PluginState.h"/>
+      <FILE id="JRuCCQ" name="SharedPluginState.cpp" compile="1" resource="0"
+            file="Source/SharedPluginState.cpp"/>
+      <FILE id="eibtMo" name="SharedPluginState.h" compile="0" resource="0"
+            file="Source/SharedPluginState.h"/>
       <FILE id="EA4HoY" name="PluginProcessor.cpp" compile="1" resource="0"
             file="Source/PluginProcessor.cpp"/>
       <FILE id="WNhrwD" name="PluginProcessor.h" compile="0" resource="0"
             file="Source/PluginProcessor.h"/>
-      <FILE id="JRuCCQ" name="SharedComponentState.cpp" compile="1" resource="0"
-            file="Source/SharedComponentState.cpp"/>
-      <FILE id="eibtMo" name="SharedComponentState.h" compile="0" resource="0"
-            file="Source/SharedComponentState.h"/>
+      <FILE id="oVMI5F" name="StateChangeMessage.cpp" compile="1" resource="0"
+            file="Source/StateChangeMessage.cpp"/>
+      <FILE id="M7swRD" name="StateChangeMessage.h" compile="0" resource="0"
+            file="Source/StateChangeMessage.h"/>
     </GROUP>
   </MAINGROUP>
   <JUCEOPTIONS JUCE_STRICT_REFCOUNTEDPOINTER="1" JUCE_VST3_CAN_REPLACE_VST2="0"/>

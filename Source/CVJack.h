@@ -14,7 +14,7 @@
 
 #include "PatchCable.h"
 #include "PatchCableManager.h"
-#include "SharedComponentState.h"
+#include "SharedStateWriter.h"
 
 enum CVJackType {
     CVInput,
@@ -23,7 +23,7 @@ enum CVJackType {
 
 class CVJack : public Component {
 public:
-    CVJack(CVJackType type, int id, int parentId, PatchCableManager* cm, PluginStateWriteHandler* stateWriter);
+    CVJack(CVJackType type, int id, int parentId, PatchCableManager* cm, SharedStateWriter* stateWriter);
 
     int getId() { return jackId; }
     int getModuleId() { return moduleId; }
@@ -71,5 +71,5 @@ private:
     CVJack* connection = nullptr;
     PatchCableManager* cableManager;
     PatchCable cable;
-    PluginStateWriteHandler* stateWriter;
+    SharedStateWriter* stateWriter;
 };

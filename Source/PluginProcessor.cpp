@@ -141,19 +141,19 @@ void SuperModularAudioProcessor::processBlock (AudioBuffer<float>& buffer, MidiB
         buffer.clear(i, 0, buffer.getNumSamples());
 
     // do something
-    std::vector<PluginStateUpdateMessage> messages;
-    stateMessageQueue.recieve_messages(messages);
+    std::vector<StateChangeMessage> messages;
+    sharedState.recieve_updates(messages);
     for (auto message : messages) {
-        int x;
+        std::string op;
         switch (message.op) {
         case ADD:
-            x = 1;
+            op = "ADD";
             break;
         case UPDATE:
-            x = 2;
+            op = "UPDATE";
             break;
         case DELETE:
-            x = 3;
+            op = "DELETE";
             break;
         }
     }
@@ -167,7 +167,7 @@ bool SuperModularAudioProcessor::hasEditor() const
 
 AudioProcessorEditor* SuperModularAudioProcessor::createEditor()
 {
-    return new SuperModularAudioProcessorEditor(*this, &stateMessageQueue);
+    return new SuperModularAudioProcessorEditor(*this, &sharedState);
 }
 
 //==============================================================================
@@ -185,7 +185,7 @@ void SuperModularAudioProcessor::setStateInformation (const void* data, int size
         if (xmlState->hasTagName("SuperModularPluginState"))
             localState = PluginState(xmlState.get());
 
-    stateMessageQueue.writeFullState(localState);
+    sharedState.writeFullState(localState);
 }
 
 //==============================================================================

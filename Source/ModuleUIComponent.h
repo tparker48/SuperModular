@@ -17,7 +17,6 @@
 #include "PatchCable.h"
 #include "ModuleGrid.h"
 
-
 class ModuleDragRules : public ComponentBoundsConstrainer {
 public:
     ModuleDragRules(ModuleGrid* mg) : ComponentBoundsConstrainer(), moduleGrid(mg) {}
@@ -42,12 +41,14 @@ private:
 class ModuleUIComponent : public Component {
 public:
     static const int hp = 1;
+    static const int typeId = -1;
 
-    ModuleUIComponent(MODULE_ID id, ModuleGrid* mg, PatchCableManager* cm, PluginStateWriteHandler* stateWriter) :
-        id(id), 
+    ModuleUIComponent(MODULE_ID id, ModuleGrid* mg, PatchCableManager* cm, SharedStateWriter* stateWriter) :
+        id(id),
         moduleGrid(mg),
         moduleDragRules(mg),
-        cableManager(cm)
+        cableManager(cm),
+        stateWriter(stateWriter)
     {}
 
     MODULE_ID getId() { return id; }
@@ -71,6 +72,13 @@ public:
         }
     }
 
+    CVJack* getCvInputJack(int jackId) {
+        return cvIns[jackId];
+    }
+    CVJack* getCvOutputJack(int jackId) {
+        return cvOuts[jackId];
+    }
+
     void mouseDown(const MouseEvent& e);
     void mouseUp(const MouseEvent& e);
     void mouseDrag(const MouseEvent& e);
@@ -78,25 +86,59 @@ public:
     // Must implement per Module type
     virtual void paint(Graphics& g) = 0;
     virtual void resized() = 0;
+    void applyState(ModuleState& state) {
+        // Load Bounds
+        auto bounds = state.getBounds();
+        auto closest = moduleGrid->closestAvailablePosition(bounds);
+        moduleGrid->placeModule(getId(), closest);
+        setBounds(closest);
+
+        // Wire CV outputs
+        auto numCvOutputs = state.getNumCvOutputs();
+        jassert(cvOuts.size() == numCvOutputs);
+        for (int i = 0; i < state.getNumCvOutputs(); i++) {
+            auto connection = state.getOutputCvConnection(i);
+            if (connection.first == -1) continue;
+            
+            Component* targetComponent = moduleGrid->getModule(connection.first);
+            auto targetModule = dynamic_cast<ModuleUIComponent*>(targetComponent);
+            if (!targetModule) continue;
+
+            auto targetJack = targetModule->getCvInputJack(connection.second);
+            if (!targetJack) continue;
+            
+            targetJack->setConnection(cvOuts[i]);
+            cvOuts[i]->setConnection(targetJack);
+        }
+    }
     
+protected:
+    std::vector<CVJack*> cvIns, cvOuts;
+
 private:
     MODULE_ID id = -1;
     ModuleGrid* moduleGrid;
     ComponentDragger myDragger;
     ModuleDragRules moduleDragRules;
     PatchCableManager* cableManager;
+    SharedStateWriter* stateWriter;
 };
+
+
 
 class TestModule : public ModuleUIComponent {
 public:
     static const int hp = 4;
+    static const int typeId = 0;
 
-    TestModule(int id, ModuleGrid* mg, PatchCableManager* cm, PluginStateWriteHandler* stateWriter) : 
-        ModuleUIComponent(id, mg, cm, stateWriter),
-        jack1(CVInput, 1, id, cm, stateWriter),
-        jack2(CVOutput, 2, id, cm, stateWriter) {
-        addAndMakeVisible(jack1);
-        addAndMakeVisible(jack2);
+    TestModule(int id, ModuleGrid* mg, PatchCableManager* cm, SharedStateWriter* stateWriter) : 
+        ModuleUIComponent(id, mg, cm, stateWriter), 
+        input1(CVInput, 0, id, cm, stateWriter), 
+        output1(CVOutput, 0, id, cm, stateWriter) {
+        cvIns.push_back(&input1);
+        cvOuts.push_back(&output1);
+        addAndMakeVisible(input1);
+        addAndMakeVisible(output1);
     }
 
     void paint(Graphics& g) override {
@@ -116,10 +158,10 @@ public:
     }
 
     void resized() override {
-        jack1.setBounds(10, 10, 25, 25);
-        jack2.setBounds(getWidth() - 10 - 25, 10, 25, 25);
+        input1.setBounds(10, 10, 25, 25);
+        output1.setBounds(getWidth() - 10 - 25, 10, 25, 25);
     }
-    
+
 private:
-    CVJack jack1, jack2;
+    CVJack input1, output1;
 };

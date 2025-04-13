@@ -23,32 +23,47 @@ void ModuleUIComponent::mouseUp(const MouseEvent& e) {
         m.showMenuAsync(PopupMenu::Options(),
             [this](int result)
             {
-                if (result == 0)
+                if (result == 1)
                 {
-                    // nothing
-                }
-                else if (result == 1)
-                {
-                    moduleGrid->yankModule(getId());
+                    moduleGrid->removeModule(getId());
 
-                    // clear patch cable connections
-                    for (auto child : getChildren()) {
-                        auto jack = dynamic_cast<CVJack*>(child);
-                        if (jack) {
-                            if (jack->isConnected()) {
-                                auto other = jack->getConnection();
-                                jack->clearConnection();
-                                other->clearConnection();
-                            }
+                    for (auto cvIn : cvIns) {
+                        if (cvIn->isConnected()) {
+                            auto other = cvIn->getConnection();
+                            cvIn->clearConnection();
+                            other->clearConnection();
+                            stateWriter->removePatchCable(
+                                getId(), 
+                                cvIn->getId(), 
+                                other->getModuleId(), 
+                                other->getId()
+                            );
                         }
                     }
+                    for (auto cvOut : cvOuts) {
+                        if (cvOut->isConnected()) {
+                            auto other = cvOut->getConnection();
+                            cvOut->clearConnection();
+                            other->clearConnection();
+                            stateWriter->removePatchCable(
+                                other->getModuleId(),
+                                other->getId(),
+                                getId(),
+                                cvOut->getId()
+                            );
+                        }
+                    }
+
+                    stateWriter->deleteModule(getId());
+
                     delete this;
                 }
             });
     }
     else {
         // left click
-        moduleGrid->placeModule(id, this->getBounds());
+        moduleGrid->placeModule(id, getBounds());
+        stateWriter->moveModule(getId(), getBounds());
     }
     
 }
@@ -64,6 +79,5 @@ void ModuleUIComponent::mouseDrag(const MouseEvent& e) {
                 jack->getConnection()->refreshCablePosition();
             }
         }
-        
     }
 }

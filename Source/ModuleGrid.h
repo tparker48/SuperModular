@@ -22,15 +22,22 @@ public:
     ~ModuleGrid() {}
 
     void setRackDimensions(int rackCount, int moduleHeight, int hpSize, int hpPerRow);
+    
+    bool addModule(MODULE_ID id, Component* module);
+    void removeModule(MODULE_ID id);
+    Component* getModule(MODULE_ID id);
+
     bool moduleIsPlaced(MODULE_ID id);
     void placeModule(MODULE_ID id, ModuleBounds bounds);
     void yankModule(MODULE_ID id);
+
     ModuleBounds closestAvailablePosition(ModuleBounds bounds);
 
 private:
     bool isOverlap(ModuleBounds bounds);
 
-    std::map<MODULE_ID, ModuleBounds> placedModules;
+    std::map<MODULE_ID, Component*> modules;
+    std::map<MODULE_ID, bool> placed;
 
     int rackHeight = -1;
     int hpWidth = -1;

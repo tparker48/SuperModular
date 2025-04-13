@@ -9,10 +9,9 @@
 */
 
 #include "CVJack.h"
-#include "PatchCableManager.h"
 
 
-CVJack::CVJack(CVJackType type, int id, int parentId, PatchCableManager* cm, PluginStateWriteHandler* stateWriterPtr):
+CVJack::CVJack(CVJackType type, int id, int parentId, PatchCableManager* cm, SharedStateWriter* stateWriterPtr):
         stateWriter(stateWriterPtr) {
     cableManager = cm;
     jackId = id;

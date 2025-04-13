@@ -10,8 +10,12 @@
 #include "PluginEditor.h"
 
 //==============================================================================
-SuperModularAudioProcessorEditor::SuperModularAudioProcessorEditor (SuperModularAudioProcessor& p, PluginStateMessageQueue* messageQueuePtr)
-    : AudioProcessorEditor (&p), audioProcessor (p), pluginStateMessageQueue(messageQueuePtr), stateWriter(messageQueuePtr) {
+
+
+SuperModularAudioProcessorEditor::SuperModularAudioProcessorEditor (SuperModularAudioProcessor& p, SharedPluginState* sharedStatePtr)
+    : AudioProcessorEditor (&p), audioProcessor (p), sharedState(sharedStatePtr), stateWriter(sharedStatePtr) {
+    initModuleFactoryMap(moduleFactories);
+
     // Make sure that before the constructor has finished, you've set the
     // editor's size to whatever you need it to be.
     double ratio = double(hpPerRow) / (double(numRows) * 5.0);
@@ -19,11 +23,36 @@ SuperModularAudioProcessorEditor::SuperModularAudioProcessorEditor (SuperModular
     setSize(size, size / ratio);
     setLookAndFeel(&customLookAndFeel);
 
+
     addAndMakeVisible(cableManager.getDragCable());
 
     hpWidth = (float)getWidth() / (float)hpPerRow;
     moduleHeight = (float)getHeight() / (float)numRows;
 
+    //auto state = stateWriter.dumpLocalState();
+    auto modState1 = ModuleState(1, TestModule::typeId, ModuleBounds(0, 0, TestModule::hp * hpWidth, moduleHeight), 1, 1);
+    auto modState2 = ModuleState(2, TestModule::typeId, ModuleBounds(100, 500, TestModule::hp * hpWidth, moduleHeight), 1, 1);
+    stateWriter.addModule(modState1);
+    stateWriter.addModule(modState2);
+    stateWriter.addPatchCable(1, 0, 2, 0);
+
+    auto state = stateWriter.dumpLocalState();
+
+    // first create all modules
+    std::map<int, ModuleUIComponent*> modules;
+    for (auto moduleState : state.moduleStates) {
+        int id = moduleState.getId();
+        int moduleTypeId = moduleState.getTypeId();
+        modules[id] = moduleFactories[moduleTypeId](id, &moduleGrid, &cableManager, &stateWriter);
+        moduleGrid.addModule(id, modules[id]);
+        addAndMakeVisible(modules[id]);
+    }
+
+    // after all modules exist, initialize them
+    for (auto moduleState : state.moduleStates) {
+        int id = moduleState.getId();
+        modules[id]->applyState(moduleState);
+    }
 }
 
 SuperModularAudioProcessorEditor::~SuperModularAudioProcessorEditor()
@@ -121,17 +150,13 @@ static int nextModuleId = 0;
 
 template <typename M>
 void SuperModularAudioProcessorEditor::addNewModule() {
-    auto bounds = moduleGrid.closestAvailablePosition(
-        ModuleBounds(0, 0, hpWidth * M::hp, moduleHeight));
+    auto newModule = new M(nextModuleId++, &moduleGrid, &cableManager, &stateWriter);
+    auto bounds = ModuleBounds(0, 0, hpWidth * M::hp, moduleHeight);
+    newModule->setBounds(bounds);
 
-    if (bounds.getX() != -1) {
-        auto module = ModuleState(nextModuleId, "TestModule", bounds, 1, 1);
+    if (moduleGrid.addModule(newModule->getId(), newModule)) {
+        auto module = ModuleState(newModule->getId(), 123, bounds, 1, 1);
         stateWriter.addModule(module);
-
-
-        auto newModule = new M(nextModuleId++, &moduleGrid, &cableManager, &stateWriter);
-        newModule->setBounds(bounds);
-        moduleGrid.placeModule(newModule->getId(), bounds);
         addAndMakeVisible(newModule);
     }
 }

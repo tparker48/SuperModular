@@ -17,20 +17,46 @@ void ModuleGrid::setRackDimensions(int rackCount, int moduleHeight, int hpSize, 
     hpPerRack = hpPerRow;
 }
 
-bool ModuleGrid::moduleIsPlaced(MODULE_ID id) {
-    return (placedModules.find(id) != placedModules.end());
+bool ModuleGrid::addModule(MODULE_ID id, Component* module) {
+    auto bounds = closestAvailablePosition(module->getBounds());
+    if (bounds.getX() != -1) {
+        module->setBounds(bounds);
+        modules[id] = module;
+        placed[id] = true;
+        return true;
+    }
+    return false;
+}
+
+void ModuleGrid::removeModule(MODULE_ID id) {
+    modules.erase(id);
+    placed.erase(id);
+}
+
+Component* ModuleGrid::getModule(MODULE_ID id) {
+    if (modules.find(id) != modules.end()) {
+        return modules[id];
+    }
+    else {
+        return nullptr;
+    }
 }
 
 void ModuleGrid::placeModule(MODULE_ID id, ModuleBounds bounds) {
     if (!isOverlap(bounds) && (!moduleIsPlaced(id))) {
-        placedModules[id] = bounds;
+        placed[id] = true;
+        modules[id]->setBounds(bounds);
     }
 }
 
 void ModuleGrid::yankModule(MODULE_ID id) {
-    if (placedModules.find(id) != placedModules.end()) {
-        placedModules.erase(id);
+    if (placed.find(id) != placed.end()) {
+        placed[id] = false;
     }
+}
+
+bool ModuleGrid::moduleIsPlaced(MODULE_ID id) {
+    return (placed.find(id) != placed.end() && placed[id]==true);
 }
 
 ModuleBounds ModuleGrid::closestAvailablePosition(ModuleBounds bounds) {
@@ -64,9 +90,11 @@ ModuleBounds ModuleGrid::closestAvailablePosition(ModuleBounds bounds) {
 
 bool ModuleGrid::isOverlap(ModuleBounds bounds) {
     // check if bounds is overlapping an existing module
-    for (const auto& pair : placedModules) {
-        if (pair.second.intersects(bounds)) {
-            return true;
+    for (const auto& pair : modules) {
+        if (placed[pair.first] == true) {
+            if (pair.second->getBounds().intersects(bounds)) {
+                return true;
+            }
         }
     }
     return false;

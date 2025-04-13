@@ -9,8 +9,10 @@
 #pragma once
 
 #include <JuceHeader.h>
+#include "ModuleFactory.h"
 #include "PluginProcessor.h"
 #include "ModuleUIComponent.h"
+#include "SharedStateWriter.h"
 
 //==============================================================================
 /**
@@ -29,13 +31,14 @@ public:
 class SuperModularAudioProcessorEditor  : public AudioProcessorEditor
 {
 public:
-    SuperModularAudioProcessorEditor (SuperModularAudioProcessor&, PluginStateMessageQueue* messageQueuePtr);
+    SuperModularAudioProcessorEditor (SuperModularAudioProcessor&, SharedPluginState* sharedStatePtr);
     ~SuperModularAudioProcessorEditor() override;
 
     //==============================================================================
     void paint (Graphics&) override;
     void resized() override;
     void mouseUp(const MouseEvent& e) override;
+
 private:
     // This reference is provided as a quick way for your editor to
     // access the processor object that created it.
@@ -45,8 +48,8 @@ private:
     ModuleGrid moduleGrid;
     PatchCableManager cableManager;
 
-    PluginStateMessageQueue* pluginStateMessageQueue;
-    PluginStateWriteHandler stateWriter;
+    SharedPluginState* sharedState;
+    SharedStateWriter stateWriter;
 
     int hpPerRow = 20;
     int numRows = 3;
@@ -57,6 +60,8 @@ private:
 
     template <typename M>
     void addNewModule();
+
+    std::map<int, ModuleFactory> moduleFactories;
 
     JUCE_DECLARE_NON_COPYABLE_WITH_LEAK_DETECTOR (SuperModularAudioProcessorEditor)
 };
