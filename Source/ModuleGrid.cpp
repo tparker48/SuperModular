@@ -61,6 +61,7 @@ bool ModuleGrid::moduleIsPlaced(MODULE_ID id) {
 
 ModuleBounds ModuleGrid::closestAvailablePosition(ModuleBounds bounds) {
     // iteratively check all possible positions
+    jassert(bounds.getWidth() > 0 && bounds.getHeight() > 0);
     std::vector<ModuleBounds> possibleBounds;
     int max_x = (hpWidth * hpPerRack) - bounds.getWidth();
     int max_y = numRacks * rackHeight;
@@ -98,4 +99,9 @@ bool ModuleGrid::isOverlap(ModuleBounds bounds) {
         }
     }
     return false;
+}
+
+void ModuleGrid::clearAllModules() {
+    modules.clear();
+    placed.clear();
 }

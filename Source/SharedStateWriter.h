@@ -20,6 +20,10 @@ public:
         sharedStatePtr->readFullState(localState);
     }
 
+    bool reload(SharedPluginState* sharedStatePtr) {
+        return sharedStatePtr->readFullStateIfNew(localState);
+    }
+
     void addModule(ModuleState newModule);
 
     void setModuleProperty(int moduleId, Identifier propertyName, var value);

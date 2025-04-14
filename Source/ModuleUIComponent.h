@@ -49,7 +49,8 @@ public:
         moduleDragRules(mg),
         cableManager(cm),
         stateWriter(stateWriter)
-    {}
+    {
+    }
 
     MODULE_ID getId() { return id; }
 
@@ -86,32 +87,50 @@ public:
     // Must implement per Module type
     virtual void paint(Graphics& g) = 0;
     virtual void resized() = 0;
+
     void applyState(ModuleState& state) {
         // Load Bounds
         auto bounds = state.getBounds();
         auto closest = moduleGrid->closestAvailablePosition(bounds);
         moduleGrid->placeModule(getId(), closest);
-        setBounds(closest);
+        stateWriter->moveModule(getId(), getBounds());
 
+        // Wire CV inputs
+        auto numCvInputs = state.getNumCvInputs();
+        jassert(cvIns.size() == numCvInputs);
+        for (int i = 0; i < state.getNumCvInputs(); i++) {
+            auto connection = state.getInputCvConnection(i);
+            if (connection.first == -1) continue;
+
+            Component* targetComponent = moduleGrid->getModule(connection.first);
+            auto targetModule = dynamic_cast<ModuleUIComponent*>(targetComponent);
+            if (!targetModule) continue;
+
+            auto targetJack = targetModule->getCvOutputJack(connection.second);
+            if (!targetJack) continue;
+
+            targetJack->setConnection(cvIns[i]);
+            cvIns[i]->setConnection(targetJack);
+        }
         // Wire CV outputs
         auto numCvOutputs = state.getNumCvOutputs();
         jassert(cvOuts.size() == numCvOutputs);
         for (int i = 0; i < state.getNumCvOutputs(); i++) {
             auto connection = state.getOutputCvConnection(i);
             if (connection.first == -1) continue;
-            
+
             Component* targetComponent = moduleGrid->getModule(connection.first);
             auto targetModule = dynamic_cast<ModuleUIComponent*>(targetComponent);
             if (!targetModule) continue;
 
             auto targetJack = targetModule->getCvInputJack(connection.second);
             if (!targetJack) continue;
-            
+
             targetJack->setConnection(cvOuts[i]);
             cvOuts[i]->setConnection(targetJack);
         }
     }
-    
+
 protected:
     std::vector<CVJack*> cvIns, cvOuts;
 

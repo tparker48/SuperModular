@@ -31,6 +31,10 @@ public:
     void placeModule(MODULE_ID id, ModuleBounds bounds);
     void yankModule(MODULE_ID id);
 
+    bool moduleExists(MODULE_ID id) { return modules.find(id) != modules.end();  }
+
+    void clearAllModules();
+
     ModuleBounds closestAvailablePosition(ModuleBounds bounds);
 
 private:

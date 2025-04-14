@@ -173,6 +173,7 @@ AudioProcessorEditor* SuperModularAudioProcessor::createEditor()
 //==============================================================================
 void SuperModularAudioProcessor::getStateInformation (MemoryBlock& destData)
 {
+    sharedState.readFullState(localState);
     std::unique_ptr<XmlElement> xml(localState.toXml());
     copyXmlToBinary(*xml, destData);
 }
@@ -185,7 +186,8 @@ void SuperModularAudioProcessor::setStateInformation (const void* data, int size
         if (xmlState->hasTagName("SuperModularPluginState"))
             localState = PluginState(xmlState.get());
 
-    sharedState.writeFullState(localState);
+    // write plugin state to shared obj, and flag a reload for the editor
+    sharedState.writeFullState(localState, true);
 }
 
 //==============================================================================

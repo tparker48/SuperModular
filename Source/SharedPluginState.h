@@ -36,13 +36,12 @@
 class SharedPluginState {
 public:
     void send_updates(std::vector<StateChangeMessage> messages);
-
     void send_update(StateChangeMessage message);
-
     void recieve_updates(std::vector<StateChangeMessage>& messages);
 
-    void writeFullState(PluginState& state);
+    void writeFullState(PluginState& state, bool flagReload = false);
     void readFullState(PluginState& state);
+    bool readFullStateIfNew(PluginState& state);
 
 private:
     Atomic<char> shareFlags = 0b00000000;

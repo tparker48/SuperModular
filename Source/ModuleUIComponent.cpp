@@ -25,8 +25,6 @@ void ModuleUIComponent::mouseUp(const MouseEvent& e) {
             {
                 if (result == 1)
                 {
-                    moduleGrid->removeModule(getId());
-
                     for (auto cvIn : cvIns) {
                         if (cvIn->isConnected()) {
                             auto other = cvIn->getConnection();
@@ -55,7 +53,7 @@ void ModuleUIComponent::mouseUp(const MouseEvent& e) {
                     }
 
                     stateWriter->deleteModule(getId());
-
+                    moduleGrid->removeModule(getId());
                     delete this;
                 }
             });

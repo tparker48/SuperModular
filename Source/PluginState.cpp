@@ -41,8 +41,9 @@ ModuleState* PluginState::getModule(int id) {
     }
 }
 void PluginState::removeModule(int id) {
-    std::remove_if(
+    auto newEnd = std::remove_if(
         moduleStates.begin(),
         moduleStates.end(),
         [id](ModuleState m) {return m.getId() == id; });
+    moduleStates.erase(newEnd, moduleStates.end());
 }

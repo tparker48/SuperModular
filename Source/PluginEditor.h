@@ -28,7 +28,7 @@ public:
     }
 };
 
-class SuperModularAudioProcessorEditor  : public AudioProcessorEditor
+class SuperModularAudioProcessorEditor  : public AudioProcessorEditor, public Timer
 {
 public:
     SuperModularAudioProcessorEditor (SuperModularAudioProcessor&, SharedPluginState* sharedStatePtr);
@@ -38,6 +38,8 @@ public:
     void paint (Graphics&) override;
     void resized() override;
     void mouseUp(const MouseEvent& e) override;
+
+    void timerCallback();
 
 private:
     // This reference is provided as a quick way for your editor to
@@ -62,6 +64,8 @@ private:
     void addNewModule();
 
     std::map<int, ModuleFactory> moduleFactories;
+
+
 
     JUCE_DECLARE_NON_COPYABLE_WITH_LEAK_DETECTOR (SuperModularAudioProcessorEditor)
 };

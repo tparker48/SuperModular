@@ -24,7 +24,7 @@ ModuleState::ModuleState(int id, int typeId, Rectangle<int> bounds, int numCvInp
     // init cv ports
     auto ins = ValueTree("cv_in");
     for (int i = 0; i < numCvInputs; i++) {
-        auto cv = ValueTree(Identifier(std::to_string(i)));
+        auto cv = ValueTree(Identifier("cv_in."+std::to_string(i)));
         cv.setProperty("module", -1, nullptr);
         cv.setProperty("cv", -1, nullptr);
         ins.appendChild(cv, nullptr);
@@ -34,7 +34,7 @@ ModuleState::ModuleState(int id, int typeId, Rectangle<int> bounds, int numCvInp
     // init cv ports
     auto outs = ValueTree("cv_out");
     for (int i = 0; i < numCvOutputs; i++) {
-        auto cv = ValueTree(Identifier(std::to_string(i)));
+        auto cv = ValueTree(Identifier("cv_out."+std::to_string(i)));
         cv.setProperty("module", -1, nullptr);
         cv.setProperty("cv", -1, nullptr);
         outs.appendChild(cv, nullptr);
@@ -90,14 +90,13 @@ void ModuleState::setOutputCvConnection(int cvId, int otherModuleId, int otherCv
     setCvConnection(cvId, otherModuleId, otherCvId, "cv_out");
 }
 
-
 std::pair<int, int> ModuleState::getCvConnection(int cvId, Identifier cvTagName) {
     auto cvJacks = state.getChildWithName(cvTagName);
     if (!cvJacks.isValid()) {
         return { -1,-1 };
     }
 
-    auto cvJack = cvJacks.getChildWithName(Identifier(std::to_string(cvId)));
+    auto cvJack = cvJacks.getChildWithName(Identifier(cvTagName + "." + std::to_string(cvId)));
     if (!cvJack.isValid()) {
         return { -1,-1 };
     }
@@ -113,7 +112,7 @@ void ModuleState::setCvConnection(int cvId, int otherModuleId, int otherCvId, Id
         return;
     }
 
-    auto cvJack = cvJacks.getChildWithName(Identifier(std::to_string(cvId)));
+    auto cvJack = cvJacks.getChildWithName(cvTagName+"."+Identifier(std::to_string(cvId)));
     if (!cvJack.isValid()) {
         return;
     }

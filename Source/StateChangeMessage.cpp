@@ -30,11 +30,12 @@ void StateChangeMessage::applyMessage(PluginState& pluginState) {
         );
         break;
     case DELETE:
-        std::remove_if(
+        auto newEnd = std::remove_if(
             pluginState.moduleStates.begin(),
             pluginState.moduleStates.end(),
             [this](ModuleState other) { return state.getId() == other.getId(); }
         );
+        pluginState.moduleStates.erase(newEnd, pluginState.moduleStates.end());
         break;
     }
 }

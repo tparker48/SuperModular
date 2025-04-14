@@ -41,21 +41,28 @@ void SharedPluginState::recieve_updates(std::vector<StateChangeMessage>& message
     endRead();
 }
 
-void SharedPluginState::writeFullState(PluginState& state) {
+void SharedPluginState::writeFullState(PluginState& state, bool flagReload) {
     stateLock.lock();
     this->state = state;
-    shouldReloadState = true;
+    if (flagReload) shouldReloadState = true;
     stateLock.unlock();
 
 }
 void SharedPluginState::readFullState(PluginState& state) {
-    // call this on timer in GUI
+    stateLock.lock();
+    state = this->state;
+    stateLock.unlock();
+}
+bool SharedPluginState::readFullStateIfNew(PluginState& state) {
+    bool returnVal = false;
     stateLock.lock();
     if (shouldReloadState) {
         state = this->state;
         shouldReloadState = false;
+        returnVal = true;
     }
     stateLock.unlock();
+    return returnVal;
 }
 
 void SharedPluginState::startRead() {

@@ -17,6 +17,7 @@ void SharedStateWriter::addModule(ModuleState newModule) {
         StateChangeMessage(newModule, ADD)
     );
 
+    saveStateToShared();
 }
 
 void SharedStateWriter::setModuleProperty(int moduleId, Identifier propertyName, var value) {
@@ -25,6 +26,7 @@ void SharedStateWriter::setModuleProperty(int moduleId, Identifier propertyName,
         module->state.setProperty(propertyName, value, nullptr);
         stateMessageQueue->send_update(StateChangeMessage(*module, UPDATE));
     }
+    saveStateToShared();
 }
 
 void SharedStateWriter::moveModule(int moduleId, Rectangle<int> newBounds) {
@@ -34,11 +36,13 @@ void SharedStateWriter::moveModule(int moduleId, Rectangle<int> newBounds) {
         // The processor doesn't really care where modules are, so no need to send
         //stateMessageQueue->send_update(StateChangeMessage(*module, UPDATE));
     }
+    saveStateToShared();
 }
 
 void SharedStateWriter::deleteModule(int moduleId) {
     localState.removeModule(moduleId);
     stateMessageQueue->send_update(StateChangeMessage(ModuleState(moduleId), DELETE));
+    saveStateToShared();
 }
 
 void SharedStateWriter::addPatchCable(int inputModuleId, int inputCvId, int outputModuleId, int outputCvId) {
@@ -55,6 +59,7 @@ void SharedStateWriter::addPatchCable(int inputModuleId, int inputCvId, int outp
         });
 
     stateMessageQueue->send_updates(messages);
+    saveStateToShared();
 }
 
 void SharedStateWriter::removePatchCable(int inputModuleId, int inputCvId, int outputModuleId, int outputCvId) {
@@ -70,8 +75,9 @@ void SharedStateWriter::removePatchCable(int inputModuleId, int inputCvId, int o
         StateChangeMessage(*outputModule, UPDATE)
         });
     stateMessageQueue->send_updates(messages);
+    saveStateToShared();
 }
 
 void SharedStateWriter::saveStateToShared() {
-    stateMessageQueue->writeFullState(localState);
+    stateMessageQueue->writeFullState(localState, false);
 }
