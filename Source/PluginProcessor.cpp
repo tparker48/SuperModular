@@ -11,8 +11,9 @@
 
 //==============================================================================
 SuperModularAudioProcessor::SuperModularAudioProcessor()
+    : osc(0), audioOut(1), lfo(2)
 #ifndef JucePlugin_PreferredChannelConfigurations
-     : AudioProcessor (BusesProperties()
+     , AudioProcessor (BusesProperties()
                      #if ! JucePlugin_IsMidiEffect
                       #if ! JucePlugin_IsSynth
                        .withInput  ("Input",  AudioChannelSet::stereo(), true)
@@ -93,8 +94,14 @@ void SuperModularAudioProcessor::changeProgramName (int index, const String& new
 //==============================================================================
 void SuperModularAudioProcessor::prepareToPlay (double sampleRate, int samplesPerBlock)
 {
+    osc.prepareToPlay(sampleRate, samplesPerBlock, 440.0);
+    lfo.prepareToPlay(sampleRate, samplesPerBlock, 10.0);
+    audioOut.prepareToPlay(sampleRate, samplesPerBlock);
 
-
+    // wire osc cv_out to audio_output cv_in
+    audioOut.getCVInputJack(0)->wirePtr(osc.getCVOutputJack(0)->getPtr());
+    audioOut.getCVInputJack(1)->wirePtr(osc.getCVOutputJack(0)->getPtr());
+    osc.getCVInputJack(0)->wirePtr(lfo.getCVOutputJack(0)->getPtr());
 }
 
 void SuperModularAudioProcessor::releaseResources()
@@ -131,16 +138,17 @@ bool SuperModularAudioProcessor::isBusesLayoutSupported (const BusesLayout& layo
 
 void SuperModularAudioProcessor::processBlock (AudioBuffer<float>& buffer, MidiBuffer& midiMessages)
 {
-    buffer.clear();
+    //buffer.clear();
 
     ScopedNoDenormals noDenormals;
     auto totalNumInputChannels = getTotalNumInputChannels();
     auto totalNumOutputChannels = getTotalNumOutputChannels();
 
-    for (auto i = totalNumInputChannels; i < totalNumOutputChannels; i++)
-        buffer.clear(i, 0, buffer.getNumSamples());
+    //for (auto i = totalNumInputChannels; i < totalNumOutputChannels; i++)
+    //    buffer.clear(i, 0, buffer.getNumSamples());
 
     // do something
+    /*
     std::vector<StateChangeMessage> messages;
     sharedState.recieve_updates(messages);
     for (auto message : messages) {
@@ -156,7 +164,14 @@ void SuperModularAudioProcessor::processBlock (AudioBuffer<float>& buffer, MidiB
             op = "DELETE";
             break;
         }
+    }*/
+
+    for (auto i = 0; i < buffer.getNumSamples(); i++) {
+        lfo.processSample();
+        osc.processSample();
+        audioOut.processSample();
     }
+    audioOut.processBlock(buffer);
 }
 
 //==============================================================================

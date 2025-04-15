@@ -164,20 +164,12 @@ void SuperModularAudioProcessorEditor::showPopupMenu() {
     // right click
     PopupMenu m;
     m.addItem(1, "TestModule");
-    m.addItem(2, "Increment comp state");
-    m.addItem(3, "Decrement comp state");
     m.showMenuAsync(PopupMenu::Options(),
         [this](int result)
         {
             switch (result) {
             case 1:
                 addNewModule<TestModule>();
-                break;
-            case 2:
-
-                break;
-            case 3:
-
                 break;
             default:
                 break;

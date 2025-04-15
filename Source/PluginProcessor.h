@@ -11,6 +11,7 @@
 #include <JuceHeader.h>
 
 #include "SharedPluginState.h"
+#include "Module.h"
 
 typedef AudioProcessorValueTreeState ValueTreeState;
 
@@ -62,6 +63,9 @@ private:
     //==============================================================================
     SharedPluginState sharedState;
     PluginState localState;
+
+    OscillatorModule osc, lfo;
+    AudioOutputModule audioOut;
 
     JUCE_DECLARE_NON_COPYABLE_WITH_LEAK_DETECTOR (SuperModularAudioProcessor)
 };
