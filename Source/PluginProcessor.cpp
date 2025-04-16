@@ -11,9 +11,8 @@
 
 //==============================================================================
 SuperModularAudioProcessor::SuperModularAudioProcessor()
-    : osc(0), audioOut(1), lfo(2)
 #ifndef JucePlugin_PreferredChannelConfigurations
-     , AudioProcessor (BusesProperties()
+     : AudioProcessor (BusesProperties()
                      #if ! JucePlugin_IsMidiEffect
                       #if ! JucePlugin_IsSynth
                        .withInput  ("Input",  AudioChannelSet::stereo(), true)
@@ -23,6 +22,7 @@ SuperModularAudioProcessor::SuperModularAudioProcessor()
                        )      
 #endif
 {
+    initModuleFactoryMap(moduleFactories);
 }
 
 SuperModularAudioProcessor::~SuperModularAudioProcessor()
@@ -94,14 +94,14 @@ void SuperModularAudioProcessor::changeProgramName (int index, const String& new
 //==============================================================================
 void SuperModularAudioProcessor::prepareToPlay (double sampleRate, int samplesPerBlock)
 {
-    osc.prepareToPlay(sampleRate, samplesPerBlock, 440.0);
-    lfo.prepareToPlay(sampleRate, samplesPerBlock, 10.0);
-    audioOut.prepareToPlay(sampleRate, samplesPerBlock);
+    //osc.prepareToPlay(sampleRate, samplesPerBlock, 440.0);
+    //lfo.prepareToPlay(sampleRate, samplesPerBlock, 10.0);
+    //audioOut.prepareToPlay(sampleRate, samplesPerBlock);
 
     // wire osc cv_out to audio_output cv_in
-    audioOut.getCVInputJack(0)->wirePtr(osc.getCVOutputJack(0)->getPtr());
-    audioOut.getCVInputJack(1)->wirePtr(osc.getCVOutputJack(0)->getPtr());
-    osc.getCVInputJack(0)->wirePtr(lfo.getCVOutputJack(0)->getPtr());
+    //audioOut.getCVInputJack(0)->wirePtr(osc.getCVOutputJack(0)->getPtr());
+    //audioOut.getCVInputJack(1)->wirePtr(osc.getCVOutputJack(0)->getPtr());
+    //osc.getCVInputJack(0)->wirePtr(lfo.getCVOutputJack(0)->getPtr());
 }
 
 void SuperModularAudioProcessor::releaseResources()
@@ -147,31 +147,63 @@ void SuperModularAudioProcessor::processBlock (AudioBuffer<float>& buffer, MidiB
     //for (auto i = totalNumInputChannels; i < totalNumOutputChannels; i++)
     //    buffer.clear(i, 0, buffer.getNumSamples());
 
-    // do something
-    /*
+    // update state
     std::vector<StateChangeMessage> messages;
     sharedState.recieve_updates(messages);
     for (auto message : messages) {
-        std::string op;
         switch (message.op) {
-        case ADD:
-            op = "ADD";
-            break;
-        case UPDATE:
-            op = "UPDATE";
-            break;
-        case DELETE:
-            op = "DELETE";
+        case ADD: {
+            if (message.state.getTypeId() == AudioOutputModule::typeId) {
+                if (audioOutModule == nullptr) {
+                    auto newModule = moduleFactories[message.state.getTypeId()](message.state.getId());
+                    modules[message.state.getId()] = newModule;
+                    newModule->prepareToPlay(getSampleRate(), getBlockSize());
+                    audioOutModule = newModule;
+                }
+                break;
+            }
+            auto newModule = moduleFactories[message.state.getTypeId()](message.state.getId());
+            modules[message.state.getId()] = newModule;
+            newModule->prepareToPlay(getSampleRate(), getBlockSize());
             break;
         }
-    }*/
+        case UPDATE:
+            modules[message.state.getId()]->updateFromState(message.state);
+            
+            // update input cv
+            for (int cvId = 0; cvId < message.state.getNumCvInputs(); cvId++) {
+                auto mod1 = modules[message.state.getId()];
+                auto connectionState = message.state.getInputCvConnection(cvId);
+                auto otherModuleId = connectionState.first;
+                auto otherCvId = connectionState.second;
 
-    for (auto i = 0; i < buffer.getNumSamples(); i++) {
-        lfo.processSample();
-        osc.processSample();
-        audioOut.processSample();
+                if (otherModuleId == -1 || otherCvId == -1) {
+                    mod1->getCVInputJack(cvId)->clearPtr();
+                    continue;
+                }
+
+                auto mod2 = modules[otherModuleId];
+                mod1->getCVInputJack(cvId)->wirePtr(mod2->getCVOutputJack(otherCvId)->getPtr());
+            }
+            break;
+        case DELETE:
+            delete modules[message.state.getId()];
+            modules.erase(message.state.getId());
+            break;
+        }
     }
-    audioOut.processBlock(buffer);
+
+    //
+    for (int sample = 0; sample < buffer.getNumSamples(); sample++) {
+        for (auto modulePair : modules) {
+            modulePair.second->processSample();
+        }
+    }
+    if (audioOutModule) {
+        if (auto outModule = dynamic_cast<AudioOutputModule*>(audioOutModule)) {
+            outModule->processBlock(buffer);
+        }
+    }
 }
 
 //==============================================================================

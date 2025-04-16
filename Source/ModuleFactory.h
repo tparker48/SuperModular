@@ -1,7 +1,7 @@
 /*
   ==============================================================================
 
-    ModuleFactory.h
+    ModuleUIFactory.h
     Created: 12 Apr 2025 8:53:29pm
     Author:  Tom
 
@@ -14,6 +14,9 @@
 
 #include "ModuleUIComponent.h"
 
-using ModuleFactory = ModuleUIComponent* (*)(int , ModuleGrid* , PatchCableManager* , SharedStateWriter* );
+using ModuleUIFactory = ModuleUIComponent* (*)(int , ModuleGrid* , PatchCableManager* , SharedStateWriter* );
+void initModuleUIFactoryMap(std::map<int, ModuleUIFactory>& factoryMap);
+
 ModuleUIComponent* createTestModule(int id, ModuleGrid* mg, PatchCableManager* cables, SharedStateWriter* writer);
-void initModuleFactoryMap(std::map<int, ModuleFactory>& factoryMap);
+ModuleUIComponent* createAudioOutputModule(int id, ModuleGrid* mg, PatchCableManager* cables, SharedStateWriter* writer);
+ModuleUIComponent* createOscillatorModule(int id, ModuleGrid* mg, PatchCableManager* cables, SharedStateWriter* writer);

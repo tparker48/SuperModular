@@ -51,7 +51,9 @@ public:
 
     Module(int id): id(id), blockSize(-1), sampleRate(-1.0) {}
 
-    void prepareToPlay(double sampleRate, int samplesPerBlock) {
+    void updateFromState(ModuleState state) {}
+
+    virtual void prepareToPlay(double sampleRate, int samplesPerBlock) {
         this->sampleRate = sampleRate;
         blockSize = samplesPerBlock;
     }
@@ -96,7 +98,7 @@ private:
 
 class AudioOutputModule : public Module {
 public:
-    static const int typeId = 0;
+    static const int typeId = 1;
 
     AudioOutputModule(int id) : Module(id) {
         // Left channel input
@@ -105,7 +107,7 @@ public:
         cvInputs.push_back(CVInputJack());
     }
 
-    void prepareToPlay(double sampleRate, int samplesPerBuffer) {
+    void prepareToPlay(double sampleRate, int samplesPerBuffer) override {
         Module::prepareToPlay(sampleRate, samplesPerBuffer);
         internalBuffer.setSize(2, samplesPerBuffer);
         writeHead = 0;
@@ -135,22 +137,22 @@ public:
 
 public:
     AudioBuffer<float> internalBuffer;
-    int writeHead;
+    int writeHead = 0;
 };
 
 class OscillatorModule : public Module {
 public:
-    static const int typeId = 1;
+    static const int typeId = 2;
 
     OscillatorModule(int id) : Module(id) {
-        cvInputs.push_back(CVInputJack());
+        hz = 440.0;
+        cvInputs.push_back(CVInputJack()); // hz in
+        cvInputs.push_back(CVInputJack()); // amp in
         cvOutputs.push_back(CVOutputJack());
     }
 
-    void prepareToPlay(double sampleRate, int samplesPerBlock, float hz) {
+    void prepareToPlay(double sampleRate, int samplesPerBlock) override {
         Module::prepareToPlay(sampleRate, samplesPerBlock);
-        this->hz = hz;// 440.0;
-        phase = 0.0;
         phaseIncrement = (hz * juce::MathConstants<float>::twoPi) / sampleRate;
     }
 
@@ -165,6 +167,12 @@ public:
         phase += phaseIncrement + (modVal*0.1);
     }
 private:
-    float hz;
-    float phase, phaseIncrement;
+    float hz = 0.0;
+    float phase = 0.0;
+    float phaseIncrement = 0.0;
 };
+
+using ModuleFactory = Module * (*)(int);
+void initModuleFactoryMap(std::map<int, ModuleFactory>& factoryMap);
+Module* createAudioOutputModule(int id);
+Module* createOscillatorModule(int id);

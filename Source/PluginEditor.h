@@ -63,7 +63,7 @@ private:
     template <typename M>
     void addNewModule();
 
-    std::map<int, ModuleFactory> moduleFactories;
+    std::map<int, ModuleUIFactory> moduleFactories;
 
 
 

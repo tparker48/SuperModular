@@ -14,7 +14,7 @@
 
 SuperModularAudioProcessorEditor::SuperModularAudioProcessorEditor (SuperModularAudioProcessor& p, SharedPluginState* sharedStatePtr)
     : AudioProcessorEditor (&p), audioProcessor (p), sharedState(sharedStatePtr), stateWriter(sharedStatePtr) {
-    initModuleFactoryMap(moduleFactories);
+    initModuleUIFactoryMap(moduleFactories);
     // Make sure that before the constructor has finished, you've set the
     // editor's size to whatever you need it to be.
     double ratio = double(hpPerRow) / (double(numRows) * 5.0);
@@ -163,13 +163,17 @@ void SuperModularAudioProcessorEditor::mouseUp(const MouseEvent& e) {
 void SuperModularAudioProcessorEditor::showPopupMenu() {
     // right click
     PopupMenu m;
-    m.addItem(1, "TestModule");
+    m.addItem(AudioOutputUI::typeId, "Audio Out");
+    m.addItem(OscillatorUI::typeId, "Oscillator");
     m.showMenuAsync(PopupMenu::Options(),
         [this](int result)
         {
             switch (result) {
-            case 1:
-                addNewModule<TestModule>();
+            case AudioOutputUI::typeId:
+                addNewModule<AudioOutputUI>();
+                break;
+            case OscillatorUI::typeId:
+                addNewModule<OscillatorUI>();
                 break;
             default:
                 break;
@@ -188,7 +192,13 @@ void SuperModularAudioProcessorEditor::addNewModule() {
 
     if (moduleGrid.addModule(newModule->getId(), newModule)) {
         bounds = newModule->getBounds();
-        auto module = ModuleState(newModule->getId(), M::typeId, bounds, 1, 1);
+        auto module = ModuleState(
+            newModule->getId(), 
+            M::typeId, 
+            bounds, 
+            newModule->getNumCVInputs(),
+            newModule->getNumCVOutputs()
+        );
         stateWriter.addModule(module);
         addAndMakeVisible(newModule);
     }

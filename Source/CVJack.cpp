@@ -49,6 +49,22 @@ void CVJack::mouseUp(const MouseEvent& e) {
     }
     if (source == target) {
         // started and ended on same CV jack
+        auto other = getConnection();
+        if (getType() == CVInput) {
+            stateWriter->removePatchCable(
+                getModuleId(), 
+                getId(), 
+                other->getModuleId(), 
+                other->getId());
+        }
+        else {
+            stateWriter->removePatchCable(
+                other->getModuleId(),
+                other->getId(),
+                getModuleId(),
+                getId());
+        }
+        
         clearConnection();
         return;
     }

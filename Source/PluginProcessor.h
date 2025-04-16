@@ -64,8 +64,9 @@ private:
     SharedPluginState sharedState;
     PluginState localState;
 
-    OscillatorModule osc, lfo;
-    AudioOutputModule audioOut;
+    std::map<int, ModuleFactory> moduleFactories;
+    std::unordered_map<int, Module*> modules;
+    Module* audioOutModule = nullptr;
 
     JUCE_DECLARE_NON_COPYABLE_WITH_LEAK_DETECTOR (SuperModularAudioProcessor)
 };

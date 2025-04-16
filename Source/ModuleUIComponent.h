@@ -80,6 +80,14 @@ public:
         return cvOuts[jackId];
     }
 
+    int getNumCVInputs() {
+        return cvIns.size();
+    }
+
+    int getNumCVOutputs() {
+        return cvOuts.size();
+    }
+
     void mouseDown(const MouseEvent& e);
     void mouseUp(const MouseEvent& e);
     void mouseDrag(const MouseEvent& e);
@@ -87,6 +95,8 @@ public:
     // Must implement per Module type
     virtual void paint(Graphics& g) = 0;
     virtual void resized() = 0;
+
+    
 
     void applyState(ModuleState& state) {
         // Load Bounds
@@ -183,4 +193,139 @@ public:
 
 private:
     CVJack input1, output1;
+};
+
+class AudioOutputUI : public ModuleUIComponent {
+public:
+    static const int hp = 1;
+    static const int typeId = 1;
+
+    AudioOutputUI(int id, ModuleGrid* mg, PatchCableManager* cm, SharedStateWriter* stateWriter) :
+        ModuleUIComponent(id, mg, cm, stateWriter),
+        inputLeft(CVInput, 0, id, cm, stateWriter),
+        inputRight(CVInput, 1, id, cm, stateWriter) {
+        cvIns.push_back(&inputLeft);
+        cvIns.push_back(&inputRight);
+        addAndMakeVisible(inputLeft);
+        addAndMakeVisible(inputRight);
+        addAndMakeVisible(gainSlider);
+
+
+        gainSlider.setSliderStyle(Slider::RotaryHorizontalDrag);
+        gainSlider.setValue(0.8);
+        gainSlider.setRange(0.0, 1.0);
+        gainSlider.setTitle("gain");
+        gainSlider.setName("gain");
+        gainSlider.setTextBoxStyle(Slider::NoTextBox, true, 0,0);
+    }
+
+    void paint(Graphics& g) override {
+        g.setColour(Colours::tan);
+        g.fillAll();
+        g.setFont(16.0);
+
+        g.setColour(Colours::black);
+        auto bounds = gainSlider.getBounds();
+        bounds.setY(bounds.getY() - (bounds.getHeight() * 0.2));
+        g.drawText("gain", bounds, Justification::centredTop);
+
+        bounds = inputLeft.getBounds();
+        bounds.setWidth(bounds.getWidth() * 1.4);
+        g.drawText("L", bounds, Justification::centredRight);
+
+        bounds = inputRight.getBounds();
+        bounds.setWidth(bounds.getWidth() * 1.4);
+        g.drawText("R", bounds, Justification::centredRight);
+        
+    }
+
+    void resized() override {
+        auto margin = getWidth() * 0.10;
+        auto gainY = getHeight() * 0.2;
+        auto cvY = getHeight() * 0.66;
+        auto middleX = getWidth() * 0.5;
+        auto paddingY = getHeight() * 0.2;
+
+        inputLeft.setBounds(margin, cvY - paddingY, 25, 25);
+        inputRight.setBounds(margin, cvY, 25, 25);
+        gainSlider.setBounds(middleX - 25, gainY, 50, 50);
+    }
+private:
+    CVJack inputLeft, inputRight;
+    Slider gainSlider;
+};
+
+class OscillatorUI : public ModuleUIComponent {
+public:
+    static const int hp = 2;
+    static const int typeId = 2;
+
+    OscillatorUI(int id, ModuleGrid* mg, PatchCableManager* cm, SharedStateWriter* stateWriter) :
+        ModuleUIComponent(id, mg, cm, stateWriter),
+        hzIn(CVInput, 0, id, cm, stateWriter),
+        ampIn(CVInput, 1, id, cm, stateWriter),
+        waveOut(CVOutput, 0, id, cm, stateWriter){
+        cvIns.push_back(&hzIn);
+        cvIns.push_back(&ampIn);
+        cvOuts.push_back(&waveOut);
+        addAndMakeVisible(hzIn);
+        addAndMakeVisible(ampIn);
+        addAndMakeVisible(waveOut);
+        addAndMakeVisible(hzSlider);
+
+        hzSlider.setSliderStyle(Slider::RotaryHorizontalDrag);
+        hzSlider.setValue(0.8);
+        hzSlider.setRange(0.0, 1.0);
+        hzSlider.setTitle("hz");
+        hzSlider.setName("hz");
+        hzSlider.setTextBoxStyle(Slider::NoTextBox, true, 0, 0);
+    }
+
+    void paint(Graphics& g) override {
+        g.setColour(Colours::lightgoldenrodyellow);
+        g.fillAll();
+        g.setFont(16.0);
+
+        g.setColour(Colours::black);
+        auto bounds = hzSlider.getBounds();
+        bounds.setY(bounds.getY() - (bounds.getHeight()));
+        g.drawText("hz", bounds, Justification::centredBottom);
+
+        bounds = hzIn.getBounds();
+        bounds.setY(bounds.getY() - bounds.getHeight());
+        bounds.setWidth(bounds.getWidth() * 2); 
+        bounds.setX(bounds.getX() - bounds.getWidth() / 4);
+        g.drawText("hz", bounds, Justification::centredBottom);
+
+        bounds = ampIn.getBounds();
+        bounds.setY(bounds.getY() - bounds.getHeight());
+        bounds.setWidth(bounds.getWidth()*2); 
+        bounds.setX(bounds.getX() - bounds.getWidth() / 4);
+        g.drawText("amp", bounds, Justification::centredBottom);
+
+        bounds = waveOut.getBounds();
+        bounds.setY(bounds.getY() - bounds.getHeight());
+        bounds.setWidth(bounds.getWidth()*2); 
+        bounds.setX(bounds.getX() - bounds.getWidth() / 4);
+        g.drawText("wave", bounds, Justification::centredBottom);
+
+    }
+
+    void resized() override {
+        auto margin = getWidth() * 0.10;
+        auto gainY = getHeight() * 0.2;
+        auto cvY = getHeight() * 0.8;
+        auto middleX = getWidth() * 0.5;
+        auto paddingY = getHeight() * 0.2;
+
+        hzIn.setBounds(margin, cvY - paddingY, 25, 25);
+        ampIn.setBounds(margin, cvY, 25, 25);
+        waveOut.setBounds(getWidth() - margin - 25, cvY, 25, 25);
+        hzSlider.setBounds(middleX - 35, gainY, 70, 70);
+    }
+
+private:
+    CVJack hzIn, ampIn;
+    CVJack waveOut;
+    Slider hzSlider;
 };
