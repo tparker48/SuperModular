@@ -10,20 +10,41 @@
 
 #include "ModuleFactory.h"
 
-void initModuleUIFactoryMap(std::map<int, ModuleUIFactory>& factoryMap) {
-    factoryMap[TestModule::typeId] = createTestModule;
-    factoryMap[AudioOutputUI::typeId] = createAudioOutputModule;
-    factoryMap[OscillatorUI::typeId] = createOscillatorModule;
+// Factory Mapps
+void initModuleProcessorFactoryMap(std::map<ModuleType, ModuleFactory>& factoryMap)
+{
+    factoryMap[AudioOutput] = createAudioOutputProcessor;
+    factoryMap[Oscillator] = createOscillatorProcessor;
+    factoryMap[Splitter] = createSplitterProcessor;
 }
 
-ModuleUIComponent* createTestModule(int id, ModuleGrid* mg, PatchCableManager* cables, SharedStateWriter* writer) {
-    return new TestModule(id, mg, cables, writer);
+void initModuleUIFactoryMap(std::map<ModuleType, ModuleUIFactory>& factoryMap) {
+    factoryMap[AudioOutput] = createAudioOutputUI;
+    factoryMap[Oscillator] = createOscillatorUI;
+    factoryMap[Splitter] = createSplitterUI;
 }
 
-ModuleUIComponent* createAudioOutputModule(int id, ModuleGrid* mg, PatchCableManager* cables, SharedStateWriter* writer) {
+
+// Factories
+ModuleProcessor* createAudioOutputProcessor(int id) {
+    return new AudioOutputProcessor(id);
+}
+ModuleUI* createAudioOutputUI(int id,  ModuleGrid* mg, PatchCableManager* cables, SharedStateWriter* writer) {
     return new AudioOutputUI(id, mg, cables, writer);
 }
 
-ModuleUIComponent* createOscillatorModule(int id, ModuleGrid* mg, PatchCableManager* cables, SharedStateWriter* writer) {
+ModuleProcessor* createOscillatorProcessor(int id) {
+    return new OscillatorProcessor(id);
+
+}
+ModuleUI* createOscillatorUI(int id, ModuleGrid* mg, PatchCableManager* cables, SharedStateWriter* writer) {
     return new OscillatorUI(id, mg, cables, writer);
+}
+
+ModuleProcessor* createSplitterProcessor(int id) {
+    return new SplitterProcessor(id);
+
+}
+ModuleUI* createSplitterUI(int id, ModuleGrid* mg, PatchCableManager* cables, SharedStateWriter* writer) {
+    return new SplitterUI(id, mg, cables, writer);
 }

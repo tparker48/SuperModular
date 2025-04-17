@@ -10,16 +10,42 @@
 
 #include "ModuleProcessor.h"
 
-void initModuleFactoryMap(std::map<int, ModuleFactory>& factoryMap)
-{
-    factoryMap[AudioOutputModule::typeId] = createAudioOutputModule;
-    factoryMap[OscillatorModule::typeId] = createOscillatorModule;
+ModuleProcessor::ModuleProcessor(int id, int numCvInputs, int numCvOutputs)
+    : id(id), blockSize(-1), sampleRate(-1.0) {
+    for (int i = 0; i < numCvInputs; i++) {
+        cvInputs.push_back(CVInputJack());
+    }
+    for (int i = 0; i < numCvOutputs; i++) {
+        cvOutputs.push_back(CVOutputJack());
+    }
 }
 
-ModuleProcessor* createAudioOutputModule(int id) {
-    return new AudioOutputModule(id);
+void ModuleProcessor::prepareToPlay(double sampleRate, int samplesPerBlock) {
+    this->sampleRate = sampleRate;
+    blockSize = samplesPerBlock;
 }
-ModuleProcessor* createOscillatorModule(int id) {
-    return new OscillatorModule(id);
 
+CVInputJack* ModuleProcessor::getCVInputJack(int inputId) {
+    if(inputId < cvInputs.size()) {
+        return &cvInputs[inputId];
+    }
+    else {
+        return nullptr;
+    }
+}
+
+CVOutputJack* ModuleProcessor::getCVOutputJack(int outputId) {
+    if (outputId < cvOutputs.size()) {
+        return &cvOutputs[outputId];
+    }
+    else {
+        return nullptr;
+    }
+
+}
+
+void ModuleProcessor::setCVInputJack(int inputId, CVOutputJack* output) {
+    if (inputId < cvInputs.size()) {
+        cvInputs[inputId].wirePtr(output->getPtr());
+    }
 }

@@ -12,11 +12,39 @@
 
 #include <JuceHeader.h>
 
-#include "ModuleUIComponent.h"
+#include "ModuleUI.h"
+#include "ModuleProcessor.h"
 
-using ModuleUIFactory = ModuleUIComponent* (*)(int , ModuleGrid* , PatchCableManager* , SharedStateWriter* );
-void initModuleUIFactoryMap(std::map<int, ModuleUIFactory>& factoryMap);
+#include "AudioOutputProcessor.h"
+#include "AudioOutputUI.h"
 
-ModuleUIComponent* createTestModule(int id, ModuleGrid* mg, PatchCableManager* cables, SharedStateWriter* writer);
-ModuleUIComponent* createAudioOutputModule(int id, ModuleGrid* mg, PatchCableManager* cables, SharedStateWriter* writer);
-ModuleUIComponent* createOscillatorModule(int id, ModuleGrid* mg, PatchCableManager* cables, SharedStateWriter* writer);
+#include "OscillatorProcessor.h"
+#include "OscillatorUI.h"
+
+#include "SplitterProcessor.h"
+#include "SplitterUI.h"
+
+
+enum ModuleType {
+    TestModule,
+    AudioOutput,
+    Oscillator,
+    Splitter
+};
+
+using ModuleFactory = ModuleProcessor * (*)(int);
+using ModuleUIFactory = ModuleUI * (*)(int, ModuleGrid*, PatchCableManager*, SharedStateWriter*);
+
+// Factory Mapps
+void initModuleProcessorFactoryMap(std::map<ModuleType, ModuleFactory>& factoryMap);
+void initModuleUIFactoryMap(std::map<ModuleType, ModuleUIFactory>& factoryMap);
+
+// Factories
+ModuleProcessor* createAudioOutputProcessor(int id);
+ModuleUI* createAudioOutputUI(int id, ModuleGrid* mg, PatchCableManager* cables, SharedStateWriter* writer);
+
+ModuleProcessor* createOscillatorProcessor(int id);
+ModuleUI* createOscillatorUI(int id, ModuleGrid* mg, PatchCableManager* cables, SharedStateWriter* writer);
+
+ModuleProcessor* createSplitterProcessor(int id);
+ModuleUI* createSplitterUI(int id, ModuleGrid* mg, PatchCableManager* cables, SharedStateWriter* writer);

@@ -19,7 +19,7 @@ ModuleState::ModuleState(int id, int typeId, Rectangle<int> bounds, int numCvInp
     state.setProperty("id", id, nullptr);
     state.setProperty("type", typeId, nullptr);
     state.setProperty("num_cv_in", numCvInputs, nullptr);
-    state.setProperty("num_cv_out", numCvInputs, nullptr);
+    state.setProperty("num_cv_out", numCvOutputs, nullptr);
 
     // init cv ports
     auto ins = ValueTree("cv_in");

@@ -1,21 +1,21 @@
 /*
   ==============================================================================
 
-    Module.cpp
+    ModuleUI.cpp
     Created: 5 Apr 2025 7:25:39pm
     Author:  Tom
 
   ==============================================================================
 */
 
-#include "ModuleUIComponent.h"
+#include "ModuleUI.h"
 
-void ModuleUIComponent::mouseDown(const MouseEvent& e) {
+void ModuleUI::mouseDown(const MouseEvent& e) {
     myDragger.startDraggingComponent(this, e);
     moduleGrid->yankModule(id);
 }
 
-void ModuleUIComponent::mouseUp(const MouseEvent& e) {
+void ModuleUI::mouseUp(const MouseEvent& e) {
     if (e.mods.isRightButtonDown()) {
         // right click
         PopupMenu m;
@@ -31,9 +31,9 @@ void ModuleUIComponent::mouseUp(const MouseEvent& e) {
                             cvIn->clearConnection();
                             other->clearConnection();
                             stateWriter->removePatchCable(
-                                getId(), 
-                                cvIn->getId(), 
-                                other->getModuleId(), 
+                                getId(),
+                                cvIn->getId(),
+                                other->getModuleId(),
                                 other->getId()
                             );
                         }
@@ -63,10 +63,10 @@ void ModuleUIComponent::mouseUp(const MouseEvent& e) {
         moduleGrid->placeModule(id, getBounds());
         stateWriter->moveModule(getId(), getBounds());
     }
-    
+
 }
 
-void ModuleUIComponent::mouseDrag(const MouseEvent& e) {
+void ModuleUI::mouseDrag(const MouseEvent& e) {
     myDragger.dragComponent(this, e, &moduleDragRules);
 
     for (auto child : getChildren()) {

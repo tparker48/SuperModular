@@ -11,7 +11,7 @@
 #include <JuceHeader.h>
 #include "ModuleFactory.h"
 #include "PluginProcessor.h"
-#include "ModuleUIComponent.h"
+#include "ModuleUI.h"
 #include "SharedStateWriter.h"
 
 //==============================================================================
@@ -33,13 +33,16 @@ class SuperModularAudioProcessorEditor  : public AudioProcessorEditor, public Ti
 public:
     SuperModularAudioProcessorEditor (SuperModularAudioProcessor&, SharedPluginState* sharedStatePtr);
     ~SuperModularAudioProcessorEditor() override;
+    void timerCallback();
+    void loadState();
+    void clearState();
 
     //==============================================================================
     void paint (Graphics&) override;
     void resized() override;
     void mouseUp(const MouseEvent& e) override;
 
-    void timerCallback();
+    
 
 private:
     // This reference is provided as a quick way for your editor to
@@ -61,11 +64,9 @@ private:
     void showPopupMenu();
 
     template <typename M>
-    void addNewModule();
+    void addNewModule(ModuleType type);
 
-    std::map<int, ModuleUIFactory> moduleFactories;
-
-
+    std::map<ModuleType, ModuleUIFactory> moduleFactories;
 
     JUCE_DECLARE_NON_COPYABLE_WITH_LEAK_DETECTOR (SuperModularAudioProcessorEditor)
 };

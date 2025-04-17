@@ -21,13 +21,19 @@ void SharedPluginState::send_updates(std::vector<StateChangeMessage> messages) {
 
     auto flagToWaitFor = writeIdx;
     auto flagToWrite = (~writeIdx) & 0b00000001;
-    while (!shareFlags.compareAndSetBool(flagToWrite, flagToWaitFor)) {}
+    while (!shareFlags.compareAndSetBool(flagToWrite, flagToWaitFor)) {
+    }
 }
 
 void SharedPluginState::send_update(StateChangeMessage message) {
     std::vector<StateChangeMessage> messages;
     messages.push_back(message);
     send_updates(messages);
+}
+
+void SharedPluginState::switchWriteIdx() {
+    // called on a timer so we never leave data in a queue unread for too long
+    send_updates(std::vector<StateChangeMessage>());
 }
 
 void SharedPluginState::recieve_updates(std::vector<StateChangeMessage>& messages) {
@@ -69,7 +75,7 @@ void SharedPluginState::startRead() {
     shareFlags += 0b00000010;
 }
 void SharedPluginState::endRead() {
-    shareFlags -= 0b00000010;
+    shareFlags -= 0b0000010;
 }
 char SharedPluginState::getWriteIdx() {
     return shareFlags.get() & 0b00000001;

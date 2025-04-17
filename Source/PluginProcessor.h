@@ -12,6 +12,8 @@
 
 #include "SharedPluginState.h"
 #include "ModuleProcessor.h"
+#include "ModuleFactory.h"
+#include "AudioOutputProcessor.h"
 
 typedef AudioProcessorValueTreeState ValueTreeState;
 
@@ -59,12 +61,17 @@ public:
     void getStateInformation (MemoryBlock& destData) override;
     void setStateInformation (const void* data, int sizeInBytes) override;
 
+    void applyStateUpdates();
+    void addModule(ModuleState state);
+    void updateModule(ModuleState state);
+    void deleteModule(ModuleState state);
+
 private:
     //==============================================================================
     SharedPluginState sharedState;
     PluginState localState;
 
-    std::map<int, ModuleFactory> moduleFactories;
+    std::map<ModuleType, ModuleFactory> moduleFactories;
     std::unordered_map<int, ModuleProcessor*> modules;
     ModuleProcessor* audioOutModule = nullptr;
 

@@ -11,6 +11,7 @@
 
 //==============================================================================
 
+static int nextModuleId = 0;
 
 SuperModularAudioProcessorEditor::SuperModularAudioProcessorEditor (SuperModularAudioProcessor& p, SharedPluginState* sharedStatePtr)
     : AudioProcessorEditor (&p), audioProcessor (p), sharedState(sharedStatePtr), stateWriter(sharedStatePtr) {
@@ -19,57 +20,62 @@ SuperModularAudioProcessorEditor::SuperModularAudioProcessorEditor (SuperModular
     // editor's size to whatever you need it to be.
     double ratio = double(hpPerRow) / (double(numRows) * 5.0);
     double size = hpPerRow * 60.0;
-    setSize(size, size / ratio);
-    setLookAndFeel(&customLookAndFeel);
-
-    addAndMakeVisible(cableManager.getDragCable());
-
     hpWidth = (float)getWidth() / (float)hpPerRow;
     moduleHeight = (float)getHeight() / (float)numRows;
+    
+    setSize(size, size / ratio);
+    setLookAndFeel(&customLookAndFeel);
+    addAndMakeVisible(cableManager.getDragCable());
 
-    startTimerHz(2);
-    /*
-    auto modState1 = ModuleState(1, TestModule::typeId, ModuleBounds(0, 0, TestModule::hp * hpWidth, moduleHeight), 1, 1);
-    auto modState2 = ModuleState(2, TestModule::typeId, ModuleBounds(100, 500, TestModule::hp * hpWidth, moduleHeight), 1, 1);
-    stateWriter.addModule(modState1);
-    stateWriter.addModule(modState2);
-    stateWriter.addPatchCable(1, 0, 2, 0);
-    */
+    loadState();
+    startTimerHz(3);
+}
+
+SuperModularAudioProcessorEditor::~SuperModularAudioProcessorEditor()
+{
+    setLookAndFeel(nullptr);
+    stateWriter.saveStateToShared();
+    clearState();
+}
+
+void SuperModularAudioProcessorEditor::timerCallback() {
+    if (stateWriter.reload(sharedState)) {
+        clearState();
+        loadState();
+    }
+
+    sharedState->switchWriteIdx();
+}
+
+
+void SuperModularAudioProcessorEditor::loadState() {
     auto state = stateWriter.dumpLocalState();
+    auto maxId = -1;
 
-    // first create all modules
-    std::map<int, ModuleUIComponent*> modules;
+    std::map<int, ModuleUI*> modules;
     for (auto moduleState : state.moduleStates) {
         int id = moduleState.getId();
         int moduleTypeId = moduleState.getTypeId();
-        modules[id] = moduleFactories[moduleTypeId](id, &moduleGrid, &cableManager, &stateWriter);
+        modules[id] = moduleFactories[(ModuleType)moduleTypeId](id, &moduleGrid, &cableManager, &stateWriter);
         modules[id]->setBounds(moduleState.getBounds());
         moduleGrid.addModule(id, modules[id]);
         addAndMakeVisible(modules[id]);
+        maxId = std::max(id, maxId);
     }
-
-    // after all modules exist, initialize them
     for (auto moduleState : state.moduleStates) {
         int id = moduleState.getId();
         modules[id]->applyState(moduleState);
     }
 
+    nextModuleId = maxId + 1;
 }
 
-void SuperModularAudioProcessorEditor::timerCallback() {
-    if (!stateWriter.reload(sharedState)) {
-        return; // nothing to read
-    }
-
-    PluginState state = stateWriter.dumpLocalState();
-
-    // reset mod grid
+void SuperModularAudioProcessorEditor::clearState() {
     moduleGrid.clearAllModules();
 
-    // delete all current modules
-    std::vector<ModuleUIComponent*> oldModules;
+    std::vector<ModuleUI*> oldModules;
     for (auto child : getChildren()) {
-        ModuleUIComponent* module = dynamic_cast<ModuleUIComponent*>(child);
+        ModuleUI* module = dynamic_cast<ModuleUI*>(child);
         if (module) {
             oldModules.push_back(module);
         }
@@ -77,42 +83,8 @@ void SuperModularAudioProcessorEditor::timerCallback() {
     for (int i = 0; i < oldModules.size(); i++) {
         delete oldModules[i];
     }
-
-    std::map<int, ModuleUIComponent*> modules;
-    for (auto moduleState : state.moduleStates) {
-        int id = moduleState.getId();
-        int moduleTypeId = moduleState.getTypeId();
-        modules[id] = moduleFactories[moduleTypeId](id, &moduleGrid, &cableManager, &stateWriter);
-        modules[id]->setBounds(moduleState.getBounds());
-        moduleGrid.addModule(id, modules[id]);
-        addAndMakeVisible(modules[id]);
-    }
-
-    // after all modules exist, initialize them
-    for (auto moduleState : state.moduleStates) {
-        int id = moduleState.getId();
-        modules[id]->applyState(moduleState);
-    }
 }
 
-SuperModularAudioProcessorEditor::~SuperModularAudioProcessorEditor()
-{
-    setLookAndFeel(nullptr);
-  
-    stateWriter.saveStateToShared();
-
-    // delete all leftover modules
-    std::vector<ModuleUIComponent*> modules;
-    for (auto child : getChildren()) {
-        ModuleUIComponent* module = dynamic_cast<ModuleUIComponent*>(child);
-        if (module) {
-            modules.push_back(module);
-        }
-    }
-    for (int i = 0; i < modules.size(); i++) {
-        delete modules[i];
-    }
-}
 
 //==============================================================================
 void SuperModularAudioProcessorEditor::paint (Graphics& g)
@@ -163,29 +135,29 @@ void SuperModularAudioProcessorEditor::mouseUp(const MouseEvent& e) {
 void SuperModularAudioProcessorEditor::showPopupMenu() {
     // right click
     PopupMenu m;
-    m.addItem(AudioOutputUI::typeId, "Audio Out");
-    m.addItem(OscillatorUI::typeId, "Oscillator");
+    m.addItem(AudioOutput, "Audio Out");
+    m.addItem(Oscillator, "Oscillator");
+    m.addItem(Splitter, "Splitter");
     m.showMenuAsync(PopupMenu::Options(),
         [this](int result)
         {
             switch (result) {
-            case AudioOutputUI::typeId:
-                addNewModule<AudioOutputUI>();
+            case AudioOutput:
+                addNewModule<AudioOutputUI>(AudioOutput);
                 break;
-            case OscillatorUI::typeId:
-                addNewModule<OscillatorUI>();
+            case Oscillator:
+                addNewModule<OscillatorUI>(Oscillator);
                 break;
+            case Splitter:
+                addNewModule<SplitterUI>(Splitter);
             default:
                 break;
             }
         });
-
 }
 
-static int nextModuleId = 0;
-
 template <typename M>
-void SuperModularAudioProcessorEditor::addNewModule() {
+void SuperModularAudioProcessorEditor::addNewModule(ModuleType typeId) {
     auto newModule = new M(nextModuleId++, &moduleGrid, &cableManager, &stateWriter);
     auto bounds = ModuleBounds(0, 0, hpWidth * M::hp, moduleHeight);
     newModule->setBounds(bounds);
@@ -194,12 +166,13 @@ void SuperModularAudioProcessorEditor::addNewModule() {
         bounds = newModule->getBounds();
         auto module = ModuleState(
             newModule->getId(), 
-            M::typeId, 
+            typeId,
             bounds, 
             newModule->getNumCVInputs(),
             newModule->getNumCVOutputs()
         );
         stateWriter.addModule(module);
         addAndMakeVisible(newModule);
+        newModule->startListeners();
     }
 }

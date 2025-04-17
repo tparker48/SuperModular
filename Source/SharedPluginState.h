@@ -37,6 +37,7 @@ class SharedPluginState {
 public:
     void send_updates(std::vector<StateChangeMessage> messages);
     void send_update(StateChangeMessage message);
+    void switchWriteIdx();
     void recieve_updates(std::vector<StateChangeMessage>& messages);
 
     void writeFullState(PluginState& state, bool flagReload = false);

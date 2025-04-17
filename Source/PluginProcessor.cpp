@@ -22,7 +22,7 @@ SuperModularAudioProcessor::SuperModularAudioProcessor()
                        )      
 #endif
 {
-    initModuleFactoryMap(moduleFactories);
+    initModuleProcessorFactoryMap(moduleFactories);
 }
 
 SuperModularAudioProcessor::~SuperModularAudioProcessor()
@@ -108,6 +108,9 @@ void SuperModularAudioProcessor::releaseResources()
 {
     // When playback stops, you can use this as an opportunity to free up any
     // spare memory, etc.
+    for (auto module : modules) {
+        delete module.second;
+    }
 }
 
 #ifndef JucePlugin_PreferredChannelConfigurations
@@ -138,69 +141,15 @@ bool SuperModularAudioProcessor::isBusesLayoutSupported (const BusesLayout& layo
 
 void SuperModularAudioProcessor::processBlock (AudioBuffer<float>& buffer, MidiBuffer& midiMessages)
 {
-    //buffer.clear();
+    applyStateUpdates();
 
-    ScopedNoDenormals noDenormals;
-    auto totalNumInputChannels = getTotalNumInputChannels();
-    auto totalNumOutputChannels = getTotalNumOutputChannels();
-
-    //for (auto i = totalNumInputChannels; i < totalNumOutputChannels; i++)
-    //    buffer.clear(i, 0, buffer.getNumSamples());
-
-    // update state
-    std::vector<StateChangeMessage> messages;
-    sharedState.recieve_updates(messages);
-    for (auto message : messages) {
-        switch (message.op) {
-        case ADD: {
-            if (message.state.getTypeId() == AudioOutputModule::typeId) {
-                if (audioOutModule == nullptr) {
-                    auto newModule = moduleFactories[message.state.getTypeId()](message.state.getId());
-                    modules[message.state.getId()] = newModule;
-                    newModule->prepareToPlay(getSampleRate(), getBlockSize());
-                    audioOutModule = newModule;
-                }
-                break;
-            }
-            auto newModule = moduleFactories[message.state.getTypeId()](message.state.getId());
-            modules[message.state.getId()] = newModule;
-            newModule->prepareToPlay(getSampleRate(), getBlockSize());
-            break;
-        }
-        case UPDATE:
-            modules[message.state.getId()]->updateFromState(message.state);
-            
-            // update input cv
-            for (int cvId = 0; cvId < message.state.getNumCvInputs(); cvId++) {
-                auto mod1 = modules[message.state.getId()];
-                auto connectionState = message.state.getInputCvConnection(cvId);
-                auto otherModuleId = connectionState.first;
-                auto otherCvId = connectionState.second;
-
-                if (otherModuleId == -1 || otherCvId == -1) {
-                    mod1->getCVInputJack(cvId)->clearPtr();
-                    continue;
-                }
-
-                auto mod2 = modules[otherModuleId];
-                mod1->getCVInputJack(cvId)->wirePtr(mod2->getCVOutputJack(otherCvId)->getPtr());
-            }
-            break;
-        case DELETE:
-            delete modules[message.state.getId()];
-            modules.erase(message.state.getId());
-            break;
-        }
-    }
-
-    //
     for (int sample = 0; sample < buffer.getNumSamples(); sample++) {
         for (auto modulePair : modules) {
             modulePair.second->processSample();
         }
     }
     if (audioOutModule) {
-        if (auto outModule = dynamic_cast<AudioOutputModule*>(audioOutModule)) {
+        if (auto outModule = dynamic_cast<AudioOutputProcessor*>(audioOutModule)) {
             outModule->processBlock(buffer);
         }
     }
@@ -235,6 +184,73 @@ void SuperModularAudioProcessor::setStateInformation (const void* data, int size
 
     // write plugin state to shared obj, and flag a reload for the editor
     sharedState.writeFullState(localState, true);
+}
+
+void SuperModularAudioProcessor::applyStateUpdates() {
+    std::vector<StateChangeMessage> messages;
+    sharedState.recieve_updates(messages);
+    for (auto message : messages) {
+        switch (message.op) {
+        case ADD:
+            addModule(message.state);
+            break;
+        case UPDATE:
+            updateModule(message.state);
+            break;
+        case DELETE:
+            deleteModule(message.state);
+            break;
+        }
+    }
+}
+
+void SuperModularAudioProcessor::addModule(ModuleState state) {
+    int id = state.getId();
+    ModuleType type = (ModuleType)state.getTypeId();
+    auto newModule = moduleFactories[type](id);
+    newModule->prepareToPlay(getSampleRate(), getBlockSize());
+
+    if (type == AudioOutput) {
+        if (audioOutModule == nullptr) {
+            audioOutModule = newModule;
+        }
+        else {
+            return;
+        }
+        
+    }
+
+    modules[id] = newModule;
+}
+void SuperModularAudioProcessor::updateModule(ModuleState state) {
+    if (modules.find(state.getId()) == modules.end()) { return; }
+
+    int id = state.getId();
+    auto module = modules[id];
+
+    module->updateFromState(state);
+
+    // update input cv
+    for (int cvId = 0; cvId < state.getNumCvInputs(); cvId++) {
+        auto otherModuleId = state.getInputCvConnection(cvId).first;
+        auto otherCvId = state.getInputCvConnection(cvId).second;
+
+        if (otherModuleId == -1 || otherCvId == -1) {
+            module->getCVInputJack(cvId)->clearPtr();
+        }
+        else {
+            auto other = modules[otherModuleId];
+            module->getCVInputJack(cvId)->wirePtr(other->getCVOutputJack(otherCvId)->getPtr());
+        }
+    }
+}
+void SuperModularAudioProcessor::deleteModule(ModuleState state) {
+    int id = state.getId();
+    if (modules[state.getId()] == audioOutModule) {
+        audioOutModule = nullptr;
+    }
+    delete modules[state.getId()];
+    modules.erase(state.getId());
 }
 
 //==============================================================================
