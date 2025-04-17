@@ -11,7 +11,7 @@
 #include <JuceHeader.h>
 
 #include "SharedPluginState.h"
-#include "Module.h"
+#include "ModuleProcessor.h"
 
 typedef AudioProcessorValueTreeState ValueTreeState;
 
@@ -65,8 +65,8 @@ private:
     PluginState localState;
 
     std::map<int, ModuleFactory> moduleFactories;
-    std::unordered_map<int, Module*> modules;
-    Module* audioOutModule = nullptr;
+    std::unordered_map<int, ModuleProcessor*> modules;
+    ModuleProcessor* audioOutModule = nullptr;
 
     JUCE_DECLARE_NON_COPYABLE_WITH_LEAK_DETECTOR (SuperModularAudioProcessor)
 };

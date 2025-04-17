@@ -5,50 +5,46 @@
               pluginCharacteristicsValue="pluginIsSynth,pluginWantsMidiIn">
   <MAINGROUP id="Fqzt31" name="SuperModular">
     <GROUP id="{0C7E7290-A30B-36B9-5B86-6E4BA2E3F5B0}" name="Source">
-      <GROUP id="{95961942-E874-79E4-359F-43BC6A24E00D}" name="Audio">
-        <FILE id="Sz6Oh6" name="Module.cpp" compile="1" resource="0" file="Source/Module.cpp"/>
-        <FILE id="Kq79tP" name="Module.h" compile="0" resource="0" file="Source/Module.h"/>
-      </GROUP>
-      <GROUP id="{EDC0C7F4-16E7-353E-0FE3-980369A4613A}" name="State">
-        <FILE id="tXzne2" name="ModuleState.cpp" compile="1" resource="0" file="Source/ModuleState.cpp"/>
-        <FILE id="hJ9y5S" name="ModuleState.h" compile="0" resource="0" file="Source/ModuleState.h"/>
-        <FILE id="v0hxaC" name="PluginState.cpp" compile="1" resource="0" file="Source/PluginState.cpp"/>
-        <FILE id="NxlOGj" name="PluginState.h" compile="0" resource="0" file="Source/PluginState.h"/>
-        <FILE id="JRuCCQ" name="SharedPluginState.cpp" compile="1" resource="0"
-              file="Source/SharedPluginState.cpp"/>
-        <FILE id="eibtMo" name="SharedPluginState.h" compile="0" resource="0"
-              file="Source/SharedPluginState.h"/>
-        <FILE id="oVMI5F" name="StateChangeMessage.cpp" compile="1" resource="0"
-              file="Source/StateChangeMessage.cpp"/>
-        <FILE id="M7swRD" name="StateChangeMessage.h" compile="0" resource="0"
-              file="Source/StateChangeMessage.h"/>
-        <FILE id="e8OXF7" name="SharedStateWriter.cpp" compile="1" resource="0"
-              file="Source/SharedStateWriter.cpp"/>
-        <FILE id="duKqV6" name="SharedStateWriter.h" compile="0" resource="0"
-              file="Source/SharedStateWriter.h"/>
-      </GROUP>
-      <GROUP id="{AE79F385-34AA-EB2F-F17C-6E10DA89A45E}" name="UI">
-        <FILE id="p8h5iG" name="ModuleFactory.cpp" compile="1" resource="0"
-              file="Source/ModuleFactory.cpp"/>
-        <FILE id="boB2IM" name="ModuleFactory.h" compile="0" resource="0" file="Source/ModuleFactory.h"/>
-        <FILE id="LQ9lvC" name="PatchCableManager.cpp" compile="1" resource="0"
-              file="Source/PatchCableManager.cpp"/>
-        <FILE id="l8qsJg" name="PatchCableManager.h" compile="0" resource="0"
-              file="Source/PatchCableManager.h"/>
-        <FILE id="FxMjSg" name="CVJack.cpp" compile="1" resource="0" file="Source/CVJack.cpp"/>
-        <FILE id="GoR9p6" name="CVJack.h" compile="0" resource="0" file="Source/CVJack.h"/>
-        <FILE id="RTK0lg" name="PatchCable.cpp" compile="1" resource="0" file="Source/PatchCable.cpp"/>
-        <FILE id="IauNX9" name="PatchCable.h" compile="0" resource="0" file="Source/PatchCable.h"/>
-        <FILE id="jSTJFd" name="ModuleUIComponent.cpp" compile="1" resource="0"
-              file="Source/ModuleUIComponent.cpp"/>
-        <FILE id="JgJmGS" name="ModuleUIComponent.h" compile="0" resource="0"
-              file="Source/ModuleUIComponent.h"/>
-        <FILE id="SKdqDJ" name="ModuleGrid.cpp" compile="1" resource="0" file="Source/ModuleGrid.cpp"/>
-        <FILE id="TR0Mvz" name="ModuleGrid.h" compile="0" resource="0" file="Source/ModuleGrid.h"/>
-        <FILE id="YezmWy" name="PluginEditor.cpp" compile="1" resource="0"
-              file="Source/PluginEditor.cpp"/>
-        <FILE id="tsXVwn" name="PluginEditor.h" compile="0" resource="0" file="Source/PluginEditor.h"/>
-      </GROUP>
+      <FILE id="Sz6Oh6" name="ModuleProcessor.cpp" compile="1" resource="0"
+            file="Source/ModuleProcessor.cpp"/>
+      <FILE id="Kq79tP" name="ModuleProcessor.h" compile="0" resource="0"
+            file="Source/ModuleProcessor.h"/>
+      <FILE id="tXzne2" name="ModuleState.cpp" compile="1" resource="0" file="Source/ModuleState.cpp"/>
+      <FILE id="hJ9y5S" name="ModuleState.h" compile="0" resource="0" file="Source/ModuleState.h"/>
+      <FILE id="v0hxaC" name="PluginState.cpp" compile="1" resource="0" file="Source/PluginState.cpp"/>
+      <FILE id="NxlOGj" name="PluginState.h" compile="0" resource="0" file="Source/PluginState.h"/>
+      <FILE id="JRuCCQ" name="SharedPluginState.cpp" compile="1" resource="0"
+            file="Source/SharedPluginState.cpp"/>
+      <FILE id="eibtMo" name="SharedPluginState.h" compile="0" resource="0"
+            file="Source/SharedPluginState.h"/>
+      <FILE id="oVMI5F" name="StateChangeMessage.cpp" compile="1" resource="0"
+            file="Source/StateChangeMessage.cpp"/>
+      <FILE id="M7swRD" name="StateChangeMessage.h" compile="0" resource="0"
+            file="Source/StateChangeMessage.h"/>
+      <FILE id="e8OXF7" name="SharedStateWriter.cpp" compile="1" resource="0"
+            file="Source/SharedStateWriter.cpp"/>
+      <FILE id="duKqV6" name="SharedStateWriter.h" compile="0" resource="0"
+            file="Source/SharedStateWriter.h"/>
+      <FILE id="p8h5iG" name="ModuleFactory.cpp" compile="1" resource="0"
+            file="Source/ModuleFactory.cpp"/>
+      <FILE id="boB2IM" name="ModuleFactory.h" compile="0" resource="0" file="Source/ModuleFactory.h"/>
+      <FILE id="LQ9lvC" name="PatchCableManager.cpp" compile="1" resource="0"
+            file="Source/PatchCableManager.cpp"/>
+      <FILE id="l8qsJg" name="PatchCableManager.h" compile="0" resource="0"
+            file="Source/PatchCableManager.h"/>
+      <FILE id="FxMjSg" name="CVJack.cpp" compile="1" resource="0" file="Source/CVJack.cpp"/>
+      <FILE id="GoR9p6" name="CVJack.h" compile="0" resource="0" file="Source/CVJack.h"/>
+      <FILE id="RTK0lg" name="PatchCable.cpp" compile="1" resource="0" file="Source/PatchCable.cpp"/>
+      <FILE id="IauNX9" name="PatchCable.h" compile="0" resource="0" file="Source/PatchCable.h"/>
+      <FILE id="jSTJFd" name="ModuleUIComponent.cpp" compile="1" resource="0"
+            file="Source/ModuleUIComponent.cpp"/>
+      <FILE id="JgJmGS" name="ModuleUIComponent.h" compile="0" resource="0"
+            file="Source/ModuleUIComponent.h"/>
+      <FILE id="SKdqDJ" name="ModuleGrid.cpp" compile="1" resource="0" file="Source/ModuleGrid.cpp"/>
+      <FILE id="TR0Mvz" name="ModuleGrid.h" compile="0" resource="0" file="Source/ModuleGrid.h"/>
+      <FILE id="YezmWy" name="PluginEditor.cpp" compile="1" resource="0"
+            file="Source/PluginEditor.cpp"/>
+      <FILE id="tsXVwn" name="PluginEditor.h" compile="0" resource="0" file="Source/PluginEditor.h"/>
       <FILE id="EA4HoY" name="PluginProcessor.cpp" compile="1" resource="0"
             file="Source/PluginProcessor.cpp"/>
       <FILE id="WNhrwD" name="PluginProcessor.h" compile="0" resource="0"

@@ -1,7 +1,7 @@
 /*
   ==============================================================================
 
-    Module.h
+    ModuleProcessor.h
     Created: 14 Apr 2025 9:27:46pm
     Author:  Tom
 
@@ -45,11 +45,11 @@ private:
     float cvValue = 0.0;
 };
 
-class Module {
+class ModuleProcessor {
 public:
     static const int typeId = -1;
 
-    Module(int id): id(id), blockSize(-1), sampleRate(-1.0) {}
+    ModuleProcessor(int id): id(id), blockSize(-1), sampleRate(-1.0) {}
 
     void updateFromState(ModuleState state) {}
 
@@ -96,11 +96,11 @@ private:
     int id = -1;
 };
 
-class AudioOutputModule : public Module {
+class AudioOutputModule : public ModuleProcessor {
 public:
     static const int typeId = 1;
 
-    AudioOutputModule(int id) : Module(id) {
+    AudioOutputModule(int id) : ModuleProcessor(id) {
         // Left channel input
         cvInputs.push_back(CVInputJack());
         // Right channel input
@@ -108,7 +108,7 @@ public:
     }
 
     void prepareToPlay(double sampleRate, int samplesPerBuffer) override {
-        Module::prepareToPlay(sampleRate, samplesPerBuffer);
+        ModuleProcessor::prepareToPlay(sampleRate, samplesPerBuffer);
         internalBuffer.setSize(2, samplesPerBuffer);
         writeHead = 0;
     }
@@ -140,11 +140,11 @@ public:
     int writeHead = 0;
 };
 
-class OscillatorModule : public Module {
+class OscillatorModule : public ModuleProcessor {
 public:
     static const int typeId = 2;
 
-    OscillatorModule(int id) : Module(id) {
+    OscillatorModule(int id) : ModuleProcessor(id) {
         hz = 440.0;
         cvInputs.push_back(CVInputJack()); // hz in
         cvInputs.push_back(CVInputJack()); // amp in
@@ -152,7 +152,7 @@ public:
     }
 
     void prepareToPlay(double sampleRate, int samplesPerBlock) override {
-        Module::prepareToPlay(sampleRate, samplesPerBlock);
+        ModuleProcessor::prepareToPlay(sampleRate, samplesPerBlock);
         phaseIncrement = (hz * juce::MathConstants<float>::twoPi) / sampleRate;
     }
 
@@ -172,7 +172,7 @@ private:
     float phaseIncrement = 0.0;
 };
 
-using ModuleFactory = Module * (*)(int);
+using ModuleFactory = ModuleProcessor * (*)(int);
 void initModuleFactoryMap(std::map<int, ModuleFactory>& factoryMap);
-Module* createAudioOutputModule(int id);
-Module* createOscillatorModule(int id);
+ModuleProcessor* createAudioOutputModule(int id);
+ModuleProcessor* createOscillatorModule(int id);

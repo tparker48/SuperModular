@@ -8,7 +8,7 @@
   ==============================================================================
 */
 
-#include "Module.h"
+#include "ModuleProcessor.h"
 
 void initModuleFactoryMap(std::map<int, ModuleFactory>& factoryMap)
 {
@@ -16,10 +16,10 @@ void initModuleFactoryMap(std::map<int, ModuleFactory>& factoryMap)
     factoryMap[OscillatorModule::typeId] = createOscillatorModule;
 }
 
-Module* createAudioOutputModule(int id) {
+ModuleProcessor* createAudioOutputModule(int id) {
     return new AudioOutputModule(id);
 }
-Module* createOscillatorModule(int id) {
+ModuleProcessor* createOscillatorModule(int id) {
     return new OscillatorModule(id);
 
 }
