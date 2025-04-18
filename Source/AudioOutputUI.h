@@ -31,14 +31,23 @@ public:
         addAndMakeVisible(gainSlider);
     }
 
-    void startListeners() {
-        gainSlider.addListener(this);
-    }
-
     void sliderValueChanged(juce::Slider* slider) override
     {
         if (slider == &gainSlider) {
             stateWriter->setModuleProperty(getId(), "gain", gainSlider.getValue());
+        }
+    }
+
+    void startListeners() override {
+        gainSlider.addListener(this);
+    }
+
+    void applyState(ModuleState& moduleState) override {
+        ModuleUI::applyState(moduleState);
+
+        auto gain = moduleState.state.getProperty("gain");
+        if (!gain.isVoid()) {
+            gainSlider.setValue(gain);
         }
     }
 
@@ -75,6 +84,7 @@ public:
         inputRight->setBounds(margin, cvY, 25, 25);
         gainSlider.setBounds(middleX - 25, gainY, 50, 50);
     }
+
 private:
     CVJack *inputLeft, *inputRight;
     Slider gainSlider;

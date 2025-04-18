@@ -15,7 +15,7 @@
 // The full state of a module
 class ModuleState {
 public:
-    ModuleState() {}
+    ModuleState(): state("module") {}
     ModuleState(int id);
     ModuleState(int id, int typeId, Rectangle<int> bounds, int numCvInputs = 0, int numCvOutputs = 0);
     ModuleState(XmlElement& xml);

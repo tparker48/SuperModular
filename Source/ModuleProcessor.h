@@ -13,7 +13,6 @@
 #include <JuceHeader.h>
 #include "ModuleState.h"
 
-
 class CVInputJack {
 public:
     float read() {
@@ -51,6 +50,7 @@ private:
 class ModuleProcessor {
 public:
     ModuleProcessor(int id, int numCvInputs, int numCvOutputs);
+    virtual ~ModuleProcessor() {}
     virtual void prepareToPlay(double sampleRate, int samplesPerBlock);
 
     virtual void updateFromState(ModuleState state) = 0;

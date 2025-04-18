@@ -16,39 +16,16 @@
 
 class PatchCableManager {
 public:
-    PatchCableManager() {
-        liveDragCable.setColour(Colour(0x88FFFFFF));
-        liveDragCable.setEndColour(Colour(0xFFFFFFFF));
-        liveDragCable.setAsDraggerCable();
-    }
+    PatchCableManager();
     ~PatchCableManager() {}
 
-    bool isDraggingCable() {
-        return dragSource != nullptr;
-    }
-
-    Component* getDraggedCable() {
-        return dragSource;
-    }
-
-    void setDraggedCable(Component* source) {
-        if (dragSource == nullptr) {
-            dragSource = source;
-        }
-    }
-
-    void clearDraggedCable() {
-        dragSource = nullptr;
-        liveDragCable.setBounds(-1, -1, -1, -1);
-    }
-
-    void updateDraggedCablePosition(const MouseEvent& e) {
-        if (dragSource != nullptr) {
-            liveDragCable.setPoints(dragSource, e);
-        }
-    }
-
+    bool isDraggingCable() { return dragSource != nullptr; }
     PatchCable* getDragCable() { return &liveDragCable; }
+    void setDraggedCable(Component* source);
+    void clearDraggedCable();
+    void updateDraggedCablePosition(const MouseEvent& e);
+
+
 
 private:
     Component* dragSource = nullptr;

@@ -8,6 +8,7 @@
 
 #include "PluginProcessor.h"
 #include "PluginEditor.h"
+#include "TestRunner.h"
 
 //==============================================================================
 SuperModularAudioProcessor::SuperModularAudioProcessor()
@@ -23,6 +24,11 @@ SuperModularAudioProcessor::SuperModularAudioProcessor()
 #endif
 {
     initModuleProcessorFactoryMap(moduleFactories);
+
+    if (PluginHostType::getPluginLoadedAs() == AudioProcessor::wrapperType_Standalone) {
+        TestRunner runner;
+        runner.runAllTests();
+    }
 }
 
 SuperModularAudioProcessor::~SuperModularAudioProcessor()
@@ -94,23 +100,19 @@ void SuperModularAudioProcessor::changeProgramName (int index, const String& new
 //==============================================================================
 void SuperModularAudioProcessor::prepareToPlay (double sampleRate, int samplesPerBlock)
 {
-    //osc.prepareToPlay(sampleRate, samplesPerBlock, 440.0);
-    //lfo.prepareToPlay(sampleRate, samplesPerBlock, 10.0);
-    //audioOut.prepareToPlay(sampleRate, samplesPerBlock);
-
-    // wire osc cv_out to audio_output cv_in
-    //audioOut.getCVInputJack(0)->wirePtr(osc.getCVOutputJack(0)->getPtr());
-    //audioOut.getCVInputJack(1)->wirePtr(osc.getCVOutputJack(0)->getPtr());
-    //osc.getCVInputJack(0)->wirePtr(lfo.getCVOutputJack(0)->getPtr());
+    for (auto module : modules) {
+        module.second->prepareToPlay(sampleRate, samplesPerBlock);
+    }
 }
 
 void SuperModularAudioProcessor::releaseResources()
 {
     // When playback stops, you can use this as an opportunity to free up any
     // spare memory, etc.
-    for (auto module : modules) {
-        delete module.second;
+    for (int i = 0; i < modules.size(); i++) {
+        delete modules[i];
     }
+    modules.clear();
 }
 
 #ifndef JucePlugin_PreferredChannelConfigurations
@@ -184,6 +186,26 @@ void SuperModularAudioProcessor::setStateInformation (const void* data, int size
 
     // write plugin state to shared obj, and flag a reload for the editor
     sharedState.writeFullState(localState, true);
+
+    // delete current modules
+    for (auto module : modules) {
+        delete module.second;
+    }
+    modules.clear();
+
+    // add all modules
+    for (auto module : localState.moduleStates) {
+        addModule(module);
+    }
+    // prepare all modules
+    for (auto module : modules) {
+        module.second->prepareToPlay(getSampleRate(), getBlockSize());
+    }
+    // wire all modules
+    for (auto module : localState.moduleStates) {
+        updateModule(module);
+    }
+    
 }
 
 void SuperModularAudioProcessor::applyStateUpdates() {

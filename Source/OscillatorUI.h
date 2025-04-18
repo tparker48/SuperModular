@@ -32,15 +32,24 @@ public:
         addAndMakeVisible(hzSlider);
     }
 
-    void startListeners() {
-        hzSlider.addListener(this);
-    }
-
     void sliderValueChanged(juce::Slider* slider) override
     {
         if (slider == &hzSlider) {
             stateWriter->setModuleProperty(getId(), "hz", hzSlider.getValue());
         }
+    }
+
+    void startListeners() override {
+        hzSlider.addListener(this);
+    }
+
+    void applyState(ModuleState& moduleState) override {
+        ModuleUI::applyState(moduleState);
+        auto hz = moduleState.state.getProperty("hz");
+        if (!hz.isVoid()) {
+            hzSlider.setValue(hz);
+        }
+
     }
 
     void paint(Graphics& g) override {

@@ -65,7 +65,9 @@ void SuperModularAudioProcessorEditor::loadState() {
     for (auto moduleState : state.moduleStates) {
         int id = moduleState.getId();
         modules[id]->applyState(moduleState);
+        modules[id]->startListeners();
     }
+
 
     nextModuleId = maxId + 1;
 }
@@ -173,6 +175,5 @@ void SuperModularAudioProcessorEditor::addNewModule(ModuleType typeId) {
         );
         stateWriter.addModule(module);
         addAndMakeVisible(newModule);
-        newModule->startListeners();
     }
 }

@@ -4,6 +4,17 @@
               addUsingNamespaceToJuceHeader="1" displaySplashScreen="1" jucerFormatVersion="1"
               pluginCharacteristicsValue="pluginIsSynth,pluginWantsMidiIn">
   <MAINGROUP id="Fqzt31" name="SuperModular">
+    <GROUP id="{95961942-E874-79E4-359F-43BC6A24E00D}" name="Test">
+      <GROUP id="{A9C75932-C219-9FBA-50AC-A6EF203D4B57}" name="Tests">
+        <FILE id="EZWKEn" name="ModuleStateTest.h" compile="0" resource="0"
+              file="Source/ModuleStateTest.h"/>
+        <FILE id="jHZoPN" name="PluginStateTest.h" compile="0" resource="0"
+              file="Source/PluginStateTest.h"/>
+      </GROUP>
+      <GROUP id="{83B456D8-F6F0-145B-C171-DD9971112EA8}" name="Runner">
+        <FILE id="v6PKuV" name="TestRunner.h" compile="0" resource="0" file="Source/TestRunner.h"/>
+      </GROUP>
+    </GROUP>
     <GROUP id="{0C7E7290-A30B-36B9-5B86-6E4BA2E3F5B0}" name="Source">
       <GROUP id="{EDC0C7F4-16E7-353E-0FE3-980369A4613A}" name="Module">
         <GROUP id="{C1EACEAB-E6AD-6971-AEE4-ED79C95C58C4}" name="Modules">
