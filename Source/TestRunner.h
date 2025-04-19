@@ -15,6 +15,7 @@
 #include "ModuleStateTest.h"
 #include "PluginStateTest.h"
 #include "ModuleUITest.h"
+#include "ModuleProcessorTest.h"
 
 class TestRunner : public UnitTestRunner {
 public:
@@ -22,6 +23,7 @@ public:
         // list tests here
         ModuleStateTest moduleState;
         ModuleUITest moduleUI;
+        ModuleProcessorTest moduleProcessor;
         PluginStateTest pluginState;
 
         setAssertOnFailure(false);

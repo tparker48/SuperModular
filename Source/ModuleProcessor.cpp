@@ -26,7 +26,7 @@ void ModuleProcessor::prepareToPlay(double sampleRate, int samplesPerBlock) {
 }
 
 CVInputJack* ModuleProcessor::getCVInputJack(int inputId) {
-    if(inputId < cvInputs.size()) {
+    if(inputId < cvInputs.size() && inputId >= 0) {
         return &cvInputs[inputId];
     }
     else {
@@ -35,7 +35,7 @@ CVInputJack* ModuleProcessor::getCVInputJack(int inputId) {
 }
 
 CVOutputJack* ModuleProcessor::getCVOutputJack(int outputId) {
-    if (outputId < cvOutputs.size()) {
+    if (outputId < cvOutputs.size() && outputId >= 0) {
         return &cvOutputs[outputId];
     }
     else {
@@ -45,7 +45,7 @@ CVOutputJack* ModuleProcessor::getCVOutputJack(int outputId) {
 }
 
 void ModuleProcessor::setCVInputJack(int inputId, CVOutputJack* output) {
-    if (inputId < cvInputs.size()) {
+    if (inputId < cvInputs.size() && inputId >= 0) {
         cvInputs[inputId].wirePtr(output->getPtr());
     }
 }
