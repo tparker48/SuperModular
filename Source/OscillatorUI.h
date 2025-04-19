@@ -96,6 +96,6 @@ public:
     }
 
 private:
-    CVJack *hzIn, *ampIn, *waveOut;
+    CVJackComponent* hzIn, *ampIn, *waveOut;
     Slider hzSlider;
 };

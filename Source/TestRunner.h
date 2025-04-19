@@ -14,12 +14,14 @@
 
 #include "ModuleStateTest.h"
 #include "PluginStateTest.h"
+#include "ModuleUITest.h"
 
 class TestRunner : public UnitTestRunner {
 public:
     void runAllTests() {
         // list tests here
         ModuleStateTest moduleState;
+        ModuleUITest moduleUI;
         PluginStateTest pluginState;
 
         setAssertOnFailure(false);

@@ -12,7 +12,7 @@
 
 #include <JuceHeader.h>
 
-#include "CVJack.h"
+#include "CVJackComponent.h"
 #include "PatchCableManager.h"
 #include "PatchCable.h"
 #include "ModuleGrid.h"
@@ -67,10 +67,16 @@ public:
     virtual void paint(Graphics& g) = 0;
     virtual void resized() = 0;
 
-    CVJack* getCvInputJack(int jackId) {
+    CVJackComponent* getCvInputJack(int jackId) {
+        if (jackId < 0 || jackId > cvIns.size()) {
+            return nullptr;
+        }
         return cvIns[jackId];
     }
-    CVJack* getCvOutputJack(int jackId) {
+    CVJackComponent* getCvOutputJack(int jackId) {
+        if (jackId < 0 || jackId > cvOuts.size()) {
+            return nullptr;
+        }
         return cvOuts[jackId];
     }
     int getNumCVInputs() {
@@ -81,7 +87,7 @@ public:
     }
 
 protected:
-    std::vector<CVJack*> cvIns, cvOuts;
+    std::vector<CVJackComponent*> cvIns, cvOuts;
     SharedStateWriter* stateWriter;
 
 private:

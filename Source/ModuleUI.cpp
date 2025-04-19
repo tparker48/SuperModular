@@ -18,12 +18,12 @@ ModuleUI::ModuleUI(MODULE_ID id, ModuleGrid* mg, PatchCableManager* cm, SharedSt
     stateWriter(stateWriter)
 {
     for (int cvIdx = 0; cvIdx < numCvIns; cvIdx++) {
-        auto newCv = new CVJack(CVInput, cvIdx, id, cm, stateWriter);
+        auto newCv = new CVJackComponent(CVInput, cvIdx, id, cm, stateWriter);
         addAndMakeVisible(newCv);
         cvIns.push_back(newCv);
     }
     for (int cvIdx = 0; cvIdx < numCvOuts; cvIdx++) {
-        auto newCv = new CVJack(CVOutput, cvIdx, id, cm, stateWriter);
+        auto newCv = new CVJackComponent(CVOutput, cvIdx, id, cm, stateWriter);
         addAndMakeVisible(newCv);
         cvOuts.push_back(newCv);
     }
@@ -117,7 +117,7 @@ void ModuleUI::mouseDrag(const MouseEvent& e) {
     myDragger.dragComponent(this, e, &moduleDragRules);
 
     for (auto child : getChildren()) {
-        auto jack = dynamic_cast<CVJack*>(child);
+        auto jack = dynamic_cast<CVJackComponent*>(child);
         if (jack) {
             jack->refreshCablePosition();
             if (jack->isConnected()) {
@@ -130,6 +130,9 @@ void ModuleUI::mouseDrag(const MouseEvent& e) {
 void ModuleUI::applyState(ModuleState& state) {
     // Load Bounds
     auto bounds = state.getBounds();
+    if (moduleGrid->moduleIsPlaced(getId())) {
+        moduleGrid->yankModule(getId());
+    }
     auto closest = moduleGrid->closestAvailablePosition(bounds);
     moduleGrid->placeModule(getId(), closest);
     stateWriter->moveModule(getId(), getBounds());

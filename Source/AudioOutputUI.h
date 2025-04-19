@@ -86,6 +86,6 @@ public:
     }
 
 private:
-    CVJack *inputLeft, *inputRight;
+    CVJackComponent*inputLeft, *inputRight;
     Slider gainSlider;
 };

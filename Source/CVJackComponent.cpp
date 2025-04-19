@@ -8,10 +8,10 @@
   ==============================================================================
 */
 
-#include "CVJack.h"
+#include "CVJackComponent.h"
 
 
-CVJack::CVJack(CVJackType type, int id, int parentId, PatchCableManager* cm, SharedStateWriter* stateWriterPtr):
+CVJackComponent::CVJackComponent(CVJackType type, int id, int parentId, PatchCableManager* cm, SharedStateWriter* stateWriterPtr):
         stateWriter(stateWriterPtr) {
     cableManager = cm;
     jackId = id;
@@ -24,24 +24,24 @@ CVJack::CVJack(CVJackType type, int id, int parentId, PatchCableManager* cm, Sha
     }
 }
 
-void CVJack::mouseDown(const MouseEvent& e) {
+void CVJackComponent::mouseDown(const MouseEvent& e) {
     if (!cableManager->isDraggingCable()) {
         cableManager->setDraggedCable(this);
         return;
     }
 }
 
-void CVJack::mouseUp(const MouseEvent& e) {
+void CVJackComponent::mouseUp(const MouseEvent& e) {
     cableManager->clearDraggedCable();
 
-    CVJack* source = this;
+    CVJackComponent* source = this;
 
     // mouseUp runs on the originally clicked CVJack. 
     // we have to use getComponentAt to see if our mouseUp event is over another CVJack
     Component* editor = getParentComponent()->getParentComponent();
     auto event = e.getEventRelativeTo(editor);
     Component* componentUnderMouse = editor->getComponentAt(event.getPosition());
-    CVJack* target = dynamic_cast<CVJack*>(componentUnderMouse);
+    CVJackComponent* target = dynamic_cast<CVJackComponent*>(componentUnderMouse);
 
     if (!target) {
         // did not end drag on another CV jack
@@ -79,7 +79,7 @@ void CVJack::mouseUp(const MouseEvent& e) {
         return;
     }
 
-    CVJack* input, * output;
+    CVJackComponent* input, * output;
     if (target->getType() == CVInput) {
         input = target;
         output = source;
@@ -107,11 +107,11 @@ void CVJack::mouseUp(const MouseEvent& e) {
 
 }
 
-void CVJack::mouseDrag(const MouseEvent& e) {
+void CVJackComponent::mouseDrag(const MouseEvent& e) {
     cableManager->updateDraggedCablePosition(e);
 }
 
-Line<float> CVJack::getPatchLine() {
+Line<float> CVJackComponent::getPatchLine() {
     if (isConnected()) {
         return Line<float>(
             getScreenPosition().getX(),
@@ -125,7 +125,7 @@ Line<float> CVJack::getPatchLine() {
     }
 }
 
-void CVJack::paint(Graphics& g) {
+void CVJackComponent::paint(Graphics& g) {
     float scale = 0.8;
     auto w = getWidth() * scale;
     auto h = getHeight() * scale;

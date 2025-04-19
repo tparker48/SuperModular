@@ -21,9 +21,9 @@ enum CVJackType {
     CVOutput
 };
 
-class CVJack : public Component {
+class CVJackComponent : public Component {
 public:
-    CVJack(CVJackType type, int id, int parentId, PatchCableManager* cm, SharedStateWriter* stateWriter);
+    CVJackComponent(CVJackType type, int id, int parentId, PatchCableManager* cm, SharedStateWriter* stateWriter);
 
     int getId() { return jackId; }
     int getModuleId() { return moduleId; }
@@ -35,11 +35,11 @@ public:
         return connection != nullptr;
     }
 
-    CVJack* getConnection() {
+    CVJackComponent* getConnection() {
         return connection;
     }
 
-    void setConnection(CVJack* other) {
+    void setConnection(CVJackComponent* other) {
         connection = other;
         refreshCablePosition();
     }
@@ -68,7 +68,7 @@ public:
 private:
     int jackId, moduleId;
     CVJackType jackType;
-    CVJack* connection = nullptr;
+    CVJackComponent* connection = nullptr;
     PatchCableManager* cableManager;
     PatchCable cable;
     SharedStateWriter* stateWriter;

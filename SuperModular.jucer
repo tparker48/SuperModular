@@ -6,8 +6,39 @@
   <MAINGROUP id="Fqzt31" name="SuperModular">
     <GROUP id="{95961942-E874-79E4-359F-43BC6A24E00D}" name="Test">
       <GROUP id="{A9C75932-C219-9FBA-50AC-A6EF203D4B57}" name="Tests">
+        <FILE id="Czt0xM" name="PluginProcessorTest.h" compile="0" resource="0"
+              file="Source/PluginProcessorTest.h"/>
+        <FILE id="w9ewkS" name="PluginEditorTest.h" compile="0" resource="0"
+              file="Source/PluginEditorTest.h"/>
+        <FILE id="NspPdY" name="ModuleGridTest.h" compile="0" resource="0"
+              file="Source/ModuleGridTest.h"/>
+        <FILE id="T33AlN" name="PatchCableTest.h" compile="0" resource="0"
+              file="Source/PatchCableTest.h"/>
+        <FILE id="JndR26" name="CVJackComponentTest.h" compile="0" resource="0"
+              file="Source/CVJackComponentTest.h"/>
+        <FILE id="onq8vq" name="PatchCableManagerTest.h" compile="0" resource="0"
+              file="Source/PatchCableManagerTest.h"/>
+        <FILE id="XQ6wuW" name="SharedStateWriterTest.h" compile="0" resource="0"
+              file="Source/SharedStateWriterTest.h"/>
+        <FILE id="kuI7Hm" name="StateChangeMessageTest.h" compile="0" resource="0"
+              file="Source/StateChangeMessageTest.h"/>
+        <FILE id="YaQYrx" name="SharedPluginStateTest.h" compile="0" resource="0"
+              file="Source/SharedPluginStateTest.h"/>
+        <FILE id="ReJ1Zd" name="AudioOutputProcessorTest.h" compile="0" resource="0"
+              file="Source/AudioOutputProcessorTest.h"/>
+        <FILE id="Dp0Olg" name="AudioOutputUITest.h" compile="0" resource="0"
+              file="Source/AudioOutputUITest.h"/>
+        <FILE id="oNBHzQ" name="OscillatorProcessorTest.h" compile="0" resource="0"
+              file="Source/OscillatorProcessorTest.h"/>
+        <FILE id="dZn5S5" name="OscillatorUITest.h" compile="0" resource="0"
+              file="Source/OscillatorUITest.h"/>
+        <FILE id="Od12eH" name="ModuleFactoryTest.h" compile="0" resource="0"
+              file="Source/ModuleFactoryTest.h"/>
+        <FILE id="ZyFUPB" name="ModuleProcessorTest.h" compile="0" resource="0"
+              file="Source/ModuleProcessorTest.h"/>
         <FILE id="EZWKEn" name="ModuleStateTest.h" compile="0" resource="0"
               file="Source/ModuleStateTest.h"/>
+        <FILE id="zI6ArN" name="ModuleUITest.h" compile="0" resource="0" file="Source/ModuleUITest.h"/>
         <FILE id="jHZoPN" name="PluginStateTest.h" compile="0" resource="0"
               file="Source/PluginStateTest.h"/>
       </GROUP>
@@ -58,8 +89,10 @@
             file="Source/PatchCableManager.cpp"/>
       <FILE id="l8qsJg" name="PatchCableManager.h" compile="0" resource="0"
             file="Source/PatchCableManager.h"/>
-      <FILE id="FxMjSg" name="CVJack.cpp" compile="1" resource="0" file="Source/CVJack.cpp"/>
-      <FILE id="GoR9p6" name="CVJack.h" compile="0" resource="0" file="Source/CVJack.h"/>
+      <FILE id="FxMjSg" name="CVJackComponent.cpp" compile="1" resource="0"
+            file="Source/CVJackComponent.cpp"/>
+      <FILE id="GoR9p6" name="CVJackComponent.h" compile="0" resource="0"
+            file="Source/CVJackComponent.h"/>
       <FILE id="RTK0lg" name="PatchCable.cpp" compile="1" resource="0" file="Source/PatchCable.cpp"/>
       <FILE id="IauNX9" name="PatchCable.h" compile="0" resource="0" file="Source/PatchCable.h"/>
       <FILE id="SKdqDJ" name="ModuleGrid.cpp" compile="1" resource="0" file="Source/ModuleGrid.cpp"/>
