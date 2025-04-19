@@ -22,6 +22,7 @@ public:
 
     void prepareToPlay(double sampleRate, int samplesPerBlock) override {
         ModuleProcessor::prepareToPlay(sampleRate, samplesPerBlock);
+        updateHz(440.0);
         
     }
 

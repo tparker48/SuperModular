@@ -192,6 +192,7 @@ void SuperModularAudioProcessor::setStateInformation (const void* data, int size
         delete module.second;
     }
     modules.clear();
+    audioOutModule = nullptr;
 
     // add all modules
     for (auto module : localState.moduleStates) {

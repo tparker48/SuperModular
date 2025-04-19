@@ -174,6 +174,7 @@ void SuperModularAudioProcessorEditor::addNewModule(ModuleType typeId) {
             newModule->getNumCVOutputs()
         );
         stateWriter.addModule(module);
+        newModule->startListeners();
         addAndMakeVisible(newModule);
     }
 }

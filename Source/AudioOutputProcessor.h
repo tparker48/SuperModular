@@ -23,7 +23,7 @@ public:
 
     void prepareToPlay(double sampleRate, int samplesPerBuffer) override {
         ModuleProcessor::prepareToPlay(sampleRate, samplesPerBuffer);
-        //internalBuffer.setSize(2, samplesPerBuffer);
+        internalBuffer.setSize(2, samplesPerBuffer);
         writeHead = 0;
     }
 
@@ -35,22 +35,22 @@ public:
     }
 
     void processSample() {
-        //internalBuffer.setSample(0, writeHead, cvInputs[0].read());
-        //internalBuffer.setSample(1, writeHead, cvInputs[1].read());
+        internalBuffer.setSample(0, writeHead, cvInputs[0].read());
+        internalBuffer.setSample(1, writeHead, cvInputs[1].read());
         writeHead++;
     }
 
     void processBlock(AudioBuffer<float>& buffer) {
         writeHead = 0;
-//        if (buffer.getNumChannels() == 1) {
-//            buffer.copyFrom(0, 0, internalBuffer.getReadPointer(0), internalBuffer.getNumSamples(), 0.5 * gain);
-//            buffer.copyFrom(0, 0, internalBuffer.getReadPointer(1), internalBuffer.getNumSamples(), 0.5 * gain);
-//        }
-//        else {
-//            auto test = buffer.getNumSamples();
-//            buffer.copyFrom(0, 0, internalBuffer.getReadPointer(0), internalBuffer.getNumSamples(), 1.0 * gain);
-//            buffer.copyFrom(1, 0, internalBuffer.getReadPointer(1), internalBuffer.getNumSamples(), 1.0 * gain);
-//        }
+        if (buffer.getNumChannels() == 1) {
+            buffer.copyFrom(0, 0, internalBuffer.getReadPointer(0), internalBuffer.getNumSamples(), 0.5 * gain);
+            buffer.copyFrom(0, 0, internalBuffer.getReadPointer(1), internalBuffer.getNumSamples(), 0.5 * gain);
+        }
+        else {
+            auto test = buffer.getNumSamples();
+            buffer.copyFrom(0, 0, internalBuffer.getReadPointer(0), internalBuffer.getNumSamples(), 1.0 * gain);
+            buffer.copyFrom(1, 0, internalBuffer.getReadPointer(1), internalBuffer.getNumSamples(), 1.0 * gain);
+        }
     }
 
 public:
