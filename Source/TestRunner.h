@@ -18,6 +18,9 @@
 #include "StateChangeMessageTest.h"
 #include "ModuleUITest.h"
 #include "ModuleProcessorTest.h"
+#include "CVJackComponentTest.h"
+#include "PatchCableTest.h"
+#include "OscillatorProcessorTest.h"
 
 class TestRunner : public UnitTestRunner {
 public:
@@ -28,6 +31,9 @@ public:
         StateChangeMessageTest stateChangeMessage;
         ModuleUITest moduleUI;
         ModuleProcessorTest moduleProcessor;
+        CVJackComponentTest cvJackComponent;
+        PatchCableTest patchCable;
+        OscillatorProcessorTest oscillatorProcessor;
 
         setAssertOnFailure(false);
         UnitTestRunner::runAllTests();

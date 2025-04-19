@@ -62,7 +62,6 @@ public:
     void mouseDown(const MouseEvent& e);
     void mouseUp(const MouseEvent& e);
     void mouseDrag(const MouseEvent& e);
-    Line<float> getPatchLine();
     void paint(Graphics& g);
 
 private:

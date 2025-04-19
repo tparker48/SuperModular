@@ -9,3 +9,16 @@
 */
 
 #pragma once
+
+#include <JuceHeader.h>
+
+#include "PatchCable.h"
+
+class PatchCableTest : public UnitTest {
+public:
+    PatchCableTest() : UnitTest("PatchCable Test") {}
+
+    void runTest() {
+        // PatchCable is entirely UI drawing logic, and not well suited for unit testing
+    }
+};

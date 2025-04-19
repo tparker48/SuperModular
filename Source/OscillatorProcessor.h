@@ -15,15 +15,12 @@
 
 class OscillatorProcessor : public ModuleProcessor {
 public:
-    static const int typeId = 2;
-
     OscillatorProcessor(int id) : ModuleProcessor(id, 2, 1) {
     }
 
     void prepareToPlay(double sampleRate, int samplesPerBlock) override {
         ModuleProcessor::prepareToPlay(sampleRate, samplesPerBlock);
         updateHz(440.0);
-        
     }
 
     void updateFromState(ModuleState moduleState) {
@@ -34,19 +31,19 @@ public:
     }
 
     void processSample() {
-        auto ampMod = 1.0+(cvInputs[1].read() - 0.5);
-        cvOutputs[0].write(sin(phase) * ampMod);
-
         if (phase >= juce::MathConstants<float>::twoPi) {
             phase -= juce::MathConstants<float>::twoPi;
         }
 
         auto phaseMod = cvInputs[0].read();
         phase += phaseIncrement + (phaseMod*0.1);
+
+        auto ampMod = 1.0 + (cvInputs[1].read() - 0.5);
+        cvOutputs[0].write(sin(phase) * ampMod);
     }
 
     void updateHz(double newHz) {
-        hz = newHz * 1000.0;
+        hz = newHz;
         phaseIncrement = (hz * juce::MathConstants<double>::twoPi) / sampleRate;
     }
 

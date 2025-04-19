@@ -15,8 +15,6 @@
 
 class AudioOutputProcessor : public ModuleProcessor {
 public:
-    static const int typeId = 1;
-
     AudioOutputProcessor(int id) : ModuleProcessor(id, 2, 0) {
     }
 

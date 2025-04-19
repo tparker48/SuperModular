@@ -18,10 +18,11 @@ CVJackComponent::CVJackComponent(CVJackType type, int id, int parentId, PatchCab
     moduleId = parentId;
     jackType = type;
     if (jackType == CVInput) {
-        cable.setBounds(0, 0, 0, 0);
         cable.setInterceptsMouseClicks(false, false);
+        cable.setBounds(0, 0, 0, 0);
         addAndMakeVisible(cable);
     }
+    setBounds(0, 0, 0, 0);
 }
 
 void CVJackComponent::mouseDown(const MouseEvent& e) {
@@ -109,20 +110,6 @@ void CVJackComponent::mouseUp(const MouseEvent& e) {
 
 void CVJackComponent::mouseDrag(const MouseEvent& e) {
     cableManager->updateDraggedCablePosition(e);
-}
-
-Line<float> CVJackComponent::getPatchLine() {
-    if (isConnected()) {
-        return Line<float>(
-            getScreenPosition().getX(),
-            getScreenPosition().getY(),
-            connection->getScreenPosition().getX(),
-            connection->getScreenPosition().getY()
-        );
-    }
-    else {
-        return Line<float>(-1.0, -1.0, -1.0, -1.0);
-    }
 }
 
 void CVJackComponent::paint(Graphics& g) {
