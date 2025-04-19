@@ -9,33 +9,3 @@
 */
 
 #include "StateChangeMessage.h"
-
-
-StateChangeMessage::StateChangeMessage(ModuleState& state, PLUGIN_STATE_MESSAGE_OP_CODE opCode) {
-    op = opCode;
-    this->state = state;
-}
-
-void StateChangeMessage::applyMessage(PluginState& pluginState) {
-    switch (op) {
-    case ADD:
-        pluginState.moduleStates.push_back(state);
-        break;
-    case UPDATE:
-        std::replace_if(
-            pluginState.moduleStates.begin(),
-            pluginState.moduleStates.end(),
-            [this](ModuleState other) { return state.getId() == other.getId(); },
-            state
-        );
-        break;
-    case DELETE:
-        auto newEnd = std::remove_if(
-            pluginState.moduleStates.begin(),
-            pluginState.moduleStates.end(),
-            [this](ModuleState other) { return state.getId() == other.getId(); }
-        );
-        pluginState.moduleStates.erase(newEnd, pluginState.moduleStates.end());
-        break;
-    }
-}

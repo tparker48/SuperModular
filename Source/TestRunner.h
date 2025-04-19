@@ -12,19 +12,22 @@
 
 #include <JuceHeader.h>
 
-#include "ModuleStateTest.h"
+#include "SharedPluginStateTest.h"
 #include "PluginStateTest.h"
+#include "ModuleStateTest.h"
+#include "StateChangeMessageTest.h"
 #include "ModuleUITest.h"
 #include "ModuleProcessorTest.h"
 
 class TestRunner : public UnitTestRunner {
 public:
     void runAllTests() {
-        // list tests here
+        SharedPluginStateTest sharedState;
+        PluginStateTest pluginState;
         ModuleStateTest moduleState;
+        StateChangeMessageTest stateChangeMessage;
         ModuleUITest moduleUI;
         ModuleProcessorTest moduleProcessor;
-        PluginStateTest pluginState;
 
         setAssertOnFailure(false);
         UnitTestRunner::runAllTests();

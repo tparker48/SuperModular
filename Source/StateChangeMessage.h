@@ -22,8 +22,10 @@ enum PLUGIN_STATE_MESSAGE_OP_CODE {
 // Contains a list of changes to make
 class StateChangeMessage {
 public:
-    StateChangeMessage(ModuleState& state, PLUGIN_STATE_MESSAGE_OP_CODE opCode);
-    void applyMessage(PluginState& pluginState);
+    StateChangeMessage(ModuleState& state, PLUGIN_STATE_MESSAGE_OP_CODE opCode) {
+        op = opCode;
+        this->state = state;
+    }
 
     ModuleState state;
     PLUGIN_STATE_MESSAGE_OP_CODE op;

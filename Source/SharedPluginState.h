@@ -28,24 +28,27 @@
 
 class SharedPluginState {
 public:
+    void recieve_updates(std::vector<StateChangeMessage>& messages);
     void send_updates(std::vector<StateChangeMessage> messages);
     void send_update(StateChangeMessage message);
     void switchWriteIdx();
-    void recieve_updates(std::vector<StateChangeMessage>& messages);
 
     void writeFullState(PluginState& state, bool flagReload = false);
     void readFullState(PluginState& state);
     bool readFullStateIfNew(PluginState& state);
 
-private:
+protected: 
+    // protected for use by test class
     Atomic<char> shareFlags = 0b00000000;
+    void startRead();
+    void endRead();
+    char getWriteIdx();
+    char getReadIdx();
+
+private:
     std::vector<StateChangeMessage> messageBuffers[2];
     std::mutex stateLock;
     bool shouldReloadState = false;
     PluginState state;
 
-    void startRead();
-    void endRead();
-    char getWriteIdx();
-    char getReadIdx();
 };
