@@ -130,28 +130,28 @@ void SuperModularAudioProcessorEditor::resized()
 
 void SuperModularAudioProcessorEditor::mouseUp(const MouseEvent& e) {
     if (e.mods.isRightButtonDown()) {
-        showPopupMenu();
+        showPopupMenu(e);
     } 
 }
 
-void SuperModularAudioProcessorEditor::showPopupMenu() {
+void SuperModularAudioProcessorEditor::showPopupMenu(const MouseEvent& e) {
     // right click
     PopupMenu m;
     m.addItem(AudioOutput, "Audio Out");
     m.addItem(Oscillator, "Oscillator");
     m.addItem(Splitter, "Splitter");
     m.showMenuAsync(PopupMenu::Options(),
-        [this](int result)
+        [this, e](int result)
         {
             switch (result) {
             case AudioOutput:
-                addNewModule<AudioOutputUI>(AudioOutput);
+                addNewModule<AudioOutputUI>(AudioOutput, e.getPosition());
                 break;
             case Oscillator:
-                addNewModule<OscillatorUI>(Oscillator);
+                addNewModule<OscillatorUI>(Oscillator, e.getPosition());
                 break;
             case Splitter:
-                addNewModule<SplitterUI>(Splitter);
+                addNewModule<SplitterUI>(Splitter, e.getPosition());
             default:
                 break;
             }
@@ -159,9 +159,12 @@ void SuperModularAudioProcessorEditor::showPopupMenu() {
 }
 
 template <typename M>
-void SuperModularAudioProcessorEditor::addNewModule(ModuleType typeId) {
+void SuperModularAudioProcessorEditor::addNewModule(ModuleType typeId, Point<int> clickLocation) {
     auto newModule = new M(nextModuleId++, &moduleGrid, &cableManager, &stateWriter);
-    auto bounds = ModuleBounds(0, 0, hpWidth * M::hp, moduleHeight);
+    auto width = hpWidth * M::hp;
+    auto x = clickLocation.getX() - (width / 2);
+    auto y = clickLocation.getY();
+    auto bounds = ModuleBounds(x, y, width, moduleHeight);
     newModule->setBounds(bounds);
 
     if (moduleGrid.addModule(newModule->getId(), newModule)) {

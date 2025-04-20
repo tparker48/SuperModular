@@ -61,10 +61,10 @@ private:
     int hpWidth = 0;
     int moduleHeight = 0;
 
-    void showPopupMenu();
+    void showPopupMenu(const MouseEvent& e);
 
     template <typename M>
-    void addNewModule(ModuleType type);
+    void addNewModule(ModuleType type, Point<int> location);
 
     std::map<ModuleType, ModuleUIFactory> moduleFactories;
 

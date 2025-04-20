@@ -24,8 +24,9 @@ public:
         waveOut = getCvOutputJack(0);
 
         hzSlider.setSliderStyle(Slider::RotaryHorizontalDrag);
-        hzSlider.setValue(0.8);
-        hzSlider.setRange(0.0, 1.0);
+        hzSlider.setValue(220.0);
+        hzSlider.setRange(0.0, 12000.0);
+        hzSlider.setSkewFactor(0.3);
         hzSlider.setTitle("hz");
         hzSlider.setName("hz");
         hzSlider.setTextBoxStyle(Slider::NoTextBox, true, 0, 0);

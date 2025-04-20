@@ -12,8 +12,6 @@
               file="Source/PluginEditorTest.h"/>
         <FILE id="NspPdY" name="ModuleGridTest.h" compile="0" resource="0"
               file="Source/ModuleGridTest.h"/>
-        <FILE id="T33AlN" name="PatchCableTest.h" compile="0" resource="0"
-              file="Source/PatchCableTest.h"/>
         <FILE id="JndR26" name="CVJackComponentTest.h" compile="0" resource="0"
               file="Source/CVJackComponentTest.h"/>
         <FILE id="onq8vq" name="PatchCableManagerTest.h" compile="0" resource="0"
@@ -26,12 +24,8 @@
               file="Source/SharedPluginStateTest.h"/>
         <FILE id="ReJ1Zd" name="AudioOutputProcessorTest.h" compile="0" resource="0"
               file="Source/AudioOutputProcessorTest.h"/>
-        <FILE id="Dp0Olg" name="AudioOutputUITest.h" compile="0" resource="0"
-              file="Source/AudioOutputUITest.h"/>
         <FILE id="oNBHzQ" name="OscillatorProcessorTest.h" compile="0" resource="0"
               file="Source/OscillatorProcessorTest.h"/>
-        <FILE id="dZn5S5" name="OscillatorUITest.h" compile="0" resource="0"
-              file="Source/OscillatorUITest.h"/>
         <FILE id="Od12eH" name="ModuleFactoryTest.h" compile="0" resource="0"
               file="Source/ModuleFactoryTest.h"/>
         <FILE id="ZyFUPB" name="ModuleProcessorTest.h" compile="0" resource="0"

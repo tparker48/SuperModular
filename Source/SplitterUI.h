@@ -15,7 +15,7 @@
 
 class SplitterUI : public ModuleUI {
 public:
-    static const int hp = 2;
+    static const int hp = 1;
 
     SplitterUI(int id, ModuleGrid* mg, PatchCableManager* cm, SharedStateWriter* stateWriter) :
         ModuleUI(id, mg, cm, stateWriter, 1, 5) {

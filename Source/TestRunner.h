@@ -19,8 +19,8 @@
 #include "ModuleUITest.h"
 #include "ModuleProcessorTest.h"
 #include "CVJackComponentTest.h"
-#include "PatchCableTest.h"
 #include "OscillatorProcessorTest.h"
+#include "PatchCableManagerTest.h"
 
 class TestRunner : public UnitTestRunner {
 public:
@@ -32,8 +32,8 @@ public:
         ModuleUITest moduleUI;
         ModuleProcessorTest moduleProcessor;
         CVJackComponentTest cvJackComponent;
-        PatchCableTest patchCable;
         OscillatorProcessorTest oscillatorProcessor;
+        PatchCableManagerTest patchCableManager;
 
         setAssertOnFailure(false);
         UnitTestRunner::runAllTests();

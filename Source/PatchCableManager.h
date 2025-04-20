@@ -25,8 +25,6 @@ public:
     void clearDraggedCable();
     void updateDraggedCablePosition(const MouseEvent& e);
 
-
-
 private:
     Component* dragSource = nullptr;
     PatchCable liveDragCable;
