@@ -16,8 +16,6 @@ static int nextModuleId = 0;
 SuperModularAudioProcessorEditor::SuperModularAudioProcessorEditor (SuperModularAudioProcessor& p, SharedPluginState* sharedStatePtr)
     : AudioProcessorEditor (&p), audioProcessor (p), sharedState(sharedStatePtr), stateWriter(sharedStatePtr) {
     initModuleUIFactoryMap(moduleFactories);
-    // Make sure that before the constructor has finished, you've set the
-    // editor's size to whatever you need it to be.
     double ratio = double(hpPerRow) / (double(numRows) * 5.0);
     double size = hpPerRow * 60.0;
     hpWidth = (float)getWidth() / (float)hpPerRow;
@@ -68,7 +66,6 @@ void SuperModularAudioProcessorEditor::loadState() {
         modules[id]->startListeners();
     }
 
-
     nextModuleId = maxId + 1;
 }
 
@@ -91,7 +88,6 @@ void SuperModularAudioProcessorEditor::clearState() {
 //==============================================================================
 void SuperModularAudioProcessorEditor::paint (Graphics& g)
 {
-    // (Our component is opaque, so we must completely fill the background with a solid colour)
     g.fillAll (getLookAndFeel().findColour(ResizableWindow::backgroundColourId));
 
 
@@ -124,18 +120,17 @@ void SuperModularAudioProcessorEditor::resized()
 {
     hpWidth = (float)getWidth() / (float)hpPerRow;
     moduleHeight = (float)getHeight() / (float)numRows;
-
     moduleGrid.setRackDimensions(numRows, moduleHeight, hpWidth, hpPerRow);
 }
 
 void SuperModularAudioProcessorEditor::mouseUp(const MouseEvent& e) {
     if (e.mods.isRightButtonDown()) {
+        // right click
         showPopupMenu(e);
     } 
 }
 
 void SuperModularAudioProcessorEditor::showPopupMenu(const MouseEvent& e) {
-    // right click
     PopupMenu m;
     m.addItem(AudioOutput, "Audio Out");
     m.addItem(Oscillator, "Oscillator");
@@ -160,10 +155,19 @@ void SuperModularAudioProcessorEditor::showPopupMenu(const MouseEvent& e) {
 
 template <typename M>
 void SuperModularAudioProcessorEditor::addNewModule(ModuleType typeId, Point<int> clickLocation) {
+    if (typeId == AudioOutput) {
+        auto localState = stateWriter.dumpLocalState();
+        for (auto module : localState.moduleStates) {
+            if((ModuleType)module.getTypeId() == AudioOutput) {
+                return;
+            }
+        }
+    }
+
     auto newModule = new M(nextModuleId++, &moduleGrid, &cableManager, &stateWriter);
     auto width = hpWidth * M::hp;
     auto x = clickLocation.getX() - (width / 2);
-    auto y = clickLocation.getY();
+    auto y = clickLocation.getY() - (moduleHeight / 2);
     auto bounds = ModuleBounds(x, y, width, moduleHeight);
     newModule->setBounds(bounds);
 

@@ -11,9 +11,24 @@
 #include "PatchCable.h"
 
 PatchCable::PatchCable() {
-    setColour(Colour(255, 255, 0));
-    setEndColour(Colour(255, 255, 0));
     setAlwaysOnTop(true);
+    setRandomColor();
+}
+
+void PatchCable::setRandomColor() {
+    std::vector<Colour> colours = {
+        Colour(252, 117, 76),
+        Colour(252, 182, 76),
+        Colour(76, 252, 111),
+        Colour(105, 76, 252),
+        Colour(252, 76, 117)
+    };
+    Random rand;
+    rand.setSeedRandomly();
+    auto randFloat = rand.nextFloat();
+    int idx = int(randFloat * colours.size());
+    setColour(colours[idx]);
+    setEndColour(colours[idx]);
 }
 
 void PatchCable::setAsDraggerCable() {

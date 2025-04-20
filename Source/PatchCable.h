@@ -18,6 +18,8 @@ public:
 
     void setAsDraggerCable();
 
+    void setRandomColor();
+
     void setColour(Colour c);
 
     void setEndColour(Colour c);

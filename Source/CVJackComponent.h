@@ -42,6 +42,7 @@ public:
     void setConnection(CVJackComponent* other) {
         connection = other;
         refreshCablePosition();
+        cable.setRandomColor();
     }
 
     void refreshCablePosition() {

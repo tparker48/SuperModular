@@ -104,8 +104,6 @@ void CVJackComponent::mouseUp(const MouseEvent& e) {
     input->clearConnection();
     output->setConnection(input);
     input->setConnection(output);
-
-
 }
 
 void CVJackComponent::mouseDrag(const MouseEvent& e) {
