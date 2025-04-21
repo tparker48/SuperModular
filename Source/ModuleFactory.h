@@ -27,13 +27,17 @@
 #include "JoystickUI.h"
 #include "JoystickProcessor.h"
 
+#include "MixerUI.h"
+#include "MixerProcessor.h"
+
 
 enum ModuleType {
     TestModule,
     AudioOutput,
     Oscillator,
     Splitter,
-    JoystickModule
+    JoystickModule,
+    Mixer
 };
 
 using ModuleFactory = ModuleProcessor * (*)(int);
@@ -55,3 +59,6 @@ ModuleUI* createSplitterUI(int id, ModuleGrid* mg, PatchCableManager* cables, Sh
 
 ModuleProcessor* createJoystickProcessor(int id);
 ModuleUI* createJoystickUI(int id, ModuleGrid* mg, PatchCableManager* cables, SharedStateWriter* writer);
+
+ModuleProcessor* createMixerProcessor(int id);
+ModuleUI* createMixerUI(int id, ModuleGrid* mg, PatchCableManager* cables, SharedStateWriter* writer);

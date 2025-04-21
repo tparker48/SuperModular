@@ -49,6 +49,9 @@
           <FILE id="SDoHkp" name="JoystickProcessor.h" compile="0" resource="0"
                 file="Source/JoystickProcessor.h"/>
           <FILE id="bEE4hz" name="JoystickUI.h" compile="0" resource="0" file="Source/JoystickUI.h"/>
+          <FILE id="zjN7FH" name="MixerProcessor.h" compile="0" resource="0"
+                file="Source/MixerProcessor.h"/>
+          <FILE id="VcyuFS" name="MixerUI.h" compile="0" resource="0" file="Source/MixerUI.h"/>
           <FILE id="AdqJr0" name="OscillatorProcessor.h" compile="0" resource="0"
                 file="Source/OscillatorProcessor.h"/>
           <FILE id="gNYVwY" name="OscillatorUI.h" compile="0" resource="0" file="Source/OscillatorUI.h"/>

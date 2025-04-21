@@ -16,7 +16,7 @@
 class CVInputJack {
 public:
     float read() {
-        if (internalPtr) {
+        if (isConnected()) {
             return *internalPtr;
         }
         else {
@@ -28,6 +28,9 @@ public:
     }
     void clearPtr() {
         internalPtr = nullptr;
+    }
+    bool isConnected() {
+        return internalPtr != nullptr;
     }
 private:
     float* internalPtr = nullptr;
