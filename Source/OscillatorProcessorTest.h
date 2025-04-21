@@ -24,7 +24,7 @@ public:
         osc.prepareToPlay(3, 0);
         osc.updateHz(1.0);
         CVOutputJack jout;
-        jout.write(0.5);
+        jout.write(0.0);
         osc.setCVInputJack(1, &jout);
 
         osc.processSample();

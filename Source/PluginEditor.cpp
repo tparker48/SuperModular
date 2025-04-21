@@ -135,6 +135,7 @@ void SuperModularAudioProcessorEditor::showPopupMenu(const MouseEvent& e) {
     m.addItem(AudioOutput, "Audio Out");
     m.addItem(Oscillator, "Oscillator");
     m.addItem(Splitter, "Splitter");
+    m.addItem(JoystickModule, "Joystick");
     m.showMenuAsync(PopupMenu::Options(),
         [this, e](int result)
         {
@@ -147,6 +148,9 @@ void SuperModularAudioProcessorEditor::showPopupMenu(const MouseEvent& e) {
                 break;
             case Splitter:
                 addNewModule<SplitterUI>(Splitter, e.getPosition());
+                break;
+            case JoystickModule:
+                addNewModule<JoystickUI>(JoystickModule, e.getPosition());
             default:
                 break;
             }

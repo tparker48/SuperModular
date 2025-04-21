@@ -28,6 +28,8 @@ public:
 
     void setModuleProperty(int moduleId, Identifier propertyName, var value);
 
+    void setModuleProperties(int moduleId, std::vector<std::pair<Identifier, var>> properties);
+
     void moveModule(int moduleId, Rectangle<int> newBounds);
 
     void deleteModule(int moduleId);

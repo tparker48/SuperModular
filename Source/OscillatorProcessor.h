@@ -35,10 +35,10 @@ public:
             phase -= juce::MathConstants<float>::twoPi;
         }
 
-        auto phaseMod = cvInputs[0].read();
-        phase += phaseIncrement + (phaseMod*0.1);
+        auto phaseMod = (cvInputs[0].read() + 1.0);
+        phase += phaseIncrement * phaseMod;
 
-        auto ampMod = 1.0 + (cvInputs[1].read() - 0.5);
+        auto ampMod = (cvInputs[1].read() + 1.0) / 2.0;
         cvOutputs[0].write(sin(phase) * ampMod);
     }
 

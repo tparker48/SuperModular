@@ -46,6 +46,9 @@
           <FILE id="T5OLmD" name="AudioOutputProcessor.h" compile="0" resource="0"
                 file="Source/AudioOutputProcessor.h"/>
           <FILE id="reMsTO" name="AudioOutputUI.h" compile="0" resource="0" file="Source/AudioOutputUI.h"/>
+          <FILE id="SDoHkp" name="JoystickProcessor.h" compile="0" resource="0"
+                file="Source/JoystickProcessor.h"/>
+          <FILE id="bEE4hz" name="JoystickUI.h" compile="0" resource="0" file="Source/JoystickUI.h"/>
           <FILE id="AdqJr0" name="OscillatorProcessor.h" compile="0" resource="0"
                 file="Source/OscillatorProcessor.h"/>
           <FILE id="gNYVwY" name="OscillatorUI.h" compile="0" resource="0" file="Source/OscillatorUI.h"/>
@@ -53,8 +56,6 @@
                 file="Source/SplitterProcessor.h"/>
           <FILE id="qKdmWM" name="SplitterUI.h" compile="0" resource="0" file="Source/SplitterUI.h"/>
         </GROUP>
-        <FILE id="tXzne2" name="ModuleState.cpp" compile="1" resource="0" file="Source/ModuleState.cpp"/>
-        <FILE id="hJ9y5S" name="ModuleState.h" compile="0" resource="0" file="Source/ModuleState.h"/>
         <FILE id="jSTJFd" name="ModuleUI.cpp" compile="1" resource="0" file="Source/ModuleUI.cpp"/>
         <FILE id="JgJmGS" name="ModuleUI.h" compile="0" resource="0" file="Source/ModuleUI.h"/>
         <FILE id="Sz6Oh6" name="ModuleProcessor.cpp" compile="1" resource="0"
@@ -65,32 +66,40 @@
               file="Source/ModuleFactory.cpp"/>
         <FILE id="boB2IM" name="ModuleFactory.h" compile="0" resource="0" file="Source/ModuleFactory.h"/>
       </GROUP>
-      <FILE id="v0hxaC" name="PluginState.cpp" compile="1" resource="0" file="Source/PluginState.cpp"/>
-      <FILE id="NxlOGj" name="PluginState.h" compile="0" resource="0" file="Source/PluginState.h"/>
-      <FILE id="JRuCCQ" name="SharedPluginState.cpp" compile="1" resource="0"
-            file="Source/SharedPluginState.cpp"/>
-      <FILE id="eibtMo" name="SharedPluginState.h" compile="0" resource="0"
-            file="Source/SharedPluginState.h"/>
-      <FILE id="oVMI5F" name="StateChangeMessage.cpp" compile="1" resource="0"
-            file="Source/StateChangeMessage.cpp"/>
-      <FILE id="M7swRD" name="StateChangeMessage.h" compile="0" resource="0"
-            file="Source/StateChangeMessage.h"/>
-      <FILE id="e8OXF7" name="SharedStateWriter.cpp" compile="1" resource="0"
-            file="Source/SharedStateWriter.cpp"/>
-      <FILE id="duKqV6" name="SharedStateWriter.h" compile="0" resource="0"
-            file="Source/SharedStateWriter.h"/>
-      <FILE id="LQ9lvC" name="PatchCableManager.cpp" compile="1" resource="0"
-            file="Source/PatchCableManager.cpp"/>
-      <FILE id="l8qsJg" name="PatchCableManager.h" compile="0" resource="0"
-            file="Source/PatchCableManager.h"/>
-      <FILE id="FxMjSg" name="CVJackComponent.cpp" compile="1" resource="0"
-            file="Source/CVJackComponent.cpp"/>
-      <FILE id="GoR9p6" name="CVJackComponent.h" compile="0" resource="0"
-            file="Source/CVJackComponent.h"/>
-      <FILE id="RTK0lg" name="PatchCable.cpp" compile="1" resource="0" file="Source/PatchCable.cpp"/>
-      <FILE id="IauNX9" name="PatchCable.h" compile="0" resource="0" file="Source/PatchCable.h"/>
-      <FILE id="SKdqDJ" name="ModuleGrid.cpp" compile="1" resource="0" file="Source/ModuleGrid.cpp"/>
-      <FILE id="TR0Mvz" name="ModuleGrid.h" compile="0" resource="0" file="Source/ModuleGrid.h"/>
+      <GROUP id="{3948EED2-6926-9B6A-7AC9-201C449B8DE8}" name="Plugin State">
+        <FILE id="tXzne2" name="ModuleState.cpp" compile="1" resource="0" file="Source/ModuleState.cpp"/>
+        <FILE id="hJ9y5S" name="ModuleState.h" compile="0" resource="0" file="Source/ModuleState.h"/>
+        <FILE id="v0hxaC" name="PluginState.cpp" compile="1" resource="0" file="Source/PluginState.cpp"/>
+        <FILE id="NxlOGj" name="PluginState.h" compile="0" resource="0" file="Source/PluginState.h"/>
+        <FILE id="JRuCCQ" name="SharedPluginState.cpp" compile="1" resource="0"
+              file="Source/SharedPluginState.cpp"/>
+        <FILE id="eibtMo" name="SharedPluginState.h" compile="0" resource="0"
+              file="Source/SharedPluginState.h"/>
+        <FILE id="oVMI5F" name="StateChangeMessage.cpp" compile="1" resource="0"
+              file="Source/StateChangeMessage.cpp"/>
+        <FILE id="M7swRD" name="StateChangeMessage.h" compile="0" resource="0"
+              file="Source/StateChangeMessage.h"/>
+        <FILE id="e8OXF7" name="SharedStateWriter.cpp" compile="1" resource="0"
+              file="Source/SharedStateWriter.cpp"/>
+        <FILE id="duKqV6" name="SharedStateWriter.h" compile="0" resource="0"
+              file="Source/SharedStateWriter.h"/>
+      </GROUP>
+      <GROUP id="{524557C3-C6DD-0D97-416F-17A7AE1D4227}" name="UI">
+        <FILE id="vkPQE2" name="Joystick.cpp" compile="1" resource="0" file="Source/Joystick.cpp"/>
+        <FILE id="kyKxEa" name="Joystick.h" compile="0" resource="0" file="Source/Joystick.h"/>
+        <FILE id="LQ9lvC" name="PatchCableManager.cpp" compile="1" resource="0"
+              file="Source/PatchCableManager.cpp"/>
+        <FILE id="l8qsJg" name="PatchCableManager.h" compile="0" resource="0"
+              file="Source/PatchCableManager.h"/>
+        <FILE id="FxMjSg" name="CVJackComponent.cpp" compile="1" resource="0"
+              file="Source/CVJackComponent.cpp"/>
+        <FILE id="GoR9p6" name="CVJackComponent.h" compile="0" resource="0"
+              file="Source/CVJackComponent.h"/>
+        <FILE id="SKdqDJ" name="ModuleGrid.cpp" compile="1" resource="0" file="Source/ModuleGrid.cpp"/>
+        <FILE id="TR0Mvz" name="ModuleGrid.h" compile="0" resource="0" file="Source/ModuleGrid.h"/>
+        <FILE id="RTK0lg" name="PatchCable.cpp" compile="1" resource="0" file="Source/PatchCable.cpp"/>
+        <FILE id="IauNX9" name="PatchCable.h" compile="0" resource="0" file="Source/PatchCable.h"/>
+      </GROUP>
       <FILE id="YezmWy" name="PluginEditor.cpp" compile="1" resource="0"
             file="Source/PluginEditor.cpp"/>
       <FILE id="tsXVwn" name="PluginEditor.h" compile="0" resource="0" file="Source/PluginEditor.h"/>
@@ -98,6 +107,9 @@
             file="Source/PluginProcessor.cpp"/>
       <FILE id="WNhrwD" name="PluginProcessor.h" compile="0" resource="0"
             file="Source/PluginProcessor.h"/>
+    </GROUP>
+    <GROUP id="{A5144A17-F70C-C56C-DA4C-B305CEFDA19B}" name="Images">
+      <FILE id="oNg5lB" name="cross.png" compile="0" resource="1" file="Images/cross.png"/>
     </GROUP>
   </MAINGROUP>
   <JUCEOPTIONS JUCE_STRICT_REFCOUNTEDPOINTER="1" JUCE_VST3_CAN_REPLACE_VST2="0"/>

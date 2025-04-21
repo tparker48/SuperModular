@@ -16,12 +16,14 @@ void initModuleProcessorFactoryMap(std::map<ModuleType, ModuleFactory>& factoryM
     factoryMap[AudioOutput] = createAudioOutputProcessor;
     factoryMap[Oscillator] = createOscillatorProcessor;
     factoryMap[Splitter] = createSplitterProcessor;
+    factoryMap[JoystickModule] = createJoystickProcessor;
 }
 
 void initModuleUIFactoryMap(std::map<ModuleType, ModuleUIFactory>& factoryMap) {
     factoryMap[AudioOutput] = createAudioOutputUI;
     factoryMap[Oscillator] = createOscillatorUI;
     factoryMap[Splitter] = createSplitterUI;
+    factoryMap[JoystickModule] = createJoystickUI;
 }
 
 
@@ -47,4 +49,12 @@ ModuleProcessor* createSplitterProcessor(int id) {
 }
 ModuleUI* createSplitterUI(int id, ModuleGrid* mg, PatchCableManager* cables, SharedStateWriter* writer) {
     return new SplitterUI(id, mg, cables, writer);
+}
+
+ModuleProcessor* createJoystickProcessor(int id) {
+    return new JoystickProcessor(id);
+
+}
+ModuleUI* createJoystickUI(int id, ModuleGrid* mg, PatchCableManager* cables, SharedStateWriter* writer) {
+    return new JoystickUI(id, mg, cables, writer);
 }

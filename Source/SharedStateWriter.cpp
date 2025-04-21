@@ -25,18 +25,27 @@ void SharedStateWriter::setModuleProperty(int moduleId, Identifier propertyName,
     if (module) {
         module->state.setProperty(propertyName, value, nullptr);
         stateMessageQueue->send_update(StateChangeMessage(*module, UPDATE));
+        saveStateToShared();
     }
-    saveStateToShared();
+}
+
+void SharedStateWriter::setModuleProperties(int moduleId, std::vector<std::pair<Identifier, var>> properties) {
+    auto module = localState.getModule(moduleId);
+    if (module) {
+        for (auto prop : properties) {
+            module->state.setProperty(prop.first, prop.second, nullptr);
+        }
+        stateMessageQueue->send_update(StateChangeMessage(*module, UPDATE));
+        saveStateToShared();
+    }
 }
 
 void SharedStateWriter::moveModule(int moduleId, Rectangle<int> newBounds) {
     auto module = localState.getModule(moduleId);
     if (module) {
         module->setBounds(newBounds);
-        // The processor doesn't really care where modules are, so no need to send
-        //stateMessageQueue->send_update(StateChangeMessage(*module, UPDATE));
+        saveStateToShared();
     }
-    saveStateToShared();
 }
 
 void SharedStateWriter::deleteModule(int moduleId) {
