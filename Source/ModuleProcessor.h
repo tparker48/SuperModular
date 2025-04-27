@@ -40,6 +40,9 @@ private:
 class CVOutputJack {
 public:
     void write(float val) {
+        jassert(val >= -1.0);
+        jassert(val <= 1.0);
+        val = std::min(std::max(-1.0f, val), 1.0f);
         cvValue = val;
     }
     float* getPtr() {

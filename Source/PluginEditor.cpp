@@ -109,9 +109,9 @@ void SuperModularAudioProcessorEditor::paint (Graphics& g)
         int holeRadius = getHeight() / 400;
         int holeDiam = holeRadius * 2;
         int holeY = barY + barH / 2 - holeRadius;
-        for (int j = 0; j < hpPerRow; j++) {
-            g.fillEllipse(j * hpWidth + hpWidth/2, holeY, holeDiam, holeDiam);
-            g.fillEllipse(j * hpWidth + hpWidth/2, holeY + moduleHeight - barH, holeDiam, holeDiam);
+        for (int j = 0; j < hpPerRow * 2; j++) {
+            g.fillEllipse(j * hpWidth/2 + hpWidth/4, holeY, holeDiam, holeDiam);
+            g.fillEllipse(j * hpWidth/2 + hpWidth/4, holeY + moduleHeight - barH, holeDiam, holeDiam);
         }
     }
 }

@@ -37,6 +37,7 @@ public:
     }
 
 private:
-    float x, y;
+    float x = 0.0; 
+    float y = 0.0;
 };
 

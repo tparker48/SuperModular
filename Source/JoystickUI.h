@@ -21,7 +21,8 @@ public:
         ModuleUI(id, mg, cm, stateWriter, 0, 2) {
         joystick.setBackgroundColour(Colours::darkseagreen);
         joystick.setPadColour(Colour(20, 20, 20));
-        joystick.setDotColour(Colours::red);
+        joystick.setDotColour(Colour(252, 56, 56));
+        joystick.setRanges(0.0, 1.0, 0.0, 1.0);
         joystick.setValues(0.5, 0.5, false, false);
         addAndMakeVisible(joystick);
 
@@ -35,8 +36,8 @@ public:
 
     void joystickValueChanged(Joystick* joystickPtr) override {
         if (joystickPtr == &joystick) {
-            auto newX = 2.0 * joystick.getHorizontalValue() - 1.0;
-            auto newY = 2.0 * joystick.getVerticalValue() - 1.0;
+            auto newX = (2.0 * joystick.getHorizontalValue()) - 1.0;
+            auto newY = (2.0 * joystick.getVerticalValue()) - 1.0;
             stateWriter->setModuleProperties(
                 getId(), 
                 { 

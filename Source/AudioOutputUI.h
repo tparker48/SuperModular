@@ -51,7 +51,7 @@ public:
     }
 
     void paintModule(Graphics& g) override {
-        g.setColour(Colour(238, 255, 230));
+        g.setColour(Colour(153, 153, 153));
         g.fillAll();
         g.setFont(16.0);
 

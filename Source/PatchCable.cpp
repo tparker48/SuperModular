@@ -65,13 +65,7 @@ void PatchCable::paint(Graphics& g) {
 }
 
 void PatchCable::drawPatchLine(Graphics& g, int x, int y, int w, int h) {
-    int radius = 10;
-    g.setColour(endColor);
-    g.fillEllipse(x - radius / 2, y - radius / 2, radius, radius);
-    g.fillEllipse(w - radius / 2, h - radius / 2, radius, radius);
-
     g.setColour(cableColor);
-
     Path path;
     Point<float> point1 = Point<float>(x, y);
     Point<float> point2 = Point<float>(w, h);
@@ -83,7 +77,13 @@ void PatchCable::drawPatchLine(Graphics& g, int x, int y, int w, int h) {
         control1,
         control1,
         point2);
+
     g.strokePath(path, PathStrokeType(5));
+
+    int radius = 12;
+    g.setColour(endColor);
+    g.fillEllipse(x - radius / 2, y - radius / 2, radius, radius);
+    g.fillEllipse(w - radius / 2, h - radius / 2, radius, radius);
 }
 
 void PatchCable::setPoints(Component* c1, Component* c2) {

@@ -106,6 +106,7 @@
                 file="Source/SliderLookAndFeel.h"/>
         </GROUP>
         <FILE id="ESsHY5" name="Dial.h" compile="0" resource="0" file="Source/Dial.h"/>
+        <FILE id="bfXiwo" name="Toggle.h" compile="0" resource="0" file="Source/Toggle.h"/>
         <FILE id="vkPQE2" name="Joystick.cpp" compile="1" resource="0" file="Source/Joystick.cpp"/>
         <FILE id="kyKxEa" name="Joystick.h" compile="0" resource="0" file="Source/Joystick.h"/>
         <FILE id="LQ9lvC" name="PatchCableManager.cpp" compile="1" resource="0"
