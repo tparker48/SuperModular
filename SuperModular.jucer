@@ -55,6 +55,9 @@
           <FILE id="AdqJr0" name="OscillatorProcessor.h" compile="0" resource="0"
                 file="Source/OscillatorProcessor.h"/>
           <FILE id="gNYVwY" name="OscillatorUI.h" compile="0" resource="0" file="Source/OscillatorUI.h"/>
+          <FILE id="eA5axH" name="SequencerProcessor.h" compile="0" resource="0"
+                file="Source/SequencerProcessor.h"/>
+          <FILE id="DoA6dd" name="SequencerUI.h" compile="0" resource="0" file="Source/SequencerUI.h"/>
           <FILE id="wdYPHd" name="SplitterProcessor.h" compile="0" resource="0"
                 file="Source/SplitterProcessor.h"/>
           <FILE id="qKdmWM" name="SplitterUI.h" compile="0" resource="0" file="Source/SplitterUI.h"/>

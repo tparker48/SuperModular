@@ -173,3 +173,24 @@ void ModuleUI::applyState(ModuleState& state) {
         cvOuts[i]->setConnection(targetJack);
     }
 }
+
+void ModuleUI::paint(Graphics& g) {
+    paintModule(g);
+    shadeEdges(g);
+}
+
+void ModuleUI::shadeEdges(Graphics& g) {
+    int thickness = 3;
+    g.setColour(Colour(0x1D000000));
+    g.fillRect(0, 0, thickness, getHeight());
+    g.fillRect(thickness, 0, getWidth()-2*thickness, thickness);
+    g.fillRect(getWidth()-thickness, 0, thickness, getHeight());
+    g.fillRect(thickness, getHeight()-thickness, getWidth()-2*thickness, thickness);
+
+    thickness = 1;
+    g.setColour(Colour(0x40000000));
+    g.fillRect(0, 0, thickness, getHeight());
+    g.fillRect(thickness, 0, getWidth() - 2 * thickness, thickness);
+    g.fillRect(getWidth() - thickness, 0, thickness, getHeight());
+    g.fillRect(thickness, getHeight() - thickness, getWidth() - 2 * thickness, thickness);
+}

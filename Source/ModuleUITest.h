@@ -25,7 +25,7 @@ public:
         int numCvOuts
     ) : ModuleUI(id, mg, cm, stateWriter, numCvIns, numCvOuts) {}
 
-    void paint(Graphics& g) {}
+    void paintModule(Graphics& g) {}
     void resized() {}
 };
 

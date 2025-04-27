@@ -53,8 +53,8 @@ public:
 
     }
 
-    void paint(Graphics& g) override {
-        g.setColour(Colours::lightgoldenrodyellow);
+    void paintModule(Graphics& g) override {
+        g.setColour(Colour(255, 249, 235));
         g.fillAll();
         g.setFont(16.0);
 
@@ -80,7 +80,6 @@ public:
         bounds.setWidth(bounds.getWidth()*2); 
         bounds.setX(bounds.getX() - bounds.getWidth() / 4);
         g.drawText("wave", bounds, Justification::centredBottom);
-
     }
 
     void resized() override {

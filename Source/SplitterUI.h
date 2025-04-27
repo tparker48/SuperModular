@@ -21,11 +21,9 @@ public:
         ModuleUI(id, mg, cm, stateWriter, 1, 5) {
     }
 
-    void paint(Graphics& g) override {
-        g.setColour(Colours::red);
+    void paintModule(Graphics& g) override {
+        g.setColour(Colour(250, 94, 80));
         g.fillAll();
-
-
     }
 
     void resized() override {

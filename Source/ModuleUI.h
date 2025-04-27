@@ -64,7 +64,7 @@ public:
     void mouseDrag(const MouseEvent& e);
 
     // Must implement per Module type
-    virtual void paint(Graphics& g) = 0;
+    virtual void paintModule(Graphics& g) = 0;
     virtual void resized() = 0;
 
     CVJackComponent* getCvInputJack(int jackId) {
@@ -86,6 +86,8 @@ public:
         return cvOuts.size();
     }
 
+    void paint(Graphics& g);
+
 protected:
     std::vector<CVJackComponent*> cvIns, cvOuts;
     SharedStateWriter* stateWriter;
@@ -96,5 +98,7 @@ private:
     ComponentDragger myDragger;
     ModuleDragRules moduleDragRules;
     PatchCableManager* cableManager;
+
+    void shadeEdges(Graphics& g);
 };
 

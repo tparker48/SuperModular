@@ -76,7 +76,7 @@ public:
         }
     }
 
-    void paint(Graphics& g) override {
+    void paintModule(Graphics& g) override {
         g.setColour(Colours::lightsalmon);
         g.fillAll();
     }

@@ -54,11 +54,15 @@ public:
         auto x = moduleState.state.getProperty("joyX");
         auto y = moduleState.state.getProperty("joyY");
         if (!x.isVoid() && !y.isVoid()) {
-            joystick.setValues(((float)x+1.0)/2.0, ((float)y + 1.0) / 2.0, false, false);
+            joystick.setValues(
+                ((float)x + 1.0) / 2.0,
+                1.0 - ((float)y + 1.0) / 2.0,
+                false,
+                false);
         }
     }
 
-    void paint(Graphics& g) override {
+    void paintModule(Graphics& g) override {
         g.setColour(Colours::darkseagreen);
         g.fillAll();
     }

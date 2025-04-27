@@ -51,8 +51,8 @@ public:
         }
     }
 
-    void paint(Graphics& g) override {
-        g.setColour(Colours::tan);
+    void paintModule(Graphics& g) override {
+        g.setColour(Colour(238, 255, 230));
         g.fillAll();
         g.setFont(16.0);
 
@@ -70,7 +70,6 @@ public:
         bounds = inputRight->getBounds();
         bounds.setWidth(bounds.getWidth() * 1.4);
         g.drawText("R", bounds, Justification::centredRight);
-        
     }
 
     void resized() override {
