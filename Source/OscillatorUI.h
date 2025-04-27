@@ -11,6 +11,7 @@
 #pragma once
 
 #include "ModuleUI.h"
+#include "Dial.h"
 
 
 class OscillatorUI : public ModuleUI, public Slider::Listener {
@@ -23,13 +24,11 @@ public:
         ampIn = getCvInputJack(1);
         waveOut = getCvOutputJack(0);
 
-        hzSlider.setSliderStyle(Slider::RotaryHorizontalDrag);
         hzSlider.setValue(220.0);
         hzSlider.setRange(0.0, 12000.0);
         hzSlider.setSkewFactor(0.3);
         hzSlider.setTitle("hz");
         hzSlider.setName("hz");
-        hzSlider.setTextBoxStyle(Slider::NoTextBox, true, 0, 0);
         addAndMakeVisible(hzSlider);
     }
 
@@ -97,5 +96,5 @@ public:
 
 private:
     CVJackComponent* hzIn, *ampIn, *waveOut;
-    Slider hzSlider;
+    Dial hzSlider;
 };

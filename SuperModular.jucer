@@ -91,6 +91,21 @@
               file="Source/SharedStateWriter.h"/>
       </GROUP>
       <GROUP id="{524557C3-C6DD-0D97-416F-17A7AE1D4227}" name="UI">
+        <GROUP id="{206E0541-4C5F-B1FC-DF45-01326EBB2B7C}" name="LookAndFeels">
+          <FILE id="XfFwNk" name="ButtonLookAndFeel.cpp" compile="1" resource="0"
+                file="Source/ButtonLookAndFeel.cpp"/>
+          <FILE id="RkDC8K" name="ButtonLookAndFeel.h" compile="0" resource="0"
+                file="Source/ButtonLookAndFeel.h"/>
+          <FILE id="mj0nsb" name="DialLookAndFeel.cpp" compile="1" resource="0"
+                file="Source/DialLookAndFeel.cpp"/>
+          <FILE id="SEH4RI" name="DialLookAndFeel.h" compile="0" resource="0"
+                file="Source/DialLookAndFeel.h"/>
+          <FILE id="MXhG1M" name="SliderLookAndFeel.cpp" compile="1" resource="0"
+                file="Source/SliderLookAndFeel.cpp"/>
+          <FILE id="XV50s5" name="SliderLookAndFeel.h" compile="0" resource="0"
+                file="Source/SliderLookAndFeel.h"/>
+        </GROUP>
+        <FILE id="ESsHY5" name="Dial.h" compile="0" resource="0" file="Source/Dial.h"/>
         <FILE id="vkPQE2" name="Joystick.cpp" compile="1" resource="0" file="Source/Joystick.cpp"/>
         <FILE id="kyKxEa" name="Joystick.h" compile="0" resource="0" file="Source/Joystick.h"/>
         <FILE id="LQ9lvC" name="PatchCableManager.cpp" compile="1" resource="0"

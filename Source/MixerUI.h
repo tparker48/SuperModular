@@ -11,6 +11,7 @@
 #pragma once
 
 #include "ModuleUI.h"
+#include "Dial.h"
 
 
 class MixerUI : public ModuleUI, public Slider::Listener {
@@ -24,10 +25,8 @@ public:
         levelLabels = { &lab1, &lab2, &lab3, &lab4,  &lab5 };
 
         for (int i = 0; i < numInputs; i++) {
-            levelSliders[i]->setSliderStyle(Slider::RotaryHorizontalDrag);
             levelSliders[i]->setRange(0.0, 1.0, 0.0);
             levelSliders[i]->setValue(1.0);
-            levelSliders[i]->setTextBoxStyle(Slider::NoTextBox, true, 0, 0);
             levelLabels[i]->attachToComponent(getCvInputJack(i), true);
             levelLabels[i]->setColour(levelLabels[i]->textColourId, Colour(20, 20, 20));
             levelLabels[i]->setText(std::to_string(i), dontSendNotification);
@@ -93,9 +92,9 @@ public:
     }
 
 private:
-    Slider lev1, lev2, lev3, lev4, lev5;
+    Dial lev1, lev2, lev3, lev4, lev5;
     Label lab1, lab2, lab3, lab4, lab5;
-    std::vector<Slider*> levelSliders;
+    std::vector<Dial*> levelSliders;
     std::vector<Label*> levelLabels;
     static const int numInputs = 5;
 };

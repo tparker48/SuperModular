@@ -11,6 +11,7 @@
 #pragma once
 
 #include "ModuleUI.h"
+#include "Dial.h"
 
 
 class SequencerUI : public ModuleUI, public Slider::Listener {
@@ -21,31 +22,24 @@ public:
         ModuleUI(id, mg, cm, stateWriter, 0, 1) {
 
         for (int i = 0; i < MAX_STEPS; i++) {
-            stepSliders[i].setSliderStyle(Slider::RotaryHorizontalDrag);
             stepSliders[i].setValue(0.0);
             stepSliders[i].setRange(-1.0, 1.0);
             stepSliders[i].setTitle(std::to_string(i));
             stepSliders[i].setName(std::to_string(i));
-            stepSliders[i].setTextBoxStyle(Slider::NoTextBox, true, 0, 0);
             addAndMakeVisible(stepSliders[i]);
         }
-        rateSlider.setSliderStyle(Slider::RotaryHorizontalDrag);
         rateSlider.setValue(0.5);
         rateSlider.setRange(0.0, 20.0);
         rateSlider.setSkewFactor(0.3);
         rateSlider.setTitle("rate");
         rateSlider.setName("rate");
-        rateSlider.setTextBoxStyle(Slider::NoTextBox, true, 0, 0);
         addAndMakeVisible(rateSlider);
 
-        numStepsSlider.setSliderStyle(Slider::RotaryHorizontalDrag);
         numStepsSlider.setValue(MAX_STEPS);
         numStepsSlider.setRange(1, MAX_STEPS, 1);
         numStepsSlider.setTitle("steps");
         numStepsSlider.setName("steps");
-        numStepsSlider.setTextBoxStyle(Slider::NoTextBox, true, 0, 0);
         addAndMakeVisible(numStepsSlider);
-        
     }
 
     void sliderValueChanged(juce::Slider* slider) override
@@ -129,6 +123,6 @@ public:
 
 private:
     static const  int MAX_STEPS = 8;
-    Slider stepSliders[MAX_STEPS];
-    Slider rateSlider, numStepsSlider;
+    Dial stepSliders[MAX_STEPS];
+    Dial rateSlider, numStepsSlider;
 };

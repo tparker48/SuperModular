@@ -11,6 +11,7 @@
 #pragma once
 
 #include "ModuleUI.h"
+#include "Dial.h"
 
 
 class AudioOutputUI : public ModuleUI, public Slider::Listener {
@@ -22,12 +23,10 @@ public:
         inputLeft = getCvInputJack(0);
         inputRight = getCvInputJack(1);
 
-        gainSlider.setSliderStyle(Slider::RotaryHorizontalDrag);
         gainSlider.setValue(0.8);
         gainSlider.setRange(0.0, 1.0);
         gainSlider.setTitle("gain");
         gainSlider.setName("gain");
-        gainSlider.setTextBoxStyle(Slider::NoTextBox, true, 0,0);
         addAndMakeVisible(gainSlider);
     }
 
@@ -86,5 +85,5 @@ public:
 
 private:
     CVJackComponent*inputLeft, *inputRight;
-    Slider gainSlider;
+    Dial gainSlider;
 };
