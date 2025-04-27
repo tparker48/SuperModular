@@ -166,11 +166,19 @@ void Joystick::paint (Graphics& g)
     g.setColour (padColour);
     g.fillRoundedRectangle(Rectangle<float>(0.0f, 0.0f, getWidth(), getHeight()), 8.0f);
 
-    // point
+    // dot
     //Image point = ImageCache::getFromMemory(BinaryData::cross_png, BinaryData::cross_pngSize);
     //g.drawImage(point, Rectangle<float>(draw_x - dot_radius / 2, draw_y - dot_radius / 2, dot_radius, dot_radius));
     g.setColour(dotColour);
-    g.fillEllipse(Rectangle<float>(draw_x - dot_radius / 2, draw_y - dot_radius / 2, dot_radius, dot_radius));
+    // cross
+    //auto crossThickness = dot_radius * 0.2;
+    //g.fillRect(draw_x - dot_radius / 2, draw_y - crossThickness/4, dot_radius, crossThickness);
+    //g.fillRect(draw_x - crossThickness/4, draw_y - dot_radius/2, crossThickness, dot_radius);
+    //g.setColour(dotColour.withAlpha(0.2f));
+    //g.fillRect(0, draw_y - crossThickness / 4, getWidth(), crossThickness);
+    //g.fillRect(draw_x - crossThickness / 4, 0, crossThickness, getHeight());
+    // circle
+    g.fillEllipse(draw_x - dot_radius / 2, draw_y - dot_radius / 2, dot_radius, dot_radius);
 
 
     // cover the point at the border
