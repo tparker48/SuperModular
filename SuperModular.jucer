@@ -122,6 +122,8 @@
         <FILE id="RTK0lg" name="PatchCable.cpp" compile="1" resource="0" file="Source/PatchCable.cpp"/>
         <FILE id="IauNX9" name="PatchCable.h" compile="0" resource="0" file="Source/PatchCable.h"/>
       </GROUP>
+      <FILE id="a1zWy5" name="faust_bandlimited_osc.h" compile="0" resource="0"
+            file="Source/faust_bandlimited_osc.h"/>
       <FILE id="YezmWy" name="PluginEditor.cpp" compile="1" resource="0"
             file="Source/PluginEditor.cpp"/>
       <FILE id="tsXVwn" name="PluginEditor.h" compile="0" resource="0" file="Source/PluginEditor.h"/>
@@ -129,6 +131,9 @@
             file="Source/PluginProcessor.cpp"/>
       <FILE id="WNhrwD" name="PluginProcessor.h" compile="0" resource="0"
             file="Source/PluginProcessor.h"/>
+      <FILE id="ZnReAk" name="WaveTableOsc.cpp" compile="1" resource="0"
+            file="Source/WaveTableOsc.cpp"/>
+      <FILE id="tDXuRZ" name="WaveTableOsc.h" compile="0" resource="0" file="Source/WaveTableOsc.h"/>
     </GROUP>
     <GROUP id="{A5144A17-F70C-C56C-DA4C-B305CEFDA19B}" name="Images">
       <FILE id="oNg5lB" name="cross.png" compile="0" resource="1" file="Images/cross.png"/>

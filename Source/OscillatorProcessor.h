@@ -11,7 +11,7 @@
 #pragma once
 
 #include "ModuleProcessor.h"
-
+#include "faust_bandlimited_osc.h"
 
 class OscillatorProcessor : public ModuleProcessor {
 public:
@@ -21,6 +21,15 @@ public:
     void prepareToPlay(double sampleRate, int samplesPerBlock) override {
         ModuleProcessor::prepareToPlay(sampleRate, samplesPerBlock);
         updateHz(440.0);
+
+        fDSP = new mydsp();
+        fDSP->init(sampleRate);
+        fUI = new MapUI();
+        fDSP->buildUserInterface(fUI);
+        outputs = new float* [2];
+        for (int channel = 0; channel < 2; ++channel) {
+            outputs[channel] = new float[samplesPerBlock];
+        }
     }
 
     void updateFromState(ModuleState moduleState) {
@@ -51,13 +60,48 @@ public:
         jassert(phase >= 0.0);
 
         auto ampMod = (cvInputs[1].isConnected()) ? (cvInputs[1].read() + 1.0) / 2.0 : 1.0;
-        cvOutputs[0].write(wave(phase) *  ampMod);
+
+        fUI->setParamValue("hz", hz);
+        switch (waveType) {
+        case 0:
+            fUI->setParamValue("wave_select_1", 0);
+            fUI->setParamValue("wave_select_2", 0);
+            break;
+        case 1:
+            fUI->setParamValue("wave_select_1", 0);
+            fUI->setParamValue("wave_select_2", 1);
+            break;
+        case 2:
+            fUI->setParamValue("wave_select_1", 1);
+            fUI->setParamValue("wave_select_2", 0);
+            break;
+        case 3:
+            fUI->setParamValue("wave_select_1", 1);
+            fUI->setParamValue("wave_select_2", 1);
+            break;
+        }
+        
+        fDSP->compute(1, nullptr, outputs);
+        cvOutputs[0].write(outputs[0][0] *  ampMod);
     }
 
     void updateHz(double newHz) {
         jassert(newHz >= 0.0);
         hz = newHz;
         phaseIncrement = (hz * juce::MathConstants<double>::twoPi) / sampleRate;
+    }
+
+    float wave(double phase) {
+        switch (waveType) {
+        case 0:
+            return sin(phase);
+        case 1:
+            return sin(phase);
+        case 2:
+            return sin(phase);
+        case 3:
+            return sin(phase);
+        }
     }
 
 private:
@@ -67,47 +111,9 @@ private:
     int waveType = 0;
     bool lfo = false;
 
-    float wave(double phase) {
-        switch (waveType) {
-        case 0:
-            return sin(phase);
-        case 1:
-            return triWave(phase);
-        case 2:
-            return sawWave(phase);
-        case 3:
-            return sqWave(phase);
-        }
-    }
-
-    float triWave(double phase) {
-        float triWave[] = {0.0f, 1.0f, 0.0f, -1.0f, 0.0f};
-        float idx = phase / MathConstants<float>::halfPi;
-
-        int lo = floor(idx);
-        int hi = ceil(idx);
-        float hi_amt = idx - lo;
-        float lo_amt = 1.0f - hi_amt;
-        
-        if (lo < 0 || hi > 4) {
-            return 0.0;
-        }
-
-        return (triWave[lo] * lo_amt) + (triWave[hi] * hi_amt);
-    }
-
-    float sawWave(double phase) {
-        return jmap<double>(phase, 0, MathConstants<double>::twoPi, -1, 1);
-    }
-
-    float sqWave(double phase) {
-        if (phase <= MathConstants<double>::pi) {
-            return -1.0;
-        }
-        else {
-            return 1.0;
-        }
-    }
+    MapUI* fUI;
+    dsp* fDSP;
+    float** outputs;
 };
 
 
