@@ -15,7 +15,7 @@
 #include "Toggle.h"
 
 
-class OscillatorUI : public ModuleUI, public Slider::Listener {
+class OscillatorUI : public ModuleUI, public Slider::Listener, Button::Listener {
 public:
     static const int hp = 2;
 
@@ -38,6 +38,9 @@ public:
         waveType.setTitle("waveSelect");
         waveType.setName("waveSelect");
         addAndMakeVisible(waveType);
+
+        lfoToggle.setToggleState(false, false);
+        addAndMakeVisible(lfoToggle);
     }
 
     void sliderValueChanged(juce::Slider* slider) override {
@@ -49,9 +52,16 @@ public:
         }
     }
 
+    void buttonClicked(juce::Button* button) override {
+        if (button == &lfoToggle) {
+            stateWriter->setModuleProperty(getId(), "lfo_toggle", (int)lfoToggle.getToggleState());
+        }
+    }
+
     void startListeners() override {
         hzSlider.addListener(this);
         waveType.addListener(this);
+        lfoToggle.addListener(this);
     }
 
     void applyState(ModuleState& moduleState) override {
@@ -63,6 +73,10 @@ public:
         auto wave = moduleState.state.getProperty("wave");
         if (!wave.isVoid()) {
             waveType.setValue(wave);
+        }
+        auto lfoState = moduleState.state.getProperty("lfo_toggle");
+        if (!lfoState.isVoid()) {
+            lfoToggle.setToggleState((bool)lfoState, false);
         }
     }
 
@@ -93,6 +107,12 @@ public:
         bounds.setWidth(bounds.getWidth()*2); 
         bounds.setX(bounds.getX() - bounds.getWidth() / 4);
         g.drawText("out", bounds, Justification::centredBottom);
+
+        bounds = lfoToggle.getBounds();
+        bounds.setY(bounds.getY() - bounds.getHeight());
+        bounds.setWidth(bounds.getWidth() * 2);
+        bounds.setX(bounds.getX() - bounds.getWidth() / 4);
+        g.drawText("lfo", bounds, Justification::centredBottom);
 
         g.setFont(14.0);
         auto stretch = 0.48;
@@ -127,15 +147,19 @@ public:
         waveOut->setBounds(getWidth() - margin - 25, cvY, 25, 25);
 
 
-        hzSlider.setSize(50, 50);
-        hzSlider.setCentrePosition(getWidth() * .3, getHeight() * .25);
+        hzSlider.setSize(40, 40);
+        hzSlider.setCentrePosition(getWidth() * .3, getHeight() * .20);
 
-        waveType.setSize(50, 50);
-        waveType.setCentrePosition(getWidth() * .5, getHeight()  * .50);
+        lfoToggle.setSize(40, 40);
+        lfoToggle.setCentrePosition(getWidth() * .7, getHeight() * .2);
+
+        waveType.setSize(40, 40);
+        waveType.setCentrePosition(getWidth() * .5, getHeight() * .45);
     }
 
 private:
     CVJackComponent* hzIn, *ampIn, *waveOut;
     Dial hzSlider;
     Dial waveType;
+    Toggle lfoToggle;
 };

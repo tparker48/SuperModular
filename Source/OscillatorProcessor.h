@@ -15,14 +15,18 @@
 #include "faustTriangle.h"
 #include "faustSaw.h"
 #include "faustSquare.h"
+#include "faustLfoSaw.h"
+#include "faustLfoSquare.h"
 
 enum WAVETYPE {
     SIN,
     TRIANGLE,
     SAW,
-    SQUARE
+    SQUARE,
+    LFOSAW,
+    LFOSQUARE
 };
-const int NUM_WAVETYPES = 4;
+const int NUM_WAVETYPES = 6;
 
 class OscillatorProcessor : public ModuleProcessor {
 public:
@@ -51,6 +55,8 @@ public:
         faustProcessors[TRIANGLE] = new triangledsp();
         faustProcessors[SAW] = new sawdsp();
         faustProcessors[SQUARE] = new squaredsp();
+        faustProcessors[LFOSAW] = new lfsawdsp();
+        faustProcessors[LFOSQUARE] = new lfsquaredsp();
 
         for (int i = 0; i < NUM_WAVETYPES; i++) {
             faustControllers[i] = new MapUI();
@@ -71,14 +77,21 @@ public:
         if (!wave.isVoid()) {
             waveType = (WAVETYPE)(int)wave;
         }
+
+        auto lfoToggle = moduleState.state.getProperty("lfo_toggle");
+        if (!lfoToggle.isVoid()) {
+            lfo = lfoToggle;
+        }
     }
 
     void processSample() {
-        auto cvHzMod = (cvInputs[0].read() + 1.0); // ranges [0,2]
-        auto ampMod = (cvInputs[1].isConnected()) ? (cvInputs[1].read() + 1.0) / 2.0 : 1.0;
-        faustControllers[waveType]->setParamValue("hz", hz * cvHzMod);
-        faustProcessors[waveType]->compute(1, nullptr, faustOutput);
-        cvOutputs[0].write(faustOutput[0][0] *  ampMod);
+        auto adjustedHz = hz + hz*(cvInputs[0].read());
+        adjustedHz = lfo? getLfoHz(adjustedHz) : adjustedHz;
+        auto adjustedGain = (cvInputs[1].isConnected()) ? (cvInputs[1].read() + 1.0) / 2.0 : 1.0;
+        auto wave = getWaveType();
+        faustControllers[wave]->setParamValue("hz", adjustedHz);
+        faustProcessors[wave]->compute(1, nullptr, faustOutput);
+        cvOutputs[0].write(faustOutput[0][0] *  adjustedGain);
     }
 
     void setHz(double newHz) {
@@ -86,9 +99,27 @@ public:
         hz = newHz;
     }
 
+    double getLfoHz(double hz) {
+        return 60.0 * (hz - 24.0) / (20000 - 24.0);
+    }
+
+    WAVETYPE getWaveType() {
+        // SAW and SQUARE have different logic at low freq
+        if (lfo) {
+            if (waveType == SAW) {
+                return LFOSAW;
+            }
+            if (waveType == SQUARE) {
+                return LFOSQUARE;
+            }
+        }
+        return waveType;
+    }
+
 private:
     WAVETYPE waveType = SIN;
     double hz = 440.0;
+    bool lfo = false;
     MapUI *faustControllers[NUM_WAVETYPES];
     dsp *faustProcessors[NUM_WAVETYPES];
     float* faustOutput[1];
