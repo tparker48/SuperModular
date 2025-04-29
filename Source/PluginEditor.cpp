@@ -25,7 +25,7 @@ SuperModularAudioProcessorEditor::SuperModularAudioProcessorEditor (SuperModular
     setLookAndFeel(&customLookAndFeel);
     addAndMakeVisible(cableManager.getDragCable());
 
-    //loadState();
+    loadState();
     startTimerHz(3);
 }
 
