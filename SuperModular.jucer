@@ -41,6 +41,18 @@
       </GROUP>
     </GROUP>
     <GROUP id="{0C7E7290-A30B-36B9-5B86-6E4BA2E3F5B0}" name="Source">
+      <GROUP id="{2C904947-C283-6804-7AF6-F92ECB4078DA}" name="Faust">
+        <FILE id="WuMrYx" name="faustLfoTriangle.h" compile="0" resource="0"
+              file="Source/faustLfoTriangle.h"/>
+        <FILE id="vbHz2E" name="faustLfoSquare.h" compile="0" resource="0"
+              file="Source/faustLfoSquare.h"/>
+        <FILE id="UznLcQ" name="faustLfoSaw.h" compile="0" resource="0" file="Source/faustLfoSaw.h"/>
+        <FILE id="NrxHg1" name="faustSin.h" compile="0" resource="0" file="Source/faustSin.h"/>
+        <FILE id="IYBj5n" name="faustSaw.h" compile="0" resource="0" file="Source/faustSaw.h"/>
+        <FILE id="Pep5vI" name="faustTriangle.h" compile="0" resource="0" file="Source/faustTriangle.h"/>
+        <FILE id="mWa1C2" name="faustSquare.h" compile="0" resource="0" file="Source/faustSquare.h"/>
+        <FILE id="a1zWy5" name="faustHeader.h" compile="0" resource="0" file="Source/faustHeader.h"/>
+      </GROUP>
       <GROUP id="{EDC0C7F4-16E7-353E-0FE3-980369A4613A}" name="Module">
         <GROUP id="{C1EACEAB-E6AD-6971-AEE4-ED79C95C58C4}" name="Modules">
           <FILE id="T5OLmD" name="AudioOutputProcessor.h" compile="0" resource="0"
@@ -122,8 +134,6 @@
         <FILE id="RTK0lg" name="PatchCable.cpp" compile="1" resource="0" file="Source/PatchCable.cpp"/>
         <FILE id="IauNX9" name="PatchCable.h" compile="0" resource="0" file="Source/PatchCable.h"/>
       </GROUP>
-      <FILE id="a1zWy5" name="faust_bandlimited_osc.h" compile="0" resource="0"
-            file="Source/faust_bandlimited_osc.h"/>
       <FILE id="YezmWy" name="PluginEditor.cpp" compile="1" resource="0"
             file="Source/PluginEditor.cpp"/>
       <FILE id="tsXVwn" name="PluginEditor.h" compile="0" resource="0" file="Source/PluginEditor.h"/>
