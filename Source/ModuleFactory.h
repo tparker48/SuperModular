@@ -33,6 +33,9 @@
 #include "SequencerUI.h"
 #include "SequencerProcessor.h"
 
+#include "FilterUI.h"
+#include "FilterProcessor.h"
+
 
 enum ModuleType {
     TestModule,
@@ -41,7 +44,8 @@ enum ModuleType {
     Splitter,
     JoystickModule,
     Mixer,
-    Sequencer
+    Sequencer,
+    Filter
 };
 
 using ModuleFactory = ModuleProcessor * (*)(int);
@@ -69,3 +73,6 @@ ModuleUI* createMixerUI(int id, ModuleGrid* mg, PatchCableManager* cables, Share
 
 ModuleProcessor* createSequencerProcessor(int id);
 ModuleUI* createSequencerUI(int id, ModuleGrid* mg, PatchCableManager* cables, SharedStateWriter* writer);
+
+ModuleProcessor* createFilterProcessor(int id);
+ModuleUI* createFilterUI(int id, ModuleGrid* mg, PatchCableManager* cables, SharedStateWriter* writer);

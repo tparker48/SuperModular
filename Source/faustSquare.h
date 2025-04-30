@@ -11,7 +11,7 @@
 #pragma once
 
 #include "faustHeader.h"
-
+using namespace faust;
 
 // BEGIN-FAUSTDSP
 /* ------------------------------------------------------------

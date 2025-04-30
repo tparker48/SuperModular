@@ -19,6 +19,7 @@ void initModuleProcessorFactoryMap(std::map<ModuleType, ModuleFactory>& factoryM
     factoryMap[JoystickModule] = createJoystickProcessor;
     factoryMap[Mixer] = createMixerProcessor;
     factoryMap[Sequencer] = createSequencerProcessor;
+    factoryMap[Filter] = createFilterProcessor;
 }
 
 void initModuleUIFactoryMap(std::map<ModuleType, ModuleUIFactory>& factoryMap) {
@@ -28,6 +29,7 @@ void initModuleUIFactoryMap(std::map<ModuleType, ModuleUIFactory>& factoryMap) {
     factoryMap[JoystickModule] = createJoystickUI;
     factoryMap[Mixer] = createMixerUI;
     factoryMap[Sequencer] = createSequencerUI;
+    factoryMap[Filter] = createFilterUI;
 }
 
 
@@ -77,4 +79,12 @@ ModuleProcessor* createSequencerProcessor(int id) {
 }
 ModuleUI* createSequencerUI(int id, ModuleGrid* mg, PatchCableManager* cables, SharedStateWriter* writer) {
     return new SequencerUI(id, mg, cables, writer);
+}
+
+ModuleProcessor* createFilterProcessor(int id) {
+    return new FilterProcessor(id);
+
+}
+ModuleUI* createFilterUI(int id, ModuleGrid* mg, PatchCableManager* cables, SharedStateWriter* writer) {
+    return new FilterUI(id, mg, cables, writer);
 }

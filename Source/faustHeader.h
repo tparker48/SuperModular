@@ -1,6 +1,8 @@
 #ifndef __mydsp_H__
 #define __mydsp_H__
 
+namespace faust {
+
 #include <cmath>
 #include <cstring>
 
@@ -559,7 +561,7 @@ public:
     virtual std::vector<std::string> getLibraryList() = 0;
     virtual std::vector<std::string> getIncludePathnames() = 0;
 
-    virtual dsp *createDSPInstance() = 0;
+    virtual faust::dsp *createDSPInstance() = 0;
 
     virtual void setMemoryManager(dsp_memory_manager *manager) = 0;
     virtual dsp_memory_manager *getMemoryManager() = 0;
@@ -582,5 +584,7 @@ public:
 #endif
 
 #endif
+
+}
 /**************************  END  dsp.h **************************/
 #endif

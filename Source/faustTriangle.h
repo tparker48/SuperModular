@@ -10,8 +10,8 @@
 
 #pragma once
 
-#include "faustHeader.h"
-
+#include "faustHeader.h";
+using namespace faust;
 
 // BEGIN-FAUSTDSP
 

@@ -120,7 +120,7 @@ private:
     WAVETYPE waveType = SIN;
     double hz = 440.0;
     bool lfo = false;
-    MapUI *faustControllers[NUM_WAVETYPES];
-    dsp *faustProcessors[NUM_WAVETYPES];
+    faust::MapUI *faustControllers[NUM_WAVETYPES];
+    faust::dsp *faustProcessors[NUM_WAVETYPES];
     float* faustOutput[1];
 };

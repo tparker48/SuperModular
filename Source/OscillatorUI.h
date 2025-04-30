@@ -27,7 +27,7 @@ public:
 
         hzSlider.setRange(24.0, 14000.0);
         hzSlider.setValue(220.0);
-        hzSlider.setSkewFactor(0.3);
+        hzSlider.setSkewFactor(.2);
         hzSlider.setTitle("hz");
         hzSlider.setName("hz");
         addAndMakeVisible(hzSlider);

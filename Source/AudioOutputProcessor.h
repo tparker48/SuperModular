@@ -58,7 +58,7 @@ public:
         }
     }
 
-public:
+private:
     AudioBuffer<float> internalBuffer;
     float gain = 1.0;
     int writeHead = 0;

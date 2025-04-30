@@ -11,7 +11,7 @@
 #pragma once
 
 #include "faustHeader.h"
-
+using namespace faust;
 
 // BEGIN-FAUSTDSP
 
@@ -172,7 +172,7 @@ class sindsp : public dsp {
 		return fSampleRate;
 	}
 	
-	virtual void buildUserInterface(UI* ui_interface) {
+	virtual void buildUserInterface(faust::UI* ui_interface) {
 		ui_interface->openVerticalBox("untitled");
 		ui_interface->addNumEntry("hz", &fEntry0, FAUSTFLOAT(4.4e+02f), FAUSTFLOAT(0.0f), FAUSTFLOAT(2e+04f), FAUSTFLOAT(1e-05f));
 		ui_interface->closeBox();
