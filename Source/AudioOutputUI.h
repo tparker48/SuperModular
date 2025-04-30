@@ -19,9 +19,10 @@ public:
     static const int hp = 1;
 
     AudioOutputUI(int id, ModuleGrid* mg, PatchCableManager* cm, SharedStateWriter* stateWriter) :
-        ModuleUI(id, mg, cm, stateWriter, 2, 0) {
+        ModuleUI(id, mg, cm, stateWriter, 3, 0) {
         inputLeft = getCvInputJack(0);
         inputRight = getCvInputJack(1);
+        inputMono = getCvInputJack(2);
 
         gainSlider.setValue(0.8);
         gainSlider.setRange(0.0, 1.0);
@@ -69,6 +70,11 @@ public:
         bounds = inputRight->getBounds();
         bounds.setWidth(bounds.getWidth() * 1.4);
         g.drawText("R", bounds, Justification::centredRight);
+
+        auto inputMono = getCvInputJack(2);
+        bounds = inputMono->getBounds();
+        bounds.setWidth(bounds.getWidth() * 1.4);
+        g.drawText("M", bounds, Justification::centredRight);
     }
 
     void resized() override {
@@ -80,10 +86,11 @@ public:
 
         inputLeft->setBounds(margin, cvY - paddingY, 25, 25);
         inputRight->setBounds(margin, cvY, 25, 25);
+        inputMono->setBounds(margin, cvY + paddingY, 25, 25);
         gainSlider.setBounds(middleX - 25, gainY, 50, 50);
     }
 
 private:
-    CVJackComponent*inputLeft, *inputRight;
+    CVJackComponent*inputLeft, *inputRight, *inputMono;
     Dial gainSlider;
 };

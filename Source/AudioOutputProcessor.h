@@ -15,7 +15,7 @@
 
 class AudioOutputProcessor : public ModuleProcessor {
 public:
-    AudioOutputProcessor(int id) : ModuleProcessor(id, 2, 0) {
+    AudioOutputProcessor(int id) : ModuleProcessor(id, 3, 0) {
     }
 
 
@@ -33,13 +33,20 @@ public:
     }
 
     void processSample() {
-        internalBuffer.setSample(0, writeHead, cvInputs[0].read());
-        internalBuffer.setSample(1, writeHead, cvInputs[1].read());
+        if (cvInputs[2].isConnected()) {
+            internalBuffer.setSample(0, writeHead, cvInputs[2].read());
+            internalBuffer.setSample(1, writeHead, cvInputs[2].read());
+        }
+        else {
+            internalBuffer.setSample(0, writeHead, cvInputs[0].read());
+            internalBuffer.setSample(1, writeHead, cvInputs[1].read());
+        }
         writeHead++;
     }
 
     void processBlock(AudioBuffer<float>& buffer) {
         writeHead = 0;
+
         if (buffer.getNumChannels() == 1) {
             buffer.copyFrom(0, 0, internalBuffer.getReadPointer(0), internalBuffer.getNumSamples(), 0.5 * gain);
             buffer.copyFrom(0, 0, internalBuffer.getReadPointer(1), internalBuffer.getNumSamples(), 0.5 * gain);
