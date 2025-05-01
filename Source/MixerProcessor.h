@@ -21,6 +21,11 @@ public:
     void prepareToPlay(double sampleRate, int samplesPerBlock) override {
         ModuleProcessor::prepareToPlay(sampleRate, samplesPerBlock);
         l1 = l2 = l3 = l4 = l5 = 1.0;
+        sl1.reset(sampleRate, 0.02);
+        sl2.reset(sampleRate, 0.02);
+        sl3.reset(sampleRate, 0.02);
+        sl4.reset(sampleRate, 0.02);
+        sl5.reset(sampleRate, 0.02);
     }
 
     void updateFromState(ModuleState moduleState) {
@@ -47,23 +52,21 @@ public:
     }
 
     void processSample() {
-        float totalConnections = (
-            (int)getCVInputJack(0)->isConnected() +
-            (int)getCVInputJack(1)->isConnected() +
-            (int)getCVInputJack(2)->isConnected() +
-            (int)getCVInputJack(3)->isConnected() +
-            (int)getCVInputJack(4)->isConnected()
-        );
-        totalConnections = std::max(1.0f, totalConnections);
+        sl1.setTargetValue(l1);
+        sl2.setTargetValue(l2);
+        sl3.setTargetValue(l3);
+        sl4.setTargetValue(l4);
+        sl5.setTargetValue(l5);
         getCVOutputJack(0)->write(
-            (l1 * getCVInputJack(0)->read() +
-             l2 * getCVInputJack(1)->read() +
-             l3 * getCVInputJack(2)->read() +
-             l4 * getCVInputJack(3)->read() +
-             l5 * getCVInputJack(4)->read()) / totalConnections);
+            (sl1.getNextValue() * getCVInputJack(0)->read() +
+             sl2.getNextValue() * getCVInputJack(1)->read() +
+             sl3.getNextValue() * getCVInputJack(2)->read() +
+             sl4.getNextValue() * getCVInputJack(3)->read() +
+             sl5.getNextValue() * getCVInputJack(4)->read()));
     }
 
 private:
     double l1, l2, l3, l4, l5;
+    SmoothedValue<double, ValueSmoothingTypes::Multiplicative> sl1, sl2, sl3, sl4, sl5;
 };
 

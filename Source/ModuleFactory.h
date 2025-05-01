@@ -36,6 +36,8 @@
 #include "FilterUI.h"
 #include "FilterProcessor.h"
 
+#include "NoiseUI.h"
+#include "NoiseProcessor.h"
 
 enum ModuleType {
     TestModule,
@@ -45,7 +47,8 @@ enum ModuleType {
     JoystickModule,
     Mixer,
     Sequencer,
-    Filter
+    Filter,
+    Noise
 };
 
 using ModuleFactory = ModuleProcessor * (*)(int);
@@ -76,3 +79,6 @@ ModuleUI* createSequencerUI(int id, ModuleGrid* mg, PatchCableManager* cables, S
 
 ModuleProcessor* createFilterProcessor(int id);
 ModuleUI* createFilterUI(int id, ModuleGrid* mg, PatchCableManager* cables, SharedStateWriter* writer);
+
+ModuleProcessor* createNoiseProcessor(int id);
+ModuleUI* createNoiseUI(int id, ModuleGrid* mg, PatchCableManager* cables, SharedStateWriter* writer);

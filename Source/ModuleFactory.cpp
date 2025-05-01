@@ -20,6 +20,7 @@ void initModuleProcessorFactoryMap(std::map<ModuleType, ModuleFactory>& factoryM
     factoryMap[Mixer] = createMixerProcessor;
     factoryMap[Sequencer] = createSequencerProcessor;
     factoryMap[Filter] = createFilterProcessor;
+    factoryMap[Noise] = createNoiseProcessor;
 }
 
 void initModuleUIFactoryMap(std::map<ModuleType, ModuleUIFactory>& factoryMap) {
@@ -30,6 +31,7 @@ void initModuleUIFactoryMap(std::map<ModuleType, ModuleUIFactory>& factoryMap) {
     factoryMap[Mixer] = createMixerUI;
     factoryMap[Sequencer] = createSequencerUI;
     factoryMap[Filter] = createFilterUI;
+    factoryMap[Noise] = createNoiseUI;
 }
 
 
@@ -87,4 +89,12 @@ ModuleProcessor* createFilterProcessor(int id) {
 }
 ModuleUI* createFilterUI(int id, ModuleGrid* mg, PatchCableManager* cables, SharedStateWriter* writer) {
     return new FilterUI(id, mg, cables, writer);
+}
+
+ModuleProcessor* createNoiseProcessor(int id) {
+    return new NoiseProcessor(id);
+
+}
+ModuleUI* createNoiseUI(int id, ModuleGrid* mg, PatchCableManager* cables, SharedStateWriter* writer) {
+    return new NoiseUI(id, mg, cables, writer);
 }

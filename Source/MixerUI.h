@@ -25,8 +25,9 @@ public:
         levelLabels = { &lab1, &lab2, &lab3, &lab4,  &lab5 };
 
         for (int i = 0; i < numInputs; i++) {
-            levelSliders[i]->setRange(0.0, 1.0, 0.0);
-            levelSliders[i]->setValue(1.0);
+            levelSliders[i]->setRange(0.0001, 1.3, 0.0);
+            levelSliders[i]->setValue(0.3);
+            levelSliders[i]->setSkewFactor(0.75);
             levelLabels[i]->attachToComponent(getCvInputJack(i), true);
             levelLabels[i]->setColour(levelLabels[i]->textColourId, Colour(20, 20, 20));
             levelLabels[i]->setText(std::to_string(i), dontSendNotification);

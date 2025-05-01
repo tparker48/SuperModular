@@ -55,6 +55,9 @@
       </GROUP>
       <GROUP id="{EDC0C7F4-16E7-353E-0FE3-980369A4613A}" name="Module">
         <GROUP id="{C1EACEAB-E6AD-6971-AEE4-ED79C95C58C4}" name="Modules">
+          <FILE id="J0zTDe" name="NoiseProcessor.h" compile="0" resource="0"
+                file="Source/NoiseProcessor.h"/>
+          <FILE id="Ujq3Va" name="NoiseUI.h" compile="0" resource="0" file="Source/NoiseUI.h"/>
           <FILE id="rrlit6" name="FilterProcessor.h" compile="0" resource="0"
                 file="Source/FilterProcessor.h"/>
           <FILE id="mPXQds" name="FilterUI.h" compile="0" resource="0" file="Source/FilterUI.h"/>
@@ -137,6 +140,14 @@
         <FILE id="RTK0lg" name="PatchCable.cpp" compile="1" resource="0" file="Source/PatchCable.cpp"/>
         <FILE id="IauNX9" name="PatchCable.h" compile="0" resource="0" file="Source/PatchCable.h"/>
       </GROUP>
+      <FILE id="ypRWrt" name="KellettPinkFilter.cpp" compile="1" resource="0"
+            file="Source/KellettPinkFilter.cpp"/>
+      <FILE id="y7RVSn" name="KellettPinkFilter.h" compile="0" resource="0"
+            file="Source/KellettPinkFilter.h"/>
+      <FILE id="n9NSpZ" name="NoiseGenerator.cpp" compile="1" resource="0"
+            file="Source/NoiseGenerator.cpp"/>
+      <FILE id="pZMRaA" name="NoiseGenerator.h" compile="0" resource="0"
+            file="Source/NoiseGenerator.h"/>
       <FILE id="YezmWy" name="PluginEditor.cpp" compile="1" resource="0"
             file="Source/PluginEditor.cpp"/>
       <FILE id="tsXVwn" name="PluginEditor.h" compile="0" resource="0" file="Source/PluginEditor.h"/>
