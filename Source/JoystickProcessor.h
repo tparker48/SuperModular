@@ -19,7 +19,11 @@ public:
     }
 
     void prepareToPlay(double sampleRate, int samplesPerBlock) override {
+        xSmooth.reset(sampleRate, 0.02);
+        xSmooth.setCurrentAndTargetValue(x);
 
+        ySmooth.reset(sampleRate, 0.02);
+        ySmooth.setCurrentAndTargetValue(y);
     }
 
     void updateFromState(ModuleState moduleState) {
@@ -32,12 +36,15 @@ public:
     }
 
     void processSample() {
-        getCVOutputJack(0)->write(x);
-        getCVOutputJack(1)->write(y);
+        xSmooth.setTargetValue(x);
+        ySmooth.setTargetValue(y);
+        getCVOutputJack(0)->write(xSmooth.getNextValue());
+        getCVOutputJack(1)->write(ySmooth.getNextValue());
     }
 
 private:
     float x = 0.0; 
     float y = 0.0;
+    SmoothedValue<float, ValueSmoothingTypes::Linear> xSmooth, ySmooth;
 };
 

@@ -38,6 +38,9 @@ public:
         hpf.prepare(spec);
         hpf.setMode(juce::dsp::LadderFilterMode::HPF24);
         hpf.setEnabled(true);
+
+        hzSmooth.reset(sampleRate, 0.01);
+        hzSmooth.setCurrentAndTargetValue(hz);
     }
 
     void updateFromState(ModuleState moduleState) {
@@ -56,11 +59,14 @@ public:
     }
 
     void processSample() {
-        lpf.setCutoffFrequencyHz(hz);
+        hzSmooth.setTargetValue(hz);
+        auto smoothedHz = hzSmooth.getNextValue();
+
+        lpf.setCutoffFrequencyHz(smoothedHz);
         lpf.setResonance(q);
         lpf.setDrive(drive);
 
-        hpf.setCutoffFrequencyHz(hz);
+        hpf.setCutoffFrequencyHz(smoothedHz);
         hpf.setResonance(q);
         hpf.setDrive(drive);
 
@@ -80,5 +86,6 @@ public:
 
 private:
     juce::dsp::LadderFilter<float> lpf, hpf;
+    SmoothedValue<double, ValueSmoothingTypes::Multiplicative> hzSmooth;
     double hz, q, drive;
 };

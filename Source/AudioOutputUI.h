@@ -25,7 +25,8 @@ public:
         inputMono = getCvInputJack(2);
 
         gainSlider.setValue(0.8);
-        gainSlider.setRange(0.0, 1.0);
+        gainSlider.setRange(0.001, 1.0);
+        gainSlider.setSkewFactor(0.75);
         gainSlider.setTitle("gain");
         gainSlider.setName("gain");
         addAndMakeVisible(gainSlider);

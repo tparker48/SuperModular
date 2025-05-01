@@ -25,7 +25,7 @@ public:
         ampIn = getCvInputJack(1);
         waveOut = getCvOutputJack(0);
 
-        hzSlider.setRange(24.0, 14000.0);
+        hzSlider.setRange(24.0, 12000.0);
         hzSlider.setValue(220.0);
         hzSlider.setSkewFactor(.2);
         hzSlider.setTitle("hz");

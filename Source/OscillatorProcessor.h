@@ -66,6 +66,8 @@ public:
         faustOutput[0] = new float;
 
         setHz(440.0);
+        hzSmooth.reset(sampleRate, 0.01);
+        hzSmooth.setCurrentAndTargetValue(hz);
     }
 
     void updateFromState(ModuleState moduleState) {
@@ -85,7 +87,9 @@ public:
     }
 
     void processSample() {
-        auto adjustedHz = hz + hz*(cvInputs[0].read());
+        hzSmooth.setTargetValue(hz);
+        auto smoothedHz = hzSmooth.getNextValue();
+        auto adjustedHz = smoothedHz + smoothedHz *(cvInputs[0].read());
         adjustedHz = lfo? getLfoHz(adjustedHz) : adjustedHz;
         auto adjustedGain = (cvInputs[1].isConnected()) ? (cvInputs[1].read() + 1.0) / 2.0 : 1.0;
         auto wave = getWaveType();
@@ -119,6 +123,7 @@ public:
 private:
     WAVETYPE waveType = SIN;
     double hz = 440.0;
+    SmoothedValue<double, ValueSmoothingTypes::Multiplicative> hzSmooth;
     bool lfo = false;
     faust::MapUI *faustControllers[NUM_WAVETYPES];
     faust::dsp *faustProcessors[NUM_WAVETYPES];
