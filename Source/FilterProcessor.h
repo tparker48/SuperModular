@@ -27,7 +27,7 @@ public:
         ModuleProcessor::prepareToPlay(sampleRate, samplesPerBuffer);
 
         juce::dsp::ProcessSpec spec;
-        spec.maximumBlockSize = samplesPerBuffer;
+        spec.maximumBlockSize = 1;
         spec.sampleRate = sampleRate;
         spec.numChannels = 1;
 

@@ -135,10 +135,12 @@ void SuperModularAudioProcessorEditor::showPopupMenu(const MouseEvent& e) {
     m.addItem(AudioOutput, "Audio Out");
     m.addItem(Oscillator, "Oscillator");
     m.addItem(Filter, "Filter");
+    m.addItem(DelayModule, "Delay");
     m.addItem(Splitter, "Splitter");
     m.addItem(Mixer, "Mixer");
     m.addItem(JoystickModule, "Joystick");
     m.addItem(Sequencer, "Sequencer");
+    m.addItem(Clock, "Clock");
     m.showMenuAsync(PopupMenu::Options(),
         [this, e](int result)
         {
@@ -152,6 +154,9 @@ void SuperModularAudioProcessorEditor::showPopupMenu(const MouseEvent& e) {
             case Filter:
                 addNewModule<FilterUI>(Filter, e.getPosition());
                 break;
+            case DelayModule:
+                addNewModule<DelayUI>(DelayModule, e.getPosition());
+                break;
             case Splitter:
                 addNewModule<SplitterUI>(Splitter, e.getPosition());
                 break;
@@ -163,6 +168,9 @@ void SuperModularAudioProcessorEditor::showPopupMenu(const MouseEvent& e) {
                 break;
             case Sequencer:
                 addNewModule<SequencerUI>(Sequencer, e.getPosition());
+                break;
+            case Clock:
+                addNewModule<ClockUI>(Clock, e.getPosition());
                 break;
             default:
                 break;

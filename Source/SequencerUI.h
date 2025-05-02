@@ -19,7 +19,7 @@ public:
     static const int hp = 4;
 
     SequencerUI(int id, ModuleGrid* mg, PatchCableManager* cm, SharedStateWriter* stateWriter) :
-        ModuleUI(id, mg, cm, stateWriter, 0, 1) {
+        ModuleUI(id, mg, cm, stateWriter, 1, 1) {
 
         for (int i = 0; i < MAX_STEPS; i++) {
             stepSliders[i].setValue(0.0);
@@ -119,6 +119,8 @@ public:
         }
 
         getCvOutputJack(0)->setBounds(getWidth() - margin - 25, getHeight() - margin - 25, 25, 25);
+        getCvInputJack(0)->setSize(25,25);
+        getCvInputJack(0)->setCentrePosition(getWidth() - margin, getHeight() - margin);
     }
 
 private:

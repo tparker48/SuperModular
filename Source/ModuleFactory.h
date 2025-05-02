@@ -39,6 +39,12 @@
 #include "NoiseUI.h"
 #include "NoiseProcessor.h"
 
+#include "DelayUI.h"
+#include "DelayProcessor.h"
+
+#include "ClockUI.h"
+#include "ClockProcessor.h"
+
 enum ModuleType {
     TestModule,
     AudioOutput,
@@ -48,7 +54,9 @@ enum ModuleType {
     Mixer,
     Sequencer,
     Filter,
-    Noise
+    Noise,
+    DelayModule,
+    Clock
 };
 
 using ModuleFactory = ModuleProcessor * (*)(int);
@@ -82,3 +90,9 @@ ModuleUI* createFilterUI(int id, ModuleGrid* mg, PatchCableManager* cables, Shar
 
 ModuleProcessor* createNoiseProcessor(int id);
 ModuleUI* createNoiseUI(int id, ModuleGrid* mg, PatchCableManager* cables, SharedStateWriter* writer);
+
+ModuleProcessor* createDelayProcessor(int id);
+ModuleUI* createDelayUI(int id, ModuleGrid* mg, PatchCableManager* cables, SharedStateWriter* writer);
+
+ModuleProcessor* createClockProcessor(int id);
+ModuleUI* createClockUI(int id, ModuleGrid* mg, PatchCableManager* cables, SharedStateWriter* writer);

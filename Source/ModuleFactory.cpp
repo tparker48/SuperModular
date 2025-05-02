@@ -21,6 +21,8 @@ void initModuleProcessorFactoryMap(std::map<ModuleType, ModuleFactory>& factoryM
     factoryMap[Sequencer] = createSequencerProcessor;
     factoryMap[Filter] = createFilterProcessor;
     factoryMap[Noise] = createNoiseProcessor;
+    factoryMap[Clock] = createClockProcessor;
+    factoryMap[DelayModule] = createDelayProcessor;
 }
 
 void initModuleUIFactoryMap(std::map<ModuleType, ModuleUIFactory>& factoryMap) {
@@ -32,6 +34,8 @@ void initModuleUIFactoryMap(std::map<ModuleType, ModuleUIFactory>& factoryMap) {
     factoryMap[Sequencer] = createSequencerUI;
     factoryMap[Filter] = createFilterUI;
     factoryMap[Noise] = createNoiseUI;
+    factoryMap[Clock] = createClockUI;
+    factoryMap[DelayModule] = createDelayUI;
 }
 
 
@@ -97,4 +101,20 @@ ModuleProcessor* createNoiseProcessor(int id) {
 }
 ModuleUI* createNoiseUI(int id, ModuleGrid* mg, PatchCableManager* cables, SharedStateWriter* writer) {
     return new NoiseUI(id, mg, cables, writer);
+}
+
+ModuleProcessor* createClockProcessor(int id) {
+    return new ClockProcessor(id);
+
+}
+ModuleUI* createClockUI(int id, ModuleGrid* mg, PatchCableManager* cables, SharedStateWriter* writer) {
+    return new ClockUI(id, mg, cables, writer);
+}
+
+ModuleProcessor* createDelayProcessor(int id) {
+    return new DelayProcessor(id);
+
+}
+ModuleUI* createDelayUI(int id, ModuleGrid* mg, PatchCableManager* cables, SharedStateWriter* writer) {
+    return new DelayUI(id, mg, cables, writer);
 }

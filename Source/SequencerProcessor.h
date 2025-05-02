@@ -15,7 +15,7 @@
 
 class SequencerProcessor : public ModuleProcessor {
 public:
-    SequencerProcessor(int id) : ModuleProcessor(id, 0, 1) {
+    SequencerProcessor(int id) : ModuleProcessor(id, 1, 1) {
         rate = 1.0;
         position = 0.0;
         numSteps = MAX_STEPS;
@@ -49,6 +49,11 @@ public:
         if (position >= 1.0) {
             position -= 1.0;
         }
+        
+        if (getCVInputJack(0)->read() == 1.0){
+            position = 0.0;
+        }
+
         int posIdx = int(position * MAX_STEPS) % numSteps;
         getCVOutputJack(0)->write(controlSteps[posIdx]);
         position += rate;
