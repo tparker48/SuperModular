@@ -17,18 +17,29 @@
 class Dial : public Slider {
 public:
     Dial() : Slider() {
-        auto dark = Colour(35, 35, 35);
-        auto light = Colour(230, 230, 230);
         this->setSliderStyle(Slider::RotaryHorizontalDrag);
         this->setTextBoxStyle(Slider::NoTextBox, true, 0, 0);
+        dlf = new DialLookAndFeel(Colour(35, 35, 35), Colour(230, 230, 230));
+        this->setLookAndFeel(dlf);
+    }
 
-        dlf = new DialLookAndFeel(dark, light);
+    Dial(Colour knobColour, Colour dotColour) : Slider() {
+        this->setSliderStyle(Slider::RotaryHorizontalDrag);
+        this->setTextBoxStyle(Slider::NoTextBox, true, 0, 0);
+        dlf = new DialLookAndFeel(knobColour, dotColour);
         this->setLookAndFeel(dlf);
     }
 
     ~Dial() {
         this->setLookAndFeel(nullptr);
         delete dlf;
+    }
+
+    void setColours(Colour knob, Colour dot) {
+        this->setLookAndFeel(nullptr);
+        delete dlf;
+        dlf = new DialLookAndFeel(knob, dot);
+        this->setLookAndFeel(dlf);
     }
 
 

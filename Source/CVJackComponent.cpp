@@ -114,6 +114,7 @@ void CVJackComponent::paint(Graphics& g) {
     float scale = 0.8;
     auto w = getWidth() * scale;
     auto h = getHeight() * scale;
+    g.setColour(jackColour);
     g.fillEllipse(
         (getWidth() - w) / 2,
         (getHeight() - h) / 2,

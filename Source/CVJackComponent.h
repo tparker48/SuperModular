@@ -65,6 +65,10 @@ public:
     void mouseDrag(const MouseEvent& e);
     void paint(Graphics& g);
 
+    void setJackColour(Colour c) {
+        jackColour = c;
+    }
+
 private:
     int jackId, moduleId;
     CVJackType jackType;
@@ -72,4 +76,5 @@ private:
     PatchCableManager* cableManager;
     PatchCable cable;
     SharedStateWriter* stateWriter;
+    Colour jackColour = Colour(0, 0, 0);
 };

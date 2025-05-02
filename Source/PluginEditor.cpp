@@ -134,6 +134,7 @@ void SuperModularAudioProcessorEditor::showPopupMenu(const MouseEvent& e) {
     PopupMenu m;
     m.addItem(AudioOutput, "Audio Out");
     m.addItem(Oscillator, "Oscillator");
+    m.addItem(Noise, "Noise");
     m.addItem(Filter, "Filter");
     m.addItem(DelayModule, "Delay");
     m.addItem(Splitter, "Splitter");
@@ -150,6 +151,9 @@ void SuperModularAudioProcessorEditor::showPopupMenu(const MouseEvent& e) {
                 break;
             case Oscillator:
                 addNewModule<OscillatorUI>(Oscillator, e.getPosition());
+                break;
+            case Noise:
+                addNewModule<NoiseUI>(Noise, e.getPosition());
                 break;
             case Filter:
                 addNewModule<FilterUI>(Filter, e.getPosition());
