@@ -22,12 +22,13 @@ public:
         ModuleUI(id, mg, cm, stateWriter, 1, 2) {
         lengthSlider.setValue(0.5);
         lengthSlider.setRange(0.001, 5.0);
+        lengthSlider.setSkewFactor(0.5);
         lengthSlider.setTitle("length");
         lengthSlider.setName("length");
         addAndMakeVisible(lengthSlider);
 
         feedbackSlider.setValue(0.5);
-        feedbackSlider.setRange(0.0, 1);
+        feedbackSlider.setRange(0.0, 0.95);
         feedbackSlider.setTitle("feedback");
         feedbackSlider.setName("feedback");
         addAndMakeVisible(feedbackSlider);

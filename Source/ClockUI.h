@@ -21,7 +21,7 @@ public:
     ClockUI(int id, ModuleGrid* mg, PatchCableManager* cm, SharedStateWriter* stateWriter) :
         ModuleUI(id, mg, cm, stateWriter, 0, 1) {
         hz.setValue(0.68);
-        hz.setRange(0.0001, 100.0);
+        hz.setRange(0.0, 20.0);
         hz.setSkewFactor(0.6);
         hz.setTitle("hz");
         hz.setName("hz");
@@ -62,6 +62,10 @@ public:
     void resized() override {
         hz.setSize(50, 50);
         hz.setCentrePosition(getWidth() / 2, getHeight() * .20);
+
+        getCvOutputJack(0)->setSize(25,25);
+        getCvOutputJack(0)->setCentrePosition(getWidth() * .5, getHeight() * .8);
+
     }
 
 private:

@@ -21,7 +21,8 @@ public:
 
     void prepareToPlay(double sampleRate, int samplesPerBuffer) override {
         ModuleProcessor::prepareToPlay(sampleRate, samplesPerBuffer);
-        position = 0;
+        position = 0.0;
+        increment = 0.0;
     }
 
     void updateFromState(ModuleState moduleState) {

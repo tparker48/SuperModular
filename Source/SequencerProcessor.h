@@ -50,7 +50,7 @@ public:
             position -= 1.0;
         }
         
-        if (getCVInputJack(0)->read() == 1.0){
+        if (getCVInputJack(0)->read() >= 0.99){
             position = 0.0;
         }
 
