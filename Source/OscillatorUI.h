@@ -41,6 +41,16 @@ public:
 
         lfoToggle.setToggleState(false, false);
         addAndMakeVisible(lfoToggle);
+
+        hzSlider.setColours(knobCol, dotCol);
+        waveType.setColours(knobCol, dotCol);
+        lfoToggle.setColours(knobCol, dotCol);
+        for (int i = 0; i < getNumCVInputs(); i++) {
+            getCvInputJack(i)->setJackColour(cvCol);
+        }
+        for (int i = 0; i < getNumCVOutputs(); i++) {
+            getCvOutputJack(i)->setJackColour(cvCol);
+        }
     }
 
     void sliderValueChanged(juce::Slider* slider) override {
@@ -81,43 +91,22 @@ public:
     }
 
     void paintModule(Graphics& g) override {
-        g.setColour(Colour(255, 249, 235));
+        g.setColour(bgCol);
         g.fillAll();
-        g.setFont(16.0);
 
-        g.setColour(Colours::black);
-        auto bounds = hzSlider.getBounds();
-        bounds.setY(bounds.getY() - (bounds.getHeight()));
-        g.drawText("hz", bounds, Justification::centredBottom);
 
-        bounds = hzIn->getBounds();
-        bounds.setY(bounds.getY() - bounds.getHeight());
-        bounds.setWidth(bounds.getWidth() * 2); 
-        bounds.setX(bounds.getX() - bounds.getWidth() / 4);
-        g.drawText("hz", bounds, Justification::centredBottom);
 
-        bounds = ampIn->getBounds();
-        bounds.setY(bounds.getY() - bounds.getHeight());
-        bounds.setWidth(bounds.getWidth()*2); 
-        bounds.setX(bounds.getX() - bounds.getWidth() / 4);
-        g.drawText("amp", bounds, Justification::centredBottom);
+        paintComponentLabel(g, &hzSlider, "hz", TOP, getWidth()*0.05, textCol);
+        paintComponentLabel(g, &lfoToggle, "lfo", TOP, getWidth()*0.05, textCol);
+        paintComponentLabel(g, hzIn, "hz", TOP, getWidth()*0.05, textCol);
+        paintComponentLabel(g, ampIn, "amp", TOP, getWidth()*0.05, textCol);
+        paintComponentLabel(g, waveOut, "out", TOP, getWidth()*0.05, textCol);
 
-        bounds = waveOut->getBounds();
-        bounds.setY(bounds.getY() - bounds.getHeight());
-        bounds.setWidth(bounds.getWidth()*2); 
-        bounds.setX(bounds.getX() - bounds.getWidth() / 4);
-        g.drawText("out", bounds, Justification::centredBottom);
-
-        bounds = lfoToggle.getBounds();
-        bounds.setY(bounds.getY() - bounds.getHeight());
-        bounds.setWidth(bounds.getWidth() * 2);
-        bounds.setX(bounds.getX() - bounds.getWidth() / 4);
-        g.drawText("lfo", bounds, Justification::centredBottom);
 
         g.setFont(14.0);
         auto stretch = 0.48;
 
-        bounds = waveType.getBounds();
+        auto bounds = waveType.getBounds();
         bounds.setCentre(bounds.getCentreX() - bounds.getWidth() * stretch, bounds.getCentreY() + bounds.getHeight() * stretch);
         g.drawText("sin", bounds, Justification::centred);
 
@@ -136,7 +125,7 @@ public:
     }
 
     void resized() override {
-        auto margin = getWidth() * 0.10;
+        auto margin = getWidth() * 0.15;
         auto hzY = getHeight() * 0.1;
         auto cvY = getHeight() * 0.9;
         auto middleX = getWidth() * 0.5;
@@ -158,8 +147,14 @@ public:
     }
 
 private:
-    CVJackComponent* hzIn, *ampIn, *waveOut;
+    CVJackComponent* hzIn, * ampIn, * waveOut;
     Dial hzSlider;
     Dial waveType;
     Toggle lfoToggle;
+
+    Colour bgCol = Colour(0xFFBAD9B5);
+    Colour textCol = Colour(0xFF393424);
+    Colour knobCol = Colour(0xFF393424);
+    Colour dotCol = Colour(0xFFEFF7CF);
+    Colour cvCol = Colour(0xFF393424);
 };

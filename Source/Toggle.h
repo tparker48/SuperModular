@@ -30,6 +30,13 @@ public:
         delete blf;
     }
 
+    void setColours(Colour dark, Colour light) {
+        setLookAndFeel(nullptr);
+        delete blf;
+        blf = new ButtonLookAndFeel(dark, light);
+        setLookAndFeel(blf);
+    }
+
     
 private:
     ButtonLookAndFeel* blf;

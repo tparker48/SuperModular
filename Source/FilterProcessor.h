@@ -19,7 +19,7 @@ public:
     FilterProcessor(int id) : ModuleProcessor(id, 2, 2) {
         hz = 4000.0;
         q = 0.0;
-        drive = 0.0;
+        drive = 1.0;
     }
 
 

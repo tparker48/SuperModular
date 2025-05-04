@@ -39,6 +39,15 @@ public:
         drive.setTitle("drive");
         drive.setName("drive");
         addAndMakeVisible(drive);
+
+        
+        hz.setColours(knobCol, dotCol);
+        q.setColours(knobCol, dotCol);
+        drive.setColours(knobCol, dotCol);
+        getCvInputJack(0)->setJackColour(cvCol);
+        getCvInputJack(1)->setJackColour(cvCol);
+        getCvOutputJack(0)->setJackColour(cvCol);
+        getCvOutputJack(1)->setJackColour(cvCol);
     }
 
     void sliderValueChanged(juce::Slider* slider) override
@@ -78,9 +87,15 @@ public:
     }
 
     void paintModule(Graphics& g) override {
-        g.setColour(Colour(153, 153, 153));
+        g.setColour(bgCol);
         g.fillAll();
-        g.setFont(16.0);
+
+        paintComponentLabel(g, &hz, "hz", TOP, getWidth() * 0.05, textCol);
+        paintComponentLabel(g, &q, "res", TOP, getWidth() * 0.05, textCol);
+        paintComponentLabel(g, &drive, "drive", TOP, getWidth() * 0.05, textCol);
+        paintComponentLabel(g, getCvInputJack(0), "input", TOP, getWidth() * 0.08, textCol);
+        paintComponentLabel(g, getCvOutputJack(0), "lpf", TOP, getWidth() * 0.08, textCol);
+        paintComponentLabel(g, getCvOutputJack(1), "hpf", TOP, getWidth() * 0.08, textCol);
     }
 
     void resized() override {
@@ -94,18 +109,21 @@ public:
         drive.setCentrePosition(getWidth() * .33, getHeight() * .45);
 
         getCvInputJack(0)->setSize(25, 25);
-        getCvInputJack(0)->setCentrePosition(25, getHeight() - 25 - 15);
-
-        getCvInputJack(0)->setSize(25, 25);
-        getCvInputJack(0)->setCentrePosition(25, getHeight() - 25 - 15 - 30);
+        getCvInputJack(0)->setCentrePosition(25, getHeight() - 12.5 - getHeight()*0.03);
 
         getCvOutputJack(0)->setSize(25, 25);
-        getCvOutputJack(0)->setCentrePosition(getWidth() - 25 - 15, getHeight() - 25 - 15 - 30);
+        getCvOutputJack(0)->setCentrePosition(getWidth() - 25, getHeight() - 12.5 - getHeight() * 0.03);
 
         getCvOutputJack(1)->setSize(25, 25);
-        getCvOutputJack(1)->setCentrePosition(getWidth() - 25 - 15, getHeight() - 25 - 15);
+        getCvOutputJack(1)->setCentrePosition(getWidth() - 25, getHeight() - 25 - getHeight() * 0.15);
     }
 
 private:
     Dial hz, q, drive;
+    
+    Colour cvCol = Colour(0xFF3D3B3C);
+    Colour knobCol = Colour(0xFF3D3B3C);
+    Colour dotCol = Colour(0xFFC2F970);
+    Colour bgCol = Colour(0xFFA5A5A5);
+    Colour textCol = Colour(0xFF3D3B3C);
 };

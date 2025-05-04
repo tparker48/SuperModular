@@ -17,6 +17,10 @@
 #include "PatchCable.h"
 #include "ModuleGrid.h"
 
+enum ComponentLabelStyle {
+    TOP, BOTTOM, LEFT, RIGHT
+};
+
 class ModuleDragRules : public ComponentBoundsConstrainer {
 public:
     ModuleDragRules(ModuleGrid* mg) : ComponentBoundsConstrainer(), moduleGrid(mg) {}
@@ -66,6 +70,8 @@ public:
     // Must implement per Module type
     virtual void paintModule(Graphics& g) = 0;
     virtual void resized() = 0;
+
+    void paintComponentLabel(Graphics& g, Component*, std::string, ComponentLabelStyle, int, Colour = Colour(20, 20, 20), int=14);
 
     CVJackComponent* getCvInputJack(int jackId) {
         if (jackId < 0 || jackId > cvIns.size()) {

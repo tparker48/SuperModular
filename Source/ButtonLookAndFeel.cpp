@@ -15,7 +15,7 @@ void ButtonLookAndFeel::drawToggleButton(Graphics& g, ToggleButton& t, bool shou
 	auto lightUpArea = buttonArea;
 	
 	
-	if (t.getToggleState()) {
+	if (true){ //t.getToggleState()) {
 		lightUpArea.setHeight(buttonArea.getHeight() * .15);
 		lightUpArea.setWidth(buttonArea.getHeight() * .60);
 		lightUpArea.setCentre(buttonArea.getCentreX(), buttonArea.getCentreY() - buttonArea.getHeight() * .17);
@@ -25,7 +25,15 @@ void ButtonLookAndFeel::drawToggleButton(Graphics& g, ToggleButton& t, bool shou
 		lightUpArea.setWidth(buttonArea.getHeight() * .40);
 		lightUpArea.setCentre(buttonArea.getCentreX(), buttonArea.getCentreY() + buttonArea.getHeight() * .17);
 	}
-	g.setColour(light);
+	//g.setColour(light);
+	//g.fillRect(lightUpArea);
+
+	if (t.getToggleState()) {
+		g.setColour(light);
+	}
+	else {
+		g.setColour(light.withMultipliedBrightness((.5)));
+	}
 	g.fillRect(lightUpArea);
 	
 }

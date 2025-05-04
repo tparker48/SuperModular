@@ -194,3 +194,49 @@ void ModuleUI::shadeEdges(Graphics& g) {
     g.fillRect(getWidth() - thickness, 0, thickness, getHeight());
     g.fillRect(thickness, getHeight() - thickness, getWidth() - 2 * thickness, thickness);
 }
+
+void ModuleUI::paintComponentLabel(
+    Graphics& g,
+    Component* comp, 
+    std::string txt, 
+    ComponentLabelStyle style, 
+    int padding,
+    Colour color,
+    int fontHeight
+) {
+    if (comp == nullptr) {
+        return;
+    }
+    // paint label
+    g.setColour(color);
+    g.setFont(fontHeight);
+
+    auto bounds = Rectangle<int>(0, 0, 0, 0);
+    bounds.setHeight(fontHeight);
+    bounds.setWidth(txt.size() * fontHeight);
+
+    int compTop = comp->getBounds().getTopLeft().getY();
+    int compBottom = comp->getBounds().getBottom();
+    int compLeft = comp->getBounds().getTopLeft().getX();
+    int compRight = comp->getBounds().getRight();
+    int compCentreX = comp->getBounds().getCentreX();
+    int compCentreY = comp->getBounds().getCentreY();
+
+    switch (style) {
+    case TOP:
+        bounds.setCentre(compCentreX, compTop - padding);
+        break;
+    case BOTTOM:
+        bounds.setCentre(compCentreX, compBottom + padding);
+        break;
+    case LEFT:
+        bounds.setCentre(compLeft - padding, compCentreY);
+        break;
+    case RIGHT:
+        bounds.setCentre(compRight + padding, compCentreY);
+        break;
+    }
+
+    //g.drawRect(bounds);
+    g.drawText(txt, bounds, Justification::centred);
+}

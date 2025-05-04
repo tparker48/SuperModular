@@ -19,7 +19,7 @@ public:
 
     JoystickUI(int id, ModuleGrid* mg, PatchCableManager* cm, SharedStateWriter* stateWriter) :
         ModuleUI(id, mg, cm, stateWriter, 0, 2) {
-        joystick.setBackgroundColour(Colours::darkseagreen);
+        joystick.setBackgroundColour(Colour(0xFF71677C));
         joystick.setPadColour(Colour(20, 20, 20));
         joystick.setDotColour(Colour(252, 56, 56));
         joystick.setRanges(0.0, 1.0, 0.0, 1.0);
@@ -64,7 +64,7 @@ public:
     }
 
     void paintModule(Graphics& g) override {
-        g.setColour(Colours::darkseagreen);
+        g.setColour(Colour(0xFF71677C));
         g.fillAll();
     }
 
