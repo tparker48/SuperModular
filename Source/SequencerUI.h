@@ -110,14 +110,15 @@ public:
     }
 
     void resized() override {
-        int margin = getHeight() * 0.05;
+        int margin = getHeight() * 0.03;
+        int knobY = getHeight() * 0.08;
         int marginY = getHeight() * 0.3;
         int spacing = getHeight() * 0.17;
         int steKnobSize = getWidth() * 0.22;
         int knobSize = getWidth() * 0.25;
 
-        rateSlider.setBounds(margin, margin, knobSize, knobSize);
-        numStepsSlider.setBounds(margin + knobSize + spacing, margin, knobSize, knobSize);
+        rateSlider.setBounds(margin, knobY, knobSize, knobSize);
+        numStepsSlider.setBounds(getWidth()-margin - knobSize, knobY, knobSize, knobSize);
 
         for (int i = 0; i < MAX_STEPS / 2; i++) {
             stepSliders[i].setSize(steKnobSize, steKnobSize);
@@ -128,10 +129,8 @@ public:
             stepSliders[i].setCentrePosition(getWidth() / 2 + getWidth() * 0.12, marginY + spacing * (i-4));
         }
 
-        getCvOutputJack(0)->setSize(25, 25);
-        getCvOutputJack(0)->setCentrePosition(getWidth() - margin - 12.5, getHeight() * 0.95);
-        getCvInputJack(0)->setSize(25, 25);
-        getCvInputJack(0)->setCentrePosition(0 + margin + 12.5, getHeight() * 0.95);
+        getCvOutputJack(0)->setCentrePosition(getWidth() - margin - getCvOutputJack(0)->getWidth()/2, getHeight() * 0.95);
+        getCvInputJack(0)->setCentrePosition(0 + margin + getCvOutputJack(0)->getWidth() / 2, getHeight() * 0.95);
     }
 
 private:
@@ -139,9 +138,9 @@ private:
     Dial stepSliders[MAX_STEPS];
     Dial rateSlider, numStepsSlider;
 
-    Colour bgCol = Colour(0xFFBAD9B5);
-    Colour textCol = Colour(0xFF393424);
-    Colour knobCol = Colour(0xFF393424);
-    Colour dotCol = Colour(0xFFEFF7CF);
-    Colour cvCol = Colour(0xFF393424);
+    Colour bgCol = Colour(0xFF829191);
+    Colour textCol = Colour(0xFFEFF7CF);
+    Colour knobCol = Colour(0xFF2E1F27);
+    Colour dotCol = Colour(0xFFF29E4C);
+    Colour cvCol = Colour(0xFF2E1F27);
 };

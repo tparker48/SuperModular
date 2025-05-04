@@ -44,23 +44,14 @@ public:
         auto cvY = getHeight() * 0.2;
         auto paddingY = getHeight() * 0.15;
 
-        getCvOutputJack(0)->setSize(25, 25);
+        
         getCvOutputJack(0)->setCentrePosition(getWidth() / 2, getHeight() * 0.15);
-
-        getCvOutputJack(1)->setSize(25, 25);
         getCvOutputJack(1)->setCentrePosition(getWidth() / 2, getHeight() * 0.15 + 1 * paddingY);
-
-        getCvOutputJack(2)->setSize(25, 25);
         getCvOutputJack(2)->setCentrePosition(getWidth() / 2, getHeight() * 0.15 + 2 * paddingY);
-
-        getCvOutputJack(3)->setSize(25, 25);
         getCvOutputJack(3)->setCentrePosition(getWidth() / 2, getHeight() * 0.15 + 3 * paddingY);
-
-        getCvOutputJack(4)->setSize(25, 25);
         getCvOutputJack(4)->setCentrePosition(getWidth() / 2, getHeight() * 0.15 + 4 * paddingY);
 
-        getCvInputJack(0)->setSize(25, 25);
-        getCvInputJack(0)->setCentrePosition(getWidth() / 2, getHeight()*0.98 - 12.5);
+        getCvInputJack(0)->setCentrePosition(getWidth() / 2, getHeight()*0.95 - getCvInputJack(0)->getWidth()/2);
     }
     
 private:

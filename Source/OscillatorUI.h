@@ -127,13 +127,13 @@ public:
     void resized() override {
         auto margin = getWidth() * 0.15;
         auto hzY = getHeight() * 0.1;
-        auto cvY = getHeight() * 0.9;
+        auto cvY = getHeight() * 0.95;
         auto middleX = getWidth() * 0.5;
-        auto paddingY = getHeight() * 0.15;
+        auto paddingY = getHeight() * 0.12;
 
-        hzIn->setBounds(margin, cvY - paddingY, 25, 25);
-        ampIn->setBounds(margin, cvY, 25, 25);
-        waveOut->setBounds(getWidth() - margin - 25, cvY, 25, 25);
+        hzIn->setCentrePosition(margin, cvY - paddingY);
+        ampIn->setCentrePosition(margin, cvY);
+        waveOut->setCentrePosition(getWidth() - margin, cvY);
 
 
         hzSlider.setSize(40, 40);

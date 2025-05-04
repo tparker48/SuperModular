@@ -90,10 +90,11 @@ public:
         g.setColour(bgCol);
         g.fillAll();
 
-        paintComponentLabel(g, &hz, "hz", TOP, getWidth() * 0.05, textCol);
+        paintComponentLabel(g, &hz, "cutoff", TOP, getWidth() * 0.05, textCol);
         paintComponentLabel(g, &q, "res", TOP, getWidth() * 0.05, textCol);
         paintComponentLabel(g, &drive, "drive", TOP, getWidth() * 0.05, textCol);
         paintComponentLabel(g, getCvInputJack(0), "input", TOP, getWidth() * 0.08, textCol);
+        paintComponentLabel(g, getCvInputJack(1), "cutoff", TOP, getWidth() * 0.08, textCol);
         paintComponentLabel(g, getCvOutputJack(0), "lpf", TOP, getWidth() * 0.08, textCol);
         paintComponentLabel(g, getCvOutputJack(1), "hpf", TOP, getWidth() * 0.08, textCol);
     }
@@ -108,14 +109,14 @@ public:
         drive.setSize(35, 35);
         drive.setCentrePosition(getWidth() * .33, getHeight() * .45);
 
-        getCvInputJack(0)->setSize(25, 25);
-        getCvInputJack(0)->setCentrePosition(25, getHeight() - 12.5 - getHeight()*0.03);
 
-        getCvOutputJack(0)->setSize(25, 25);
-        getCvOutputJack(0)->setCentrePosition(getWidth() - 25, getHeight() - 12.5 - getHeight() * 0.03);
+        auto jackW = getCvInputJack(0)->getWidth();
+        getCvInputJack(0)->setCentrePosition(jackW, getHeight() - jackW / 2 - getHeight() * 0.03);
+        getCvInputJack(1)->setCentrePosition(jackW, getHeight() - jackW / 2 - getHeight() * 0.15);
 
-        getCvOutputJack(1)->setSize(25, 25);
-        getCvOutputJack(1)->setCentrePosition(getWidth() - 25, getHeight() - 25 - getHeight() * 0.15);
+
+        getCvOutputJack(0)->setCentrePosition(getWidth() - jackW, getHeight() - jackW/2 - getHeight() * 0.03);
+        getCvOutputJack(1)->setCentrePosition(getWidth() - jackW, getHeight() - jackW/2 - getHeight()  * 0.15);
     }
 
 private:

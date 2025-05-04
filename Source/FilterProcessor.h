@@ -62,11 +62,13 @@ public:
         hzSmooth.setTargetValue(hz);
         auto smoothedHz = hzSmooth.getNextValue();
 
-        lpf.setCutoffFrequencyHz(smoothedHz);
+        auto modulatedHz = smoothedHz + (smoothedHz * 0.8 * getCVInputJack(1)->read());
+
+        lpf.setCutoffFrequencyHz(modulatedHz);
         lpf.setResonance(q);
         lpf.setDrive(drive);
 
-        hpf.setCutoffFrequencyHz(smoothedHz);
+        hpf.setCutoffFrequencyHz(modulatedHz);
         hpf.setResonance(q);
         hpf.setDrive(drive);
 

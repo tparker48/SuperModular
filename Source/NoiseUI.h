@@ -108,19 +108,14 @@ public:
 
     void resized() override {
         rate.setSize(50,50);
-        rate.setCentrePosition(getWidth() / 2, getHeight() * 0.15);
+        rate.setCentrePosition(getWidth() / 2, getHeight() * 0.25);
 
         fine.setSize(35,35);
-        fine.setCentrePosition(getWidth() / 2, getHeight() * 0.35);
+        fine.setCentrePosition(getWidth() / 2, getHeight() * 0.45);
 
-        getCvOutputJack(0)->setSize(25, 25);
-        getCvOutputJack(0)->setCentrePosition(getWidth() * .50, getHeight() * .60);
-
-        getCvOutputJack(1)->setSize(25, 25);
-        getCvOutputJack(1)->setCentrePosition(getWidth() * .50, getHeight() * .60 + 25 + 18);
-
-        getCvOutputJack(2)->setSize(25, 25);
-        getCvOutputJack(2)->setCentrePosition(getWidth() * .50, getHeight() * .60 + 50 + 36);
+        getCvOutputJack(0)->setCentrePosition(getWidth() * .50, getHeight() * .65);
+        getCvOutputJack(1)->setCentrePosition(getWidth() * .50, getHeight() * .65 + getCvOutputJack(1)->getWidth()   + getHeight() * 0.08);
+        getCvOutputJack(2)->setCentrePosition(getWidth() * .50, getHeight() * .65 + 2*getCvOutputJack(1)->getWidth() + getHeight() * 0.16);
     }
 
 private:

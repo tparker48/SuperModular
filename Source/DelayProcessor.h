@@ -16,7 +16,7 @@
 
 class DelayProcessor : public ModuleProcessor {
 public:
-    DelayProcessor(int id) : ModuleProcessor(id, 1, 3) {
+    DelayProcessor(int id) : ModuleProcessor(id, 2, 2) {
     }
 
 
@@ -44,14 +44,15 @@ public:
     }
 
     void processSample() {
+        auto modulatedLength = length + (length * 0.3 * getCVInputJack(0)->read());
         delay.setParams(
-            length,
+            modulatedLength,
             feedback,
             dryWet
         );
         auto buffer = AudioBuffer<float>(1, 1);
         juce::dsp::AudioBlock<float> audioBlock(buffer);
-        buffer.setSample(0, 0, getCVInputJack(0)->read() * inputGain);
+        buffer.setSample(0, 0, getCVInputJack(1)->read() * inputGain);
         delay.process(juce::dsp::ProcessContextReplacing<float>(audioBlock));
         getCVOutputJack(0)->write(buffer.getSample(0, 0));
         getCVOutputJack(1)->write(delay.getLastWetSample());

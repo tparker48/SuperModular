@@ -24,11 +24,16 @@ public:
         inputRight = getCvInputJack(1);
         inputMono = getCvInputJack(2);
 
+        inputLeft->setJackColour(cvCol);
+        inputRight->setJackColour(cvCol);
+        inputMono->setJackColour(cvCol);
+
         gainSlider.setValue(0.68);
         gainSlider.setRange(0.001, 1.3);
         gainSlider.setSkewFactor(0.75);
         gainSlider.setTitle("gain");
         gainSlider.setName("gain");
+        gainSlider.setColours(knobCol, dotCol);
         addAndMakeVisible(gainSlider);
     }
 
@@ -53,45 +58,35 @@ public:
     }
 
     void paintModule(Graphics& g) override {
-        g.setColour(Colour(153, 153, 153));
+        g.setColour(bgCol);
         g.fillAll();
-        g.setFont(16.0);
 
-        g.setColour(Colours::black);
-        auto bounds = gainSlider.getBounds();
-        bounds.setY(bounds.getY() - (bounds.getHeight() * 0.2));
-        g.drawText("gain", bounds, Justification::centredTop);
-
-        auto inputLeft = getCvInputJack(0);
-        bounds = inputLeft->getBounds();
-        bounds.setWidth(bounds.getWidth() * 1.4);
-        g.drawText("L", bounds, Justification::centredRight);
-
-        auto inputRight = getCvInputJack(1);
-        bounds = inputRight->getBounds();
-        bounds.setWidth(bounds.getWidth() * 1.4);
-        g.drawText("R", bounds, Justification::centredRight);
-
-        auto inputMono = getCvInputJack(2);
-        bounds = inputMono->getBounds();
-        bounds.setWidth(bounds.getWidth() * 1.4);
-        g.drawText("M", bounds, Justification::centredRight);
+        paintComponentLabel(g, &gainSlider, "gain", TOP, getHeight() * 0.05, textCol);
+        paintComponentLabel(g, inputLeft, "left", RIGHT, getHeight() * 0.05, textCol);
+        paintComponentLabel(g, inputRight, "right", RIGHT, getHeight() * 0.05, textCol);
+        paintComponentLabel(g, inputMono, "mono", RIGHT, getHeight() * 0.05, textCol);
     }
 
     void resized() override {
-        auto margin = getWidth() * 0.10;
+        auto margin = getWidth() * 0.05;
         auto gainY = getHeight() * 0.2;
         auto cvY = getHeight() * 0.66;
         auto middleX = getWidth() * 0.5;
-        auto paddingY = getHeight() * 0.2;
+        auto paddingY = getHeight() * 0.15;
 
-        inputLeft->setBounds(margin, cvY - paddingY, 25, 25);
-        inputRight->setBounds(margin, cvY, 25, 25);
-        inputMono->setBounds(margin, cvY + paddingY, 25, 25);
+        inputLeft->setBounds(margin, cvY - paddingY, 20, 20);
+        inputRight->setBounds(margin, cvY, 20, 20);
+        inputMono->setBounds(margin, cvY + paddingY, 20, 20);
         gainSlider.setBounds(middleX - 25, gainY, 50, 50);
     }
 
 private:
     CVJackComponent*inputLeft, *inputRight, *inputMono;
     Dial gainSlider;
+
+    Colour bgCol = Colour(0xFFEAE0CC);
+    Colour textCol = Colour(0xFFD5573B);
+    Colour knobCol = Colour(0xFF231F20);
+    Colour dotCol = Colour(0xFFD5573B);
+    Colour cvCol = Colour(0xFF231F20);
 };

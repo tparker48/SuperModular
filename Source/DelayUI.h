@@ -19,25 +19,33 @@ public:
     static const int hp = 2;
 
     DelayUI(int id, ModuleGrid* mg, PatchCableManager* cm, SharedStateWriter* stateWriter) :
-        ModuleUI(id, mg, cm, stateWriter, 1, 2) {
+        ModuleUI(id, mg, cm, stateWriter, 2, 2) {
         lengthSlider.setValue(0.5);
         lengthSlider.setRange(0.001, 5.0);
         lengthSlider.setSkewFactor(0.5);
         lengthSlider.setTitle("length");
         lengthSlider.setName("length");
+        lengthSlider.setColours(knobCol, dotCol);
         addAndMakeVisible(lengthSlider);
 
         feedbackSlider.setValue(0.5);
         feedbackSlider.setRange(0.0, 0.95);
         feedbackSlider.setTitle("feedback");
         feedbackSlider.setName("feedback");
+        feedbackSlider.setColours(knobCol, dotCol);
         addAndMakeVisible(feedbackSlider);
 
         dryWetSlider.setValue(0.5);
         dryWetSlider.setRange(0.0, 1.0);
         dryWetSlider.setTitle("dryWet");
         dryWetSlider.setName("dryWet");
+        dryWetSlider.setColours(knobCol, dotCol);
         addAndMakeVisible(dryWetSlider);
+
+        getCvInputJack(0)->setJackColour(cvCol);
+        getCvInputJack(1)->setJackColour(cvCol);
+        getCvOutputJack(0)->setJackColour(cvCol);
+        getCvOutputJack(1)->setJackColour(cvCol);
     }
 
     void sliderValueChanged(juce::Slider* slider) override
@@ -79,37 +87,15 @@ public:
     }
 
     void paintModule(Graphics& g) override {
-        g.setColour(Colour(153, 153, 153));
+        g.setColour(bgCol);
         g.fillAll();
-        g.setFont(16.0);
-
-        g.setColour(Colours::black);
-        auto bounds = lengthSlider.getBounds();
-        bounds.setY(bounds.getY() - (bounds.getHeight() * 0.2));
-        g.drawText("delay", bounds, Justification::centredTop);
-
-        g.setColour(Colours::black);
-        bounds = feedbackSlider.getBounds();
-        bounds.setY(bounds.getY() - (bounds.getHeight() * 0.2));
-        g.drawText("feedback", bounds, Justification::centredTop);
-
-        g.setColour(Colours::black);
-        bounds = dryWetSlider.getBounds();
-        bounds.setY(bounds.getY() - (bounds.getHeight() * 0.2));
-        g.drawText("dry/wet", bounds, Justification::centredTop);
-
-        bounds = getCvInputJack(0)->getBounds();
-        bounds.setWidth(bounds.getWidth() * 1.4);
-        g.drawText("in", bounds, Justification::centredRight);
-
-        bounds = getCvOutputJack(0)->getBounds();
-        bounds.setWidth(bounds.getWidth() * 1.4);
-        g.drawText("out", bounds, Justification::centredRight);
-
-
-        bounds = getCvOutputJack(1)->getBounds();
-        bounds.setWidth(bounds.getWidth() * 1.4);
-        g.drawText("wet", bounds, Justification::centredRight);
+        paintComponentLabel(g, &lengthSlider, "delay", TOP, getHeight() * 0.03, textCol);
+        paintComponentLabel(g, &feedbackSlider, "feedback", TOP, getHeight() * 0.03, textCol);
+        paintComponentLabel(g, &dryWetSlider, "dry/wet", TOP, getHeight() * 0.03, textCol);
+        paintComponentLabel(g, getCvInputJack(0), "delay", TOP, getHeight() * 0.03, textCol);
+        paintComponentLabel(g, getCvInputJack(1), "in", TOP, getHeight() * 0.03, textCol);
+        paintComponentLabel(g, getCvOutputJack(0), "out", TOP, getHeight() * 0.03, textCol);
+        paintComponentLabel(g, getCvOutputJack(1), "wet", TOP, getHeight() * 0.03, textCol);
     }
 
     void resized() override {
@@ -122,16 +108,18 @@ public:
         dryWetSlider.setSize(40, 40);
         dryWetSlider.setCentrePosition(getWidth() / 2, getHeight() * 0.5);
 
-        getCvOutputJack(0)->setSize(25, 25);
-        getCvOutputJack(0)->setCentrePosition(getWidth() * 0.8, getHeight() * .85);
-
-        getCvOutputJack(1)->setSize(25, 25);
-        getCvOutputJack(1)->setCentrePosition(getWidth() * 0.8, getHeight() * .85 + 25 + 15);
-
-        getCvInputJack(0)->setSize(25, 25);
-        getCvInputJack(0)->setCentrePosition(getWidth() * 0.2, getHeight() * .85);
+        getCvOutputJack(0)->setCentrePosition(getWidth() * 0.8, getHeight() * .80);
+        getCvOutputJack(1)->setCentrePosition(getWidth() * 0.8, getHeight() * .80 + 25 + 15);
+        getCvInputJack(0)->setCentrePosition(getWidth() * 0.2, getHeight() * .80);
+        getCvInputJack(1)->setCentrePosition(getWidth() * 0.2, getHeight() * .80 + 25 + 15);
     }
 
 private:
     Dial lengthSlider, feedbackSlider, dryWetSlider;
+
+    Colour bgCol = Colour(0xFF4A4E69);
+    Colour textCol = Colour(0xFFC9ADA7);
+    Colour knobCol = Colour(0xFF22223B);
+    Colour dotCol = Colour(0xFFC9ADA7);
+    Colour cvCol = Colour(0xFF22223B);
 };

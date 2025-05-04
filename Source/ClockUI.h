@@ -25,7 +25,10 @@ public:
         hz.setSkewFactor(0.6);
         hz.setTitle("hz");
         hz.setName("hz");
+        hz.setColours(knobCol, dotCol);
         addAndMakeVisible(hz);
+
+        getCvOutputJack(0)->setJackColour(cvCol);
     }
 
     void sliderValueChanged(juce::Slider* slider) override
@@ -49,25 +52,25 @@ public:
     }
 
     void paintModule(Graphics& g) override {
-        g.setColour(Colour(255, 60, 46));
+        g.setColour(bgCol);
         g.fillAll();
-        g.setFont(16.0);
-        g.setColour(Colour(255, 242, 209));
-        auto bounds = hz.getBounds();
-        bounds.setY(bounds.getY() - (bounds.getHeight() * 0.2));
-        g.drawText("hz", bounds, Justification::centredTop);
+        paintComponentLabel(g, &hz, "rate", TOP, getHeight() * 0.05, textCol);
+        paintComponentLabel(g, getCvOutputJack(0), "out", TOP, getHeight() * 0.05, textCol);
 
     }
 
     void resized() override {
         hz.setSize(50, 50);
         hz.setCentrePosition(getWidth() / 2, getHeight() * .20);
-
-        getCvOutputJack(0)->setSize(25,25);
-        getCvOutputJack(0)->setCentrePosition(getWidth() * .5, getHeight() * .8);
-
+        getCvOutputJack(0)->setCentrePosition(getWidth() * .5, getHeight() * .95);
     }
 
 private:
     Dial hz;
+
+    Colour bgCol = Colour(0xFF847996);
+    Colour cvCol = Colour(0xFF323031);
+    Colour textCol = Colour(0xFFFAF8D4);
+    Colour knobCol = Colour(0xFF323031);
+    Colour dotCol = Colour(0xFFFAF8D4);
 };

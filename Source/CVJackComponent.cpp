@@ -23,6 +23,7 @@ CVJackComponent::CVJackComponent(CVJackType type, int id, int parentId, PatchCab
         addAndMakeVisible(cable);
     }
     setBounds(0, 0, 0, 0);
+    setSize(20, 20);
 }
 
 void CVJackComponent::mouseDown(const MouseEvent& e) {

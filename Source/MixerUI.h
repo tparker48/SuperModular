@@ -22,16 +22,19 @@ public:
         ModuleUI(id, mg, cm, stateWriter, numInputs, 1) {
 
         levelSliders = { &lev1, &lev2, &lev3, &lev4,  &lev5 };
-        levelLabels = { &lab1, &lab2, &lab3, &lab4,  &lab5 };
 
         for (int i = 0; i < numInputs; i++) {
             levelSliders[i]->setRange(0.0001, 1.3, 0.0);
             levelSliders[i]->setValue(0.3);
             levelSliders[i]->setSkewFactor(0.75);
-            levelLabels[i]->attachToComponent(getCvInputJack(i), true);
-            levelLabels[i]->setColour(levelLabels[i]->textColourId, Colour(20, 20, 20));
-            levelLabels[i]->setText(std::to_string(i), dontSendNotification);
+            levelSliders[i]->setColours(knobCol, dotCol);
             addAndMakeVisible(levelSliders[i]);
+        }
+        for (int i = 0; i < numInputs; i++) {
+            getCvInputJack(i)->setJackColour(cvCol);
+        }
+        for (int i = 0; i < getNumCVOutputs(); i++) {
+            getCvOutputJack(i)->setJackColour(cvCol);
         }
     }
 
@@ -77,25 +80,42 @@ public:
     }
 
     void paintModule(Graphics& g) override {
-        g.setColour(Colours::lightsalmon);
+        g.setColour(bgCol);
         g.fillAll();
+
+        for (int i = 0; i < getNumCVInputs(); i++) {
+            paintComponentLabel(g, getCvInputJack(i), "in " + std::to_string(i), LEFT, getWidth() * 0.1, textCol);
+        }
+        paintComponentLabel(g, getCvOutputJack(0), "out", LEFT, getWidth() * 0.1, textCol);
     }
 
     void resized() override {
         auto margin = getWidth() * 0.15;
-        auto cvY = getHeight() * 0.05;
-        auto cvSpacing = 25 + getHeight() * 0.08;
+        auto cvY = getHeight() * 0.15;
+        auto cvW = getCvInputJack(0)->getWidth();
+        auto cvSpacing = cvW + getHeight() * 0.08;
         for (int i = 0; i < numInputs; i++) {
-            getCvInputJack(i)->setBounds(margin, cvY + cvSpacing * i, 25, 25);
-            levelSliders[i]->setBounds(getWidth()-margin-30, cvY + cvSpacing * i - 12, 50, 50);
+            getCvInputJack(i)->setCentrePosition(
+                getWidth()/2 - margin,
+                cvY + cvSpacing * i
+            );
+            levelSliders[i]->setSize(40, 40);
+            levelSliders[i]->setCentrePosition(
+                getWidth()/2 + margin,
+                cvY + cvSpacing * i
+            );
         }
-        getCvOutputJack(0)->setBounds(getWidth() - 25 - margin/2, getHeight() - 25 - margin, 25, 25);
+        getCvOutputJack(0)->setCentrePosition(getWidth()*0.88, getHeight()*0.95);
     }
 
 private:
     Dial lev1, lev2, lev3, lev4, lev5;
-    Label lab1, lab2, lab3, lab4, lab5;
     std::vector<Dial*> levelSliders;
-    std::vector<Label*> levelLabels;
     static const int numInputs = 5;
+
+    Colour bgCol = Colour(0xFFCE796B);
+    Colour textCol = Colour(0xFF24272B);
+    Colour knobCol = Colour(0xFF24272B);
+    Colour dotCol = Colour(0xFFEFE9AE);
+    Colour cvCol = Colour(0xFF24272B);
 };
