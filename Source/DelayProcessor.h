@@ -30,6 +30,9 @@ public:
 
         delay.prepare(spec);
         delay.setParams(0.3, 0.3, 0.5);
+
+        buffer = AudioBuffer<float>(1, 1);
+        audioBlock = juce::dsp::AudioBlock<float>(buffer);
     }
 
     void updateFromState(ModuleState moduleState) {
@@ -43,15 +46,18 @@ public:
         }
     }
 
+    void preBlockProcessing() override {
+        lengthx3 = length * 0.3;
+    }
+
     void processSample() {
-        auto modulatedLength = length + (length * 0.3 * getCVInputJack(0)->read());
+        auto modulatedLength = length + (lengthx3 * getCVInputJack(0)->read());
         delay.setParams(
             modulatedLength,
             feedback,
             dryWet
         );
-        auto buffer = AudioBuffer<float>(1, 1);
-        juce::dsp::AudioBlock<float> audioBlock(buffer);
+        
         buffer.setSample(0, 0, getCVInputJack(1)->read() * inputGain);
         delay.process(juce::dsp::ProcessContextReplacing<float>(audioBlock));
         getCVOutputJack(0)->write(buffer.getSample(0, 0));
@@ -62,5 +68,8 @@ public:
 private:
     Delay delay;
     double length, feedback, dryWet;
+    double lengthx3;
     float inputGain = 0.95;
+    AudioBuffer<float> buffer;
+    juce::dsp::AudioBlock<float> audioBlock;
 };

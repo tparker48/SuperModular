@@ -61,6 +61,10 @@ public:
 
     virtual void updateFromState(ModuleState state) = 0;
     virtual void processSample() = 0;
+    
+
+    // optionally override this to perform computations once per block
+    virtual void preBlockProcessing() {}
 
     int getId() { return id; }
     void setCVInputJack(int inputId, CVOutputJack* output);

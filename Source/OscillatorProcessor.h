@@ -77,25 +77,36 @@ public:
         }
         auto wave = moduleState.state.getProperty("wave");
         if (!wave.isVoid()) {
-            waveType = (WAVETYPE)(int)wave;
+            waveType = getWaveType((WAVETYPE)(int)wave);
         }
 
         auto lfoToggle = moduleState.state.getProperty("lfo_toggle");
         if (!lfoToggle.isVoid()) {
             lfo = lfoToggle;
         }
+
+        auto newAmAmt = moduleState.state.getProperty("amAmt");
+        if (!newAmAmt.isVoid()) {
+            amAmt = newAmAmt;
+        }
+
+        auto newFmAmt = moduleState.state.getProperty("fmAmt");
+        if (!newFmAmt.isVoid()) {
+            fmAmt = newFmAmt;
+        }
+    }
+
+    void preBlockProcessing() override {
+        hzSmooth.setTargetValue(lfo ? getLfoHz(hz) : hz);
+        hzSmooth.skip(blockSize);
+        fmAmtxSmoothed = fmAmt * hzSmooth.getCurrentValue();
+        amAmtxAmplitude = amAmt * amplitude;
     }
 
     void processSample() {
-        hzSmooth.setTargetValue(hz);
-        auto smoothedHz = hzSmooth.getNextValue();
-        auto adjustedHz = smoothedHz + smoothedHz *(cvInputs[0].read());
-        adjustedHz = lfo? getLfoHz(adjustedHz) : adjustedHz;
-        auto adjustedGain = (cvInputs[1].isConnected()) ? (cvInputs[1].read() + 1.0) / 2.0 : 1.0;
-        auto wave = getWaveType();
-        faustControllers[wave]->setParamValue("hz", adjustedHz);
-        faustProcessors[wave]->compute(1, nullptr, faustOutput);
-        cvOutputs[0].write(faustOutput[0][0] *  adjustedGain);
+        faustControllers[waveType]->setParamValue("hz", hzSmooth.getCurrentValue() + (cvInputs[0].read() * fmAmtxSmoothed));
+        faustProcessors[waveType]->compute(1, nullptr, faustOutput);
+        cvOutputs[0].write(faustOutput[0][0] * amplitude + (amAmtxAmplitude * cvInputs[1].read()));
     }
 
     void setHz(double newHz) {
@@ -107,22 +118,26 @@ public:
         return 60.0 * (hz - 24.0) / (20000 - 24.0);
     }
 
-    WAVETYPE getWaveType() {
+    WAVETYPE getWaveType(WAVETYPE wave) {
         // SAW and SQUARE have different logic at low freq
         if (lfo) {
-            if (waveType == SAW) {
+            if (wave == SAW) {
                 return LFOSAW;
             }
-            if (waveType == SQUARE) {
+            if (wave == SQUARE) {
                 return LFOSQUARE;
             }
         }
-        return waveType;
+        return wave;
     }
 
 private:
     WAVETYPE waveType = SIN;
+    double fmAmtxSmoothed, amAmtxAmplitude;
     double hz = 440.0;
+    double amplitude = 1.0;
+    double fmAmt = 0.0;
+    double amAmt = 0.0;
     SmoothedValue<double, ValueSmoothingTypes::Multiplicative> hzSmooth;
     bool lfo = false;
     faust::MapUI *faustControllers[NUM_WAVETYPES];

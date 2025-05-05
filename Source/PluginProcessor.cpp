@@ -145,11 +145,16 @@ void SuperModularAudioProcessor::processBlock (AudioBuffer<float>& buffer, MidiB
 {
     applyStateUpdates();
 
+    for (auto modulePair : modules) {
+        modulePair.second->preBlockProcessing();
+    }
+
     for (int sample = 0; sample < buffer.getNumSamples(); sample++) {
         for (auto modulePair : modules) {
             modulePair.second->processSample();
         }
     }
+
     if (audioOutModule) {
         if (auto outModule = dynamic_cast<AudioOutputProcessor*>(audioOutModule)) {
             outModule->processBlock(buffer);

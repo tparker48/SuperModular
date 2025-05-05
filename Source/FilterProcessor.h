@@ -22,7 +22,6 @@ public:
         drive = 1.0;
     }
 
-
     void prepareToPlay(double sampleRate, int samplesPerBuffer) override {
         ModuleProcessor::prepareToPlay(sampleRate, samplesPerBuffer);
 
@@ -39,8 +38,11 @@ public:
         hpf.setMode(juce::dsp::LadderFilterMode::HPF24);
         hpf.setEnabled(true);
 
-        hzSmooth.reset(sampleRate, 0.01);
+        hzSmooth.reset(sampleRate, 0.02);
         hzSmooth.setCurrentAndTargetValue(hz);
+
+        buffer = AudioBuffer<float>(1, 1);
+        audioBlock = juce::dsp::AudioBlock<float>(buffer);
     }
 
     void updateFromState(ModuleState moduleState) {
@@ -56,13 +58,27 @@ public:
         if (!newDrive.isVoid()) {
             drive = newDrive;
         }
+
+        auto newMode = moduleState.state["mode"];
+        if (!newMode.isVoid()) {
+            lpfMode = newMode;
+        }
+    }
+
+    void preBlockProcessing() override {
+        hzSmooth.setTargetValue(hz);
+        hzSmooth.skip(blockSize);
+        smoothedHzVal = hzSmooth.getCurrentValue();
+        smoothedHzx8 = smoothedHzVal * 0.8;
     }
 
     void processSample() {
-        hzSmooth.setTargetValue(hz);
-        auto smoothedHz = hzSmooth.getNextValue();
+        if (!getCVInputJack(0)->isConnected()) {
+            getCVOutputJack(0)->write(0.0);
+            return;
+        }
 
-        auto modulatedHz = smoothedHz + (smoothedHz * 0.8 * getCVInputJack(1)->read());
+        auto modulatedHz = smoothedHzVal + (smoothedHzx8 * getCVInputJack(1)->read());
 
         lpf.setCutoffFrequencyHz(modulatedHz);
         lpf.setResonance(q);
@@ -72,22 +88,25 @@ public:
         hpf.setResonance(q);
         hpf.setDrive(drive);
 
-        auto buffer = AudioBuffer<float>(1, 1);
-        juce::dsp::AudioBlock<float> audioBlock(buffer);
-
         auto in = getCVInputJack(0)->read();
-
         buffer.setSample(0, 0, in);
-        lpf.process(juce::dsp::ProcessContextReplacing<float>(audioBlock));
-        getCVOutputJack(0)->write(buffer.getSample(0, 0));
 
-        buffer.setSample(0, 0, in);
-        hpf.process(juce::dsp::ProcessContextReplacing<float>(audioBlock));
-        getCVOutputJack(1)->write(buffer.getSample(0, 0));
+        if (lpfMode) {
+            lpf.process(juce::dsp::ProcessContextReplacing<float>(audioBlock));
+            getCVOutputJack(0)->write(buffer.getSample(0, 0));
+        }
+        else {
+            hpf.process(juce::dsp::ProcessContextReplacing<float>(audioBlock));
+            getCVOutputJack(1)->write(buffer.getSample(0, 0));
+        }
     }
 
 private:
+    bool lpfMode = true;
     juce::dsp::LadderFilter<float> lpf, hpf;
     SmoothedValue<double, ValueSmoothingTypes::Multiplicative> hzSmooth;
     double hz, q, drive;
+    double smoothedHzx8, smoothedHzVal;
+    AudioBuffer<float> buffer;
+    juce::dsp::AudioBlock<float> audioBlock;
 };
