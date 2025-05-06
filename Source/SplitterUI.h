@@ -55,7 +55,9 @@ public:
     }
     
 private:
-    Colour bgCol = Colour(0xFFE0DDCF);
-    Colour cvCol = Colour(0xFF3B252C);
-    Colour textCol = Colour(0xFF3B252C);
+    Colour bgCol = Colour(0xFFF5EFE4);
+    Colour textCol = Colour(0xFF60695C);
+    Colour knobCol = Colour(0xFF2E1F27);
+    Colour dotCol = Colour(0xFFF29E4C);
+    Colour cvCol = Colour(0xFF2E1F27);
 };

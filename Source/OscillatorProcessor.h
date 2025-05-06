@@ -68,6 +68,9 @@ public:
         setHz(440.0);
         hzSmooth.reset(sampleRate, 0.01);
         hzSmooth.setCurrentAndTargetValue(hz);
+
+        gainSmooth.reset(sampleRate, 0.01);
+        gainSmooth.setCurrentAndTargetValue(1.0);
     }
 
     void updateFromState(ModuleState moduleState) {
@@ -75,6 +78,12 @@ public:
         if (!newHz.isVoid()) {
             setHz(newHz);
         }
+
+        auto newGain = moduleState.state.getProperty("gain");
+        if (!newGain.isVoid()) {
+            gain = newGain;
+        }
+
         auto wave = moduleState.state.getProperty("wave");
         if (!wave.isVoid()) {
             waveType = getWaveType((WAVETYPE)(int)wave);
@@ -98,15 +107,15 @@ public:
 
     void preBlockProcessing() override {
         hzSmooth.setTargetValue(lfo ? getLfoHz(hz) : hz);
-        hzSmooth.skip(blockSize);
-        fmAmtxSmoothed = fmAmt * hzSmooth.getCurrentValue();
-        amAmtxAmplitude = amAmt * amplitude;
+        gainSmooth.setTargetValue(gain);
     }
 
     void processSample() {
-        faustControllers[waveType]->setParamValue("hz", hzSmooth.getCurrentValue() + (cvInputs[0].read() * fmAmtxSmoothed));
+        gainSmooth.skip(1);
+        hzSmooth.skip(1);
+        faustControllers[waveType]->setParamValue("hz", hzSmooth.getCurrentValue() + (cvInputs[0].read() * fmAmt * hzSmooth.getCurrentValue()));
         faustProcessors[waveType]->compute(1, nullptr, faustOutput);
-        cvOutputs[0].write(faustOutput[0][0] * amplitude + (amAmtxAmplitude * cvInputs[1].read()));
+        cvOutputs[0].write(faustOutput[0][0] * (gainSmooth.getCurrentValue() + (amAmt * gainSmooth.getCurrentValue() * cvInputs[1].read())));
     }
 
     void setHz(double newHz) {
@@ -115,7 +124,7 @@ public:
     }
 
     double getLfoHz(double hz) {
-        return 60.0 * (hz - 24.0) / (20000 - 24.0);
+        return 60.0 * (hz - 23.9) / (20000 - 23.9);
     }
 
     WAVETYPE getWaveType(WAVETYPE wave) {
@@ -132,14 +141,16 @@ public:
     }
 
 private:
-    WAVETYPE waveType = SIN;
-    double fmAmtxSmoothed, amAmtxAmplitude;
     double hz = 440.0;
-    double amplitude = 1.0;
+    double gain = 1.0;
     double fmAmt = 0.0;
     double amAmt = 0.0;
-    SmoothedValue<double, ValueSmoothingTypes::Multiplicative> hzSmooth;
     bool lfo = false;
+    WAVETYPE waveType = SIN;
+
+    SmoothedValue<double, ValueSmoothingTypes::Multiplicative> hzSmooth;
+    SmoothedValue<double, ValueSmoothingTypes::Multiplicative> gainSmooth;
+    
     faust::MapUI *faustControllers[NUM_WAVETYPES];
     faust::dsp *faustProcessors[NUM_WAVETYPES];
     float* faustOutput[1];

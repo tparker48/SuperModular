@@ -32,7 +32,7 @@ public:
         hzSlider.setName("hz");
         addAndMakeVisible(hzSlider);
 
-        gainSlider.setRange(0.0, 1.0);
+        gainSlider.setRange(0.001, 1.0);
         gainSlider.setValue(1.0);
         gainSlider.setSkewFactor(.75);
         gainSlider.setTitle("gain");
@@ -203,9 +203,9 @@ private:
     Dial waveType;
     Toggle lfoToggle;
 
-    Colour bgCol = Colour(0xFFBAD9B5);
-    Colour textCol = Colour(0xFF393424);
-    Colour knobCol = Colour(0xFF393424);
-    Colour dotCol = Colour(0xFFEFF7CF);
-    Colour cvCol = Colour(0xFF393424);
+    Colour bgCol = Colour(0xFF84A98C);
+    Colour textCol = Colour(0xFFF8F4F9);
+    Colour knobCol = Colour(0xFF1C3738);
+    Colour dotCol = Colour(0xFFF8F4F9);
+    Colour cvCol = Colour(0xFF1C3738);
 };

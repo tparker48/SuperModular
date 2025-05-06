@@ -45,6 +45,9 @@
 #include "ClockUI.h"
 #include "ClockProcessor.h"
 
+#include "AmpUI.h"
+#include "AmpProcessor.h"
+
 enum ModuleType {
     TestModule,
     AudioOutput,
@@ -56,13 +59,14 @@ enum ModuleType {
     Filter,
     Noise,
     DelayModule,
-    Clock
+    Clock,
+    Amp
 };
 
 using ModuleFactory = ModuleProcessor * (*)(int);
 using ModuleUIFactory = ModuleUI * (*)(int, ModuleGrid*, PatchCableManager*, SharedStateWriter*);
 
-// Factory Mapps
+// Factory Maps
 void initModuleProcessorFactoryMap(std::map<ModuleType, ModuleFactory>& factoryMap);
 void initModuleUIFactoryMap(std::map<ModuleType, ModuleUIFactory>& factoryMap);
 
@@ -96,3 +100,6 @@ ModuleUI* createDelayUI(int id, ModuleGrid* mg, PatchCableManager* cables, Share
 
 ModuleProcessor* createClockProcessor(int id);
 ModuleUI* createClockUI(int id, ModuleGrid* mg, PatchCableManager* cables, SharedStateWriter* writer);
+
+ModuleProcessor* createAmpProcessor(int id);
+ModuleUI* createAmpUI(int id, ModuleGrid* mg, PatchCableManager* cables, SharedStateWriter* writer);

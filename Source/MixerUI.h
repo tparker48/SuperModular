@@ -113,9 +113,9 @@ private:
     std::vector<Dial*> levelSliders;
     static const int numInputs = 5;
 
-    Colour bgCol = Colour(0xFFCE796B);
-    Colour textCol = Colour(0xFF24272B);
-    Colour knobCol = Colour(0xFF24272B);
-    Colour dotCol = Colour(0xFFEFE9AE);
-    Colour cvCol = Colour(0xFF24272B);
+    Colour bgCol = Colour(0xFFF5EFE4);
+    Colour textCol = Colour(0xFF60695C);
+    Colour knobCol = Colour(0xFF2E1F27);
+    Colour dotCol = Colour(0xFFF29E4C);
+    Colour cvCol = Colour(0xFF2E1F27);
 };

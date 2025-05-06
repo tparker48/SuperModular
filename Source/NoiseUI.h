@@ -120,9 +120,9 @@ public:
 
 private:
     Dial rate, fine;
-    Colour bg = Colour(0xFFF4AFB4);
-    Colour text = Colour(0xFF272838);
-    Colour knobBg = Colour(0xFF272838);
+    Colour bg = Colour(0xFFE16F7C);
+    Colour text = Colour(0xFFF5F8DE);
+    Colour knobBg = Colour(0xFF42213D);
     Colour knobDot = Colour(0xFFF5FFC6);
-    Colour cvColour = Colour(0xFF272838);
+    Colour cvColour = Colour(0xFF42213D);
 };

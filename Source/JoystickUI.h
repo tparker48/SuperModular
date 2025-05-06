@@ -20,8 +20,8 @@ public:
     JoystickUI(int id, ModuleGrid* mg, PatchCableManager* cm, SharedStateWriter* stateWriter) :
         ModuleUI(id, mg, cm, stateWriter, 0, 2) {
         joystick.setBackgroundColour(Colour(bgCol));
-        joystick.setPadColour(Colour(20, 20, 20));
-        joystick.setDotColour(Colour(252, 56, 56));
+        joystick.setPadColour(knobCol);
+        joystick.setDotColour(dotCol);
         joystick.setRanges(0.0, 1.0, 0.0, 1.0);
         joystick.setValues(0.5, 0.5, false, false);
         addAndMakeVisible(joystick);
@@ -88,7 +88,9 @@ public:
 private:
     Joystick joystick;
 
-    Colour bgCol = Colour(0xFF9EC5AB);
-    Colour cvCol = Colour(0xFF141414);
-    Colour textCol = Colour(0xFF141414);
+    Colour bgCol = Colour(0xFF829191);
+    Colour textCol = Colour(0xFFEFF7CF);
+    Colour knobCol = Colour(0xFF2E1F27);
+    Colour dotCol = Colour(0xFFF29E4C);
+    Colour cvCol = Colour(0xFF2E1F27);
 };

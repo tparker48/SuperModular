@@ -122,9 +122,9 @@ public:
 private:
     Dial hz, q, drive;
     
-    Colour cvCol = Colour(0xFF3D3B3C);
-    Colour knobCol = Colour(0xFF3D3B3C);
-    Colour dotCol = Colour(0xFFC2F970);
-    Colour bgCol = Colour(0xFFA5A5A5);
-    Colour textCol = Colour(0xFF3D3B3C);
+    Colour bgCol = Colour(0xFF983628);
+    Colour cvCol = Colour(0xFF2E0E02);
+    Colour knobCol = Colour(0xFF2E0E02);
+    Colour dotCol = Colour(0xFFCFCBCA);
+    Colour textCol = Colour(0xFFCFCBCA);
 };

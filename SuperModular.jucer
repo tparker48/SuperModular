@@ -43,15 +43,17 @@
     <GROUP id="{0C7E7290-A30B-36B9-5B86-6E4BA2E3F5B0}" name="Source">
       <GROUP id="{EDC0C7F4-16E7-353E-0FE3-980369A4613A}" name="Module">
         <GROUP id="{C1EACEAB-E6AD-6971-AEE4-ED79C95C58C4}" name="Modules">
-          <FILE id="I4msvP" name="ClockUI.h" compile="0" resource="0" file="Source/ClockUI.h"/>
+          <FILE id="IRXtqR" name="AmpProcessor.h" compile="0" resource="0" file="Source/AmpProcessor.h"/>
+          <FILE id="Sxodi6" name="AmpUI.h" compile="0" resource="0" file="Source/AmpUI.h"/>
           <FILE id="lGdo8P" name="ClockProcessor.h" compile="0" resource="0"
                 file="Source/ClockProcessor.h"/>
-          <FILE id="UOVZS9" name="DistortionUI.h" compile="0" resource="0" file="Source/DistortionUI.h"/>
+          <FILE id="I4msvP" name="ClockUI.h" compile="0" resource="0" file="Source/ClockUI.h"/>
           <FILE id="mYIMXq" name="DistortionProcessor.h" compile="0" resource="0"
                 file="Source/DistortionProcessor.h"/>
-          <FILE id="BFkQMw" name="DelayUI.h" compile="0" resource="0" file="Source/DelayUI.h"/>
+          <FILE id="UOVZS9" name="DistortionUI.h" compile="0" resource="0" file="Source/DistortionUI.h"/>
           <FILE id="F23Rhx" name="DelayProcessor.h" compile="0" resource="0"
                 file="Source/DelayProcessor.h"/>
+          <FILE id="BFkQMw" name="DelayUI.h" compile="0" resource="0" file="Source/DelayUI.h"/>
           <FILE id="J0zTDe" name="NoiseProcessor.h" compile="0" resource="0"
                 file="Source/NoiseProcessor.h"/>
           <FILE id="Ujq3Va" name="NoiseUI.h" compile="0" resource="0" file="Source/NoiseUI.h"/>

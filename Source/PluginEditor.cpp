@@ -133,15 +133,16 @@ void SuperModularAudioProcessorEditor::mouseUp(const MouseEvent& e) {
 void SuperModularAudioProcessorEditor::showPopupMenu(const MouseEvent& e) {
     PopupMenu m;
     m.addItem(AudioOutput, "Audio Out");
+    m.addItem(Splitter, "Splitter");
+    m.addItem(Mixer, "Mixer");
+    m.addItem(Amp, "Amp");
     m.addItem(Oscillator, "Oscillator");
     m.addItem(Noise, "Noise");
     m.addItem(Filter, "Filter");
     m.addItem(DelayModule, "Delay");
-    m.addItem(Splitter, "Splitter");
-    m.addItem(Mixer, "Mixer");
-    m.addItem(JoystickModule, "Joystick");
     m.addItem(Sequencer, "Sequencer");
     m.addItem(Clock, "Clock");
+    m.addItem(JoystickModule, "Joystick");
     m.showMenuAsync(PopupMenu::Options(),
         [this, e](int result)
         {
@@ -166,6 +167,9 @@ void SuperModularAudioProcessorEditor::showPopupMenu(const MouseEvent& e) {
                 break;
             case Mixer:
                 addNewModule<MixerUI>(Mixer, e.getPosition());
+                break;
+            case Amp:
+                addNewModule<AmpUI>(Amp, e.getPosition());
                 break;
             case JoystickModule:
                 addNewModule<JoystickUI>(JoystickModule, e.getPosition());

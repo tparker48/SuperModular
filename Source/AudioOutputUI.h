@@ -84,9 +84,9 @@ private:
     CVJackComponent*inputLeft, *inputRight, *inputMono;
     Dial gainSlider;
 
-    Colour bgCol = Colour(0xFFEAE0CC);
-    Colour textCol = Colour(0xFFD5573B);
-    Colour knobCol = Colour(0xFF231F20);
-    Colour dotCol = Colour(0xFFD5573B);
-    Colour cvCol = Colour(0xFF231F20);
+    Colour bgCol = Colour(0xFFF5EFE4);
+    Colour textCol = Colour(0xFF60695C);
+    Colour knobCol = Colour(0xFF2E1F27);
+    Colour dotCol = Colour(0xFFF29E4C);
+    Colour cvCol = Colour(0xFF2E1F27);
 };
