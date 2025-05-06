@@ -19,7 +19,6 @@
 #include "ModuleUITest.h"
 #include "ModuleProcessorTest.h"
 #include "CVJackComponentTest.h"
-#include "OscillatorProcessorTest.h"
 #include "PatchCableManagerTest.h"
 
 class TestRunner : public UnitTestRunner {
@@ -32,7 +31,6 @@ public:
         ModuleUITest moduleUI;
         ModuleProcessorTest moduleProcessor;
         CVJackComponentTest cvJackComponent;
-        OscillatorProcessorTest oscillatorProcessor;
         PatchCableManagerTest patchCableManager;
 
         setAssertOnFailure(false);
@@ -40,7 +38,7 @@ public:
 
         // Throw exception if we failed a test
         for (int i = 0; i < getNumResults(); i++) {
-            //jassert(getResult(i)->failures == 0);
+            jassert(getResult(i)->failures == 0);
         }
     }
 

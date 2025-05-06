@@ -24,8 +24,6 @@
               file="Source/SharedPluginStateTest.h"/>
         <FILE id="ReJ1Zd" name="AudioOutputProcessorTest.h" compile="0" resource="0"
               file="Source/AudioOutputProcessorTest.h"/>
-        <FILE id="oNBHzQ" name="OscillatorProcessorTest.h" compile="0" resource="0"
-              file="Source/OscillatorProcessorTest.h"/>
         <FILE id="Od12eH" name="ModuleFactoryTest.h" compile="0" resource="0"
               file="Source/ModuleFactoryTest.h"/>
         <FILE id="ZyFUPB" name="ModuleProcessorTest.h" compile="0" resource="0"
