@@ -17,11 +17,11 @@ PatchCable::PatchCable() {
 
 void PatchCable::setRandomColor() {
     std::vector<Colour> colours = {
-        Colour(252, 117, 76),
-        Colour(252, 182, 76),
-        Colour(76, 252, 111),
-        Colour(105, 76, 252),
-        Colour(252, 76, 117)
+        //Colour(252, 117, 76),
+        Colour(0xFFF29E4C),
+        //Colour(76, 252, 111),
+        //Colour(105, 76, 252),
+        //Colour(252, 76, 117)
     };
     Random rand;
     rand.setSeedRandomly();

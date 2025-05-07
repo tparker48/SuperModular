@@ -117,9 +117,9 @@ public:
 private:
     Dial lengthSlider, feedbackSlider, dryWetSlider;
 
-    Colour bgCol = Colour(0xFF4A4E69);
-    Colour textCol = Colour(0xFFC9ADA7);
-    Colour knobCol = Colour(0xFF22223B);
-    Colour dotCol = Colour(0xFFC9ADA7);
-    Colour cvCol = Colour(0xFF22223B);
+    //Colour bgCol = Colour(0xFF4A4E69);
+    //Colour textCol = Colour(0xFFC9ADA7);
+    //Colour knobCol = Colour(0xFF22223B);
+    //Colour dotCol = Colour(0xFFC9ADA7);
+    //Colour cvCol = Colour(0xFF22223B);
 };

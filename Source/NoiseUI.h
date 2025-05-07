@@ -26,18 +26,18 @@ public:
         rate.setSkewFactor(0.4);
         rate.setTitle("rate");
         rate.setName("rate");
-        rate.setColours(knobBg, knobDot);
+        rate.setColours(knobCol, dotCol);
         addAndMakeVisible(rate);
 
         fine.setValue(0.);
         fine.setRange(-1.0, 1.0);
         fine.setTitle("fine");
         fine.setName("fine");
-        fine.setColours(knobBg, knobDot);
+        fine.setColours(knobCol, dotCol);
         addAndMakeVisible(fine);
 
         for (int i = 0; i < getNumCVOutputs(); i++) {
-            getCvOutputJack(i)->setJackColour(cvColour);
+            getCvOutputJack(i)->setJackColour(cvCol);
         }
     }
 
@@ -69,10 +69,10 @@ public:
     }
 
     void paintModule(Graphics& g) override {
-        g.setColour(bg);
+        g.setColour(bgCol);
         g.fillAll();
 
-        g.setColour(text);
+        g.setColour(textCol);
         g.setFont(16);
 
         auto bounds = rate.getBounds();
@@ -120,9 +120,9 @@ public:
 
 private:
     Dial rate, fine;
-    Colour bg = Colour(0xFFE16F7C);
-    Colour text = Colour(0xFFF5F8DE);
-    Colour knobBg = Colour(0xFF42213D);
-    Colour knobDot = Colour(0xFFF5FFC6);
-    Colour cvColour = Colour(0xFF42213D);
+    // Colour bg = Colour(0xFFE16F7C);
+    // Colour text = Colour(0xFFF5F8DE);
+    // Colour knobCol = Colour(0xFF42213D);
+    // Colour dotCol = Colour(0xFFF5FFC6);
+    // Colour cvCol = Colour(0xFF42213D);
 };

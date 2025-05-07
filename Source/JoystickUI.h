@@ -88,9 +88,9 @@ public:
 private:
     Joystick joystick;
 
-    Colour bgCol = Colour(0xFF829191);
-    Colour textCol = Colour(0xFFEFF7CF);
-    Colour knobCol = Colour(0xFF2E1F27);
-    Colour dotCol = Colour(0xFFF29E4C);
-    Colour cvCol = Colour(0xFF2E1F27);
+    //Colour bgCol = Colour(0xFF829191);
+    //Colour textCol = Colour(0xFFEFF7CF);
+    //Colour knobCol = Colour(0xFF2E1F27);
+    //Colour dotCol = Colour(0xFFF29E4C);
+    //Colour cvCol = Colour(0xFF2E1F27);
 };

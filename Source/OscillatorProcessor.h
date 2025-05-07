@@ -30,7 +30,7 @@ const int NUM_WAVETYPES = 6;
 
 class OscillatorProcessor : public ModuleProcessor {
 public:
-    OscillatorProcessor(int id) : ModuleProcessor(id, 2, 1) {}
+    OscillatorProcessor(int id) : ModuleProcessor(id, 1, 1) {}
 
     ~OscillatorProcessor() {
         ModuleProcessor::~ModuleProcessor();
@@ -68,20 +68,12 @@ public:
         setHz(440.0);
         hzSmooth.reset(sampleRate, 0.01);
         hzSmooth.setCurrentAndTargetValue(hz);
-
-        gainSmooth.reset(sampleRate, 0.01);
-        gainSmooth.setCurrentAndTargetValue(1.0);
     }
 
     void updateFromState(ModuleState moduleState) {
         auto newHz = moduleState.state.getProperty("hz");
         if (!newHz.isVoid()) {
             setHz(newHz);
-        }
-
-        auto newGain = moduleState.state.getProperty("gain");
-        if (!newGain.isVoid()) {
-            gain = newGain;
         }
 
         auto wave = moduleState.state.getProperty("wave");
@@ -107,15 +99,14 @@ public:
 
     void preBlockProcessing() override {
         hzSmooth.setTargetValue(lfo ? getLfoHz(hz) : hz);
-        gainSmooth.setTargetValue(gain);
+
     }
 
     void processSample() {
-        gainSmooth.skip(1);
         hzSmooth.skip(1);
         faustControllers[waveType]->setParamValue("hz", hzSmooth.getCurrentValue() + (cvInputs[0].read() * fmAmt * hzSmooth.getCurrentValue()));
         faustProcessors[waveType]->compute(1, nullptr, faustOutput);
-        cvOutputs[0].write(faustOutput[0][0] * (gainSmooth.getCurrentValue() + (amAmt * gainSmooth.getCurrentValue() * cvInputs[1].read())));
+        cvOutputs[0].write(faustOutput[0][0]);
     }
 
     void setHz(double newHz) {
@@ -142,14 +133,12 @@ public:
 
 private:
     double hz = 440.0;
-    double gain = 1.0;
     double fmAmt = 0.0;
     double amAmt = 0.0;
     bool lfo = false;
     WAVETYPE waveType = SIN;
 
     SmoothedValue<double, ValueSmoothingTypes::Multiplicative> hzSmooth;
-    SmoothedValue<double, ValueSmoothingTypes::Multiplicative> gainSmooth;
     
     faust::MapUI *faustControllers[NUM_WAVETYPES];
     faust::dsp *faustProcessors[NUM_WAVETYPES];

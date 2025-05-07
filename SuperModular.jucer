@@ -171,9 +171,6 @@
       <FILE id="WNhrwD" name="PluginProcessor.h" compile="0" resource="0"
             file="Source/PluginProcessor.h"/>
     </GROUP>
-    <GROUP id="{A5144A17-F70C-C56C-DA4C-B305CEFDA19B}" name="Images">
-      <FILE id="oNg5lB" name="cross.png" compile="0" resource="1" file="Images/cross.png"/>
-    </GROUP>
   </MAINGROUP>
   <JUCEOPTIONS JUCE_STRICT_REFCOUNTEDPOINTER="1" JUCE_VST3_CAN_REPLACE_VST2="0"/>
   <EXPORTFORMATS>

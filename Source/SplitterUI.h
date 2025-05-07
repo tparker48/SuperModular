@@ -19,7 +19,6 @@ public:
 
     SplitterUI(int id, ModuleGrid* mg, PatchCableManager* cm, SharedStateWriter* stateWriter) :
         ModuleUI(id, mg, cm, stateWriter, 1, 5) {
-
         getCvOutputJack(0)->setJackColour(cvCol);
         getCvOutputJack(1)->setJackColour(cvCol);
         getCvOutputJack(2)->setJackColour(cvCol);
@@ -44,7 +43,6 @@ public:
         auto cvY = getHeight() * 0.2;
         auto paddingY = getHeight() * 0.15;
 
-        
         getCvOutputJack(0)->setCentrePosition(getWidth() / 2, getHeight() * 0.15);
         getCvOutputJack(1)->setCentrePosition(getWidth() / 2, getHeight() * 0.15 + 1 * paddingY);
         getCvOutputJack(2)->setCentrePosition(getWidth() / 2, getHeight() * 0.15 + 2 * paddingY);
@@ -55,9 +53,9 @@ public:
     }
     
 private:
-    Colour bgCol = Colour(0xFFF5EFE4);
-    Colour textCol = Colour(0xFF60695C);
-    Colour knobCol = Colour(0xFF2E1F27);
-    Colour dotCol = Colour(0xFFF29E4C);
-    Colour cvCol = Colour(0xFF2E1F27);
+    // Colour bgCol = Colour(0xFFF5EFE4);
+    // Colour textCol = Colour(0xFF60695C);
+    // Colour knobCol = Colour(0xFF2E1F27);
+    // Colour dotCol = Colour(0xFFF29E4C);
+    // Colour cvCol = Colour(0xFF2E1F27);
 };
