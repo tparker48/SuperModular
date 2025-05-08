@@ -88,12 +88,11 @@ void SuperModularAudioProcessorEditor::clearState() {
 //==============================================================================
 void SuperModularAudioProcessorEditor::paint (Graphics& g)
 {
-    g.fillAll (getLookAndFeel().findColour(ResizableWindow::backgroundColourId));
-
+    g.fillAll(Colour(0xff121212));
 
     for (int i = 0; i < numRows+1; i++) {
         int moduleHeight = getHeight() / numRows;
-        int barH = getHeight() / 40;
+        int barH = getHeight() * 0.02;
         int barY = i * moduleHeight;
 
         g.setColour(Colour(0xff1f1f1f));
@@ -140,6 +139,7 @@ void SuperModularAudioProcessorEditor::showPopupMenu(const MouseEvent& e) {
     m.addItem(Noise, "Noise");
     m.addItem(Filter, "Filter");
     m.addItem(DelayModule, "Delay");
+    m.addItem(DistortionModule, "Distortion");
     m.addItem(Sequencer, "Sequencer");
     m.addItem(Clock, "Clock");
     m.addItem(JoystickModule, "Joystick");
@@ -161,6 +161,9 @@ void SuperModularAudioProcessorEditor::showPopupMenu(const MouseEvent& e) {
                 break;
             case DelayModule:
                 addNewModule<DelayUI>(DelayModule, e.getPosition());
+                break;
+            case DistortionModule:
+                addNewModule<DistortionUI>(DistortionModule, e.getPosition());
                 break;
             case Splitter:
                 addNewModule<SplitterUI>(Splitter, e.getPosition());

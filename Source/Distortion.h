@@ -7,14 +7,14 @@ public:
     Distortion() { }
     void prepare(const juce::dsp::ProcessSpec& spec);
     void setParams(float gain, float color, float dryWet);
-    void process(dsp::ProcessContextReplacing<float> context);
+    void process(juce::dsp::ProcessContextReplacing<float> context);
 
 private:
     bool isPrepared = false;
 
     enum
     {
-        bpfIdx,
+        //bpfIdx,
         preGainIdx,
         waveshaperIdx,
         postGainIdx,
@@ -23,7 +23,7 @@ private:
     juce::SmoothedValue<float> smoothedGain;
 
     juce::dsp::ProcessorChain<
-        dsp::StateVariableTPTFilter<float>,
+        //juce::dsp::StateVariableTPTFilter<float>,
         juce::dsp::Gain<float>,
         juce::dsp::WaveShaper<float>,
         juce::dsp::Gain<float>> processorChain;

@@ -24,6 +24,7 @@ void initModuleProcessorFactoryMap(std::map<ModuleType, ModuleFactory>& factoryM
     factoryMap[Clock] = createClockProcessor;
     factoryMap[DelayModule] = createDelayProcessor;
     factoryMap[Amp] = createAmpProcessor;
+    factoryMap[DistortionModule] = createDistortionProcessor;
 }
 
 void initModuleUIFactoryMap(std::map<ModuleType, ModuleUIFactory>& factoryMap) {
@@ -38,6 +39,7 @@ void initModuleUIFactoryMap(std::map<ModuleType, ModuleUIFactory>& factoryMap) {
     factoryMap[Clock] = createClockUI;
     factoryMap[DelayModule] = createDelayUI;
     factoryMap[Amp] = createAmpUI;
+    factoryMap[DistortionModule] = createDistortionUI;
 }
 
 
@@ -127,4 +129,12 @@ ModuleProcessor* createAmpProcessor(int id) {
 }
 ModuleUI* createAmpUI(int id, ModuleGrid* mg, PatchCableManager* cables, SharedStateWriter* writer) {
     return new AmpUI(id, mg, cables, writer);
+}
+
+ModuleProcessor* createDistortionProcessor(int id) {
+    return new DistortionProcessor(id);
+
+}
+ModuleUI* createDistortionUI(int id, ModuleGrid* mg, PatchCableManager* cables, SharedStateWriter* writer) {
+    return new DistortionUI(id, mg, cables, writer);
 }

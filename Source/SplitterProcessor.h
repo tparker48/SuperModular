@@ -15,8 +15,6 @@
 
 class SplitterProcessor : public ModuleProcessor {
 public:
-    static const int typeId = 2;
-
     SplitterProcessor(int id) : ModuleProcessor(id, 1, 5) {
     }
 

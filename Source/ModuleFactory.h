@@ -48,6 +48,9 @@
 #include "AmpUI.h"
 #include "AmpProcessor.h"
 
+#include "DistortionUI.h"
+#include "DistortionProcessor.h"
+
 enum ModuleType {
     TestModule,
     AudioOutput,
@@ -60,7 +63,8 @@ enum ModuleType {
     Noise,
     DelayModule,
     Clock,
-    Amp
+    Amp,
+    DistortionModule
 };
 
 using ModuleFactory = ModuleProcessor * (*)(int);
@@ -103,3 +107,6 @@ ModuleUI* createClockUI(int id, ModuleGrid* mg, PatchCableManager* cables, Share
 
 ModuleProcessor* createAmpProcessor(int id);
 ModuleUI* createAmpUI(int id, ModuleGrid* mg, PatchCableManager* cables, SharedStateWriter* writer);
+
+ModuleProcessor* createDistortionProcessor(int id);
+ModuleUI* createDistortionUI(int id, ModuleGrid* mg, PatchCableManager* cables, SharedStateWriter* writer);

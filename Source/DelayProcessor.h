@@ -70,6 +70,7 @@ private:
     double length, feedback, dryWet;
     double lengthx3;
     float inputGain = 0.95;
+
     AudioBuffer<float> buffer;
     juce::dsp::AudioBlock<float> audioBlock;
 };
