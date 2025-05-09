@@ -2,9 +2,9 @@
 
 void Distortion::prepare(const juce::dsp::ProcessSpec& spec)
 {
-    //auto& bpf = processorChain.template get<bpfIdx>();
-    //bpf.setType(juce::dsp::StateVariableTPTFilterType::bandpass);
-    //bpf.setResonance(0.25f);
+    auto& bpf = processorChain.template get<bpfIdx>();
+    bpf.setType(juce::dsp::StateVariableTPTFilterType::bandpass);
+    bpf.setResonance(0.5f);
 
     auto& waveshaper = processorChain.template get<waveshaperIdx>();
     waveshaper.functionToUse = [](float x)
@@ -38,8 +38,8 @@ void Distortion::process(dsp::ProcessContextReplacing<float> context)
 void Distortion::setParams(float gain, float color, float dryWet)
 {
     // TODO figure out how color should work
-    //auto& bpf = processorChain.template get<bpfIdx>();
-    //bpf.setCutoffFrequency(color);
+    auto& bpf = processorChain.template get<bpfIdx>();
+    bpf.setCutoffFrequency(color);
 
     smoothedGain.setTargetValue(gain);
     auto& preGain = processorChain.template get<preGainIdx>();

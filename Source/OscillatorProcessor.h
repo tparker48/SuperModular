@@ -1,7 +1,7 @@
 /*
   ==============================================================================
 
-    OscillatorProcessor.h
+    OldOscillatorProcessor.h
     Created: 16 Apr 2025 11:02:28pm
     Author:  Tom
 
@@ -11,12 +11,7 @@
 #pragma once
 
 #include "ModuleProcessor.h"
-#include "faustSin.h"
-#include "faustTriangle.h"
-#include "faustSaw.h"
-#include "faustSquare.h"
-#include "faustLfoSaw.h"
-#include "faustLfoSquare.h"
+#include "Oscillator.h"
 
 enum WAVETYPE {
     SIN,
@@ -32,48 +27,21 @@ class OscillatorProcessor : public ModuleProcessor {
 public:
     OscillatorProcessor(int id) : ModuleProcessor(id, 1, 1) {}
 
-    ~OscillatorProcessor() {
-        ModuleProcessor::~ModuleProcessor();
-        for (int i = 0; i < NUM_WAVETYPES; i++) {
-            if (faustProcessors[i]) {
-                delete faustProcessors[i];
-            }
-            if (faustControllers[i]) {
-                delete faustControllers[i];
-            }
-        }
-        if (faustOutput[0]) {
-            delete faustOutput[0];
-        }
-    }
-
     void prepareToPlay(double sampleRate, int samplesPerBlock) override {
         ModuleProcessor::prepareToPlay(sampleRate, samplesPerBlock);
-
-        // init faust processors
-        faustProcessors[SIN] = new sindsp();
-        faustProcessors[TRIANGLE] = new triangledsp();
-        faustProcessors[SAW] = new sawdsp();
-        faustProcessors[SQUARE] = new squaredsp();
-        faustProcessors[LFOSAW] = new lfsawdsp();
-        faustProcessors[LFOSQUARE] = new lfsquaredsp();
-
-        for (int i = 0; i < NUM_WAVETYPES; i++) {
-            faustControllers[i] = new MapUI();
-            faustProcessors[i]->init(sampleRate);
-            faustProcessors[i]->buildUserInterface(faustControllers[i]);
-        }
-        faustOutput[0] = new float;
 
         setHz(440.0);
         hzSmooth.reset(sampleRate, 0.01);
         hzSmooth.setCurrentAndTargetValue(hz);
+
+        osc.prepareToPlay(sampleRate);
     }
 
     void updateFromState(ModuleState moduleState) {
         auto newHz = moduleState.state.getProperty("hz");
         if (!newHz.isVoid()) {
             setHz(newHz);
+            hzSmooth.setTargetValue(lfo ? getLfoHz(hz) : hz);
         }
 
         auto wave = moduleState.state.getProperty("wave");
@@ -86,27 +54,31 @@ public:
             lfo = lfoToggle;
         }
 
-        auto newAmAmt = moduleState.state.getProperty("amAmt");
-        if (!newAmAmt.isVoid()) {
-            amAmt = newAmAmt;
-        }
-
         auto newFmAmt = moduleState.state.getProperty("fmAmt");
         if (!newFmAmt.isVoid()) {
             fmAmt = newFmAmt;
         }
     }
 
-    void preBlockProcessing() override {
-        hzSmooth.setTargetValue(lfo ? getLfoHz(hz) : hz);
-
-    }
-
     void processSample() {
         hzSmooth.skip(1);
-        faustControllers[waveType]->setParamValue("hz", hzSmooth.getCurrentValue() + (cvInputs[0].read() * fmAmt * hzSmooth.getCurrentValue()));
-        faustProcessors[waveType]->compute(1, nullptr, faustOutput);
-        cvOutputs[0].write(faustOutput[0][0]);
+        osc.incrementPhase();
+        osc.setHz(hzSmooth.getCurrentValue() + (cvInputs[0].read() * fmAmt * hzSmooth.getCurrentValue()));
+        switch (waveType) {
+        case SIN:
+            getCVOutputJack(0)->write(osc.getSinSample());
+            break;
+        case TRIANGLE:
+            getCVOutputJack(0)->write(osc.getTriangleSample());
+            break;
+        case SAW:
+            getCVOutputJack(0)->write(osc.getSawSample());
+            break;
+        case SQUARE:
+            getCVOutputJack(0)->write(osc.getSquareSample());
+            break;
+        }
+        
     }
 
     void setHz(double newHz) {
@@ -122,25 +94,22 @@ public:
         // SAW and SQUARE have different logic at low freq
         if (lfo) {
             if (wave == SAW) {
-                return LFOSAW;
+                return WAVETYPE::LFOSAW;
             }
             if (wave == SQUARE) {
-                return LFOSQUARE;
+                return WAVETYPE::LFOSQUARE;
             }
         }
         return wave;
     }
 
 private:
+    Oscillator osc;
+
     double hz = 440.0;
     double fmAmt = 0.0;
-    double amAmt = 0.0;
     bool lfo = false;
-    WAVETYPE waveType = SIN;
+    WAVETYPE waveType = WAVETYPE::SIN;
 
     SmoothedValue<double, ValueSmoothingTypes::Multiplicative> hzSmooth;
-    
-    faust::MapUI *faustControllers[NUM_WAVETYPES];
-    faust::dsp *faustProcessors[NUM_WAVETYPES];
-    float* faustOutput[1];
 };

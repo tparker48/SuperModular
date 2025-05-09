@@ -1,7 +1,7 @@
 /*
   ==============================================================================
 
-    OscillatorUI.h
+    OldOscillatorUI.h
     Created: 16 Apr 2025 11:02:35pm
     Author:  Tom
 
@@ -15,11 +15,11 @@
 #include "Toggle.h"
 
 
-class OscillatorUI : public ModuleUI, public Slider::Listener, Button::Listener {
+class OldOscillatorUI : public ModuleUI, public Slider::Listener, Button::Listener {
 public:
     static const int hp = 2;
 
-    OscillatorUI(int id, ModuleGrid* mg, PatchCableManager* cm, SharedStateWriter* stateWriter) :
+    OldOscillatorUI(int id, ModuleGrid* mg, PatchCableManager* cm, SharedStateWriter* stateWriter) :
         ModuleUI(id, mg, cm, stateWriter, 1, 1) {
         hzIn = getCvInputJack(0);
         waveOut = getCvOutputJack(0);
@@ -101,17 +101,17 @@ public:
         auto lfoState = moduleState.state.getProperty("lfo_toggle");
         if (!lfoState.isVoid()) {
             lfoToggle.setToggleState((bool)lfoState, false);
-        }
+        }   
     }
 
     void paintModule(Graphics& g) override {
         g.setColour(bgCol);
         g.fillAll();
 
-        paintComponentLabel(g, &hzSlider, "hz", TOP, getWidth() * 0.05, textCol);
-        paintComponentLabel(g, &lfoToggle, "lfo", TOP, getWidth() * 0.05, textCol);
-        paintComponentLabel(g, hzIn, "hz", TOP, getWidth() * 0.05, textCol);
-        paintComponentLabel(g, waveOut, "out", TOP, getWidth() * 0.05, textCol);
+        paintComponentLabel(g, &hzSlider, "hz", TOP, getWidth()*0.05, textCol);
+        paintComponentLabel(g, &lfoToggle, "lfo", TOP, getWidth()*0.05, textCol);
+        paintComponentLabel(g, hzIn, "hz", TOP, getWidth()*0.05, textCol);
+        paintComponentLabel(g, waveOut, "out", TOP, getWidth()*0.05, textCol);
 
         g.setFont(14.0);
         auto stretch = 0.48;
@@ -161,4 +161,10 @@ private:
     Dial hzSlider, fmSlider;
     Dial waveType;
     Toggle lfoToggle;
+
+    // Colour bgCol = Colour(0xFF84A98C);
+    // Colour textCol = Colour(0xFFF8F4F9);
+    // Colour knobCol = Colour(0xFF1C3738);
+    // Colour dotCol = Colour(0xFFF8F4F9);
+    // Colour cvCol = Colour(0xFF1C3738);
 };

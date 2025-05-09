@@ -16,7 +16,7 @@
 class DistortionProcessor : public ModuleProcessor {
 public:
 
-    DistortionProcessor(int id) : ModuleProcessor(id, 1, 1) {
+    DistortionProcessor(int id) : ModuleProcessor(id, 2, 1) {
         gain = 1.0;
         color = 1600.0;
         dryWet = 0.5;

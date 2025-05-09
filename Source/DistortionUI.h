@@ -18,7 +18,7 @@ public:
     static const int hp = 2;
 
     DistortionUI(int id, ModuleGrid* mg, PatchCableManager* cm, SharedStateWriter* stateWriter)
-        : ModuleUI(id, mg, cm, stateWriter, 1, 1) {
+        : ModuleUI(id, mg, cm, stateWriter, 2, 1) {
 
         // Initialize Gain Knob
         gain.setValue(0.68);
@@ -28,7 +28,7 @@ public:
         addAndMakeVisible(gain);
 
         color.setValue(880.0);
-        color.setRange(0.0, 17000.0);
+        color.setRange(300.0, 2500.0);
         color.setSkewFactor(0.5);
         color.setColours(knobCol, dotCol);
         addAndMakeVisible(color);
@@ -90,18 +90,18 @@ public:
     }
 
     void resized() override {
-        gain.setSize(40, 40);
-        gain.setCentrePosition(getWidth() / 2, getHeight() * 0.3);
+        gain.setSize(50, 50);
+        gain.setCentrePosition(getWidth() / 2, getHeight() * 0.25);
 
         color.setSize(40, 40);
         color.setCentrePosition(getWidth() / 3, getHeight() * 0.45);
 
         dryWet.setSize(40, 40);
-        dryWet.setCentrePosition(getWidth()*2 / 3, getHeight() * 0.45);
+        dryWet.setCentrePosition(getWidth() * 2/3, getHeight() * 0.45);
 
 
-        getCvInputJack(0)->setCentrePosition(getWidth() / 2 - getWidth() * 0.2, getHeight() * 0.95);
-        getCvOutputJack(0)->setCentrePosition(getWidth() / 2 + getWidth() * 0.2, getHeight() * 0.95);
+        getCvInputJack(0)->setCentrePosition(getWidth() / 2 - getWidth() * 0.3, getHeight() * 0.95);
+        getCvOutputJack(0)->setCentrePosition(getWidth() / 2 + getWidth() * 0.3, getHeight() * 0.95);
     }
 
 private:

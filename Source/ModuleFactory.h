@@ -21,6 +21,9 @@
 #include "OscillatorProcessor.h"
 #include "OscillatorUI.h"
 
+#include "OldOscillatorProcessor.h"
+#include "OldOscillatorUI.h"
+
 #include "SplitterProcessor.h"
 #include "SplitterUI.h"
 
@@ -54,7 +57,8 @@
 enum ModuleType {
     TestModule,
     AudioOutput,
-    Oscillator,
+    OscillatorModule,
+    OldOscillatorModule,
     Splitter,
     JoystickModule,
     Mixer,
@@ -80,6 +84,9 @@ ModuleUI* createAudioOutputUI(int id, ModuleGrid* mg, PatchCableManager* cables,
 
 ModuleProcessor* createOscillatorProcessor(int id);
 ModuleUI* createOscillatorUI(int id, ModuleGrid* mg, PatchCableManager* cables, SharedStateWriter* writer);
+
+ModuleProcessor* createOldOscillatorProcessor(int id);
+ModuleUI* createOldOscillatorUI(int id, ModuleGrid* mg, PatchCableManager* cables, SharedStateWriter* writer);
 
 ModuleProcessor* createSplitterProcessor(int id);
 ModuleUI* createSplitterUI(int id, ModuleGrid* mg, PatchCableManager* cables, SharedStateWriter* writer);

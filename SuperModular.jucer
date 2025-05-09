@@ -41,6 +41,15 @@
     <GROUP id="{0C7E7290-A30B-36B9-5B86-6E4BA2E3F5B0}" name="Source">
       <GROUP id="{EDC0C7F4-16E7-353E-0FE3-980369A4613A}" name="Module">
         <GROUP id="{C1EACEAB-E6AD-6971-AEE4-ED79C95C58C4}" name="Modules">
+          <FILE id="xC04xP" name="OscillatorUI.h" compile="0" resource="0" file="Source/OscillatorUI.h"/>
+          <FILE id="roLnUK" name="OscillatorProcessor.h" compile="0" resource="0"
+                file="Source/OscillatorProcessor.h"/>
+          <FILE id="fMxr9k" name="AudioInputUI.h" compile="0" resource="0" file="Source/AudioInputUI.h"/>
+          <FILE id="obsoyv" name="AudioInputProcessor.h" compile="0" resource="0"
+                file="Source/AudioInputProcessor.h"/>
+          <FILE id="O4b9nL" name="MidiInputUI.h" compile="0" resource="0" file="Source/MidiInputUI.h"/>
+          <FILE id="DUGtNf" name="MidiInputProcessor.h" compile="0" resource="0"
+                file="Source/MidiInputProcessor.h"/>
           <FILE id="IRXtqR" name="AmpProcessor.h" compile="0" resource="0" file="Source/AmpProcessor.h"/>
           <FILE id="Sxodi6" name="AmpUI.h" compile="0" resource="0" file="Source/AmpUI.h"/>
           <FILE id="lGdo8P" name="ClockProcessor.h" compile="0" resource="0"
@@ -67,9 +76,10 @@
           <FILE id="zjN7FH" name="MixerProcessor.h" compile="0" resource="0"
                 file="Source/MixerProcessor.h"/>
           <FILE id="VcyuFS" name="MixerUI.h" compile="0" resource="0" file="Source/MixerUI.h"/>
-          <FILE id="AdqJr0" name="OscillatorProcessor.h" compile="0" resource="0"
-                file="Source/OscillatorProcessor.h"/>
-          <FILE id="gNYVwY" name="OscillatorUI.h" compile="0" resource="0" file="Source/OscillatorUI.h"/>
+          <FILE id="AdqJr0" name="OldOscillatorProcessor.h" compile="0" resource="0"
+                file="Source/OldOscillatorProcessor.h"/>
+          <FILE id="gNYVwY" name="OldOscillatorUI.h" compile="0" resource="0"
+                file="Source/OldOscillatorUI.h"/>
           <FILE id="eA5axH" name="SequencerProcessor.h" compile="0" resource="0"
                 file="Source/SequencerProcessor.h"/>
           <FILE id="DoA6dd" name="SequencerUI.h" compile="0" resource="0" file="Source/SequencerUI.h"/>
@@ -118,6 +128,8 @@
           <FILE id="mWa1C2" name="faustSquare.h" compile="0" resource="0" file="Source/faustSquare.h"/>
           <FILE id="a1zWy5" name="faustHeader.h" compile="0" resource="0" file="Source/faustHeader.h"/>
         </GROUP>
+        <FILE id="Yyfmrs" name="Oscillator.cpp" compile="1" resource="0" file="Source/Oscillator.cpp"/>
+        <FILE id="i4kvyU" name="Oscillator.h" compile="0" resource="0" file="Source/Oscillator.h"/>
         <FILE id="ypRWrt" name="KellettPinkFilter.cpp" compile="1" resource="0"
               file="Source/KellettPinkFilter.cpp"/>
         <FILE id="y7RVSn" name="KellettPinkFilter.h" compile="0" resource="0"

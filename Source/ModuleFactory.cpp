@@ -14,7 +14,8 @@
 void initModuleProcessorFactoryMap(std::map<ModuleType, ModuleFactory>& factoryMap)
 {
     factoryMap[AudioOutput] = createAudioOutputProcessor;
-    factoryMap[Oscillator] = createOscillatorProcessor;
+    factoryMap[OscillatorModule] = createOscillatorProcessor;
+    factoryMap[OldOscillatorModule] = createOldOscillatorProcessor;
     factoryMap[Splitter] = createSplitterProcessor;
     factoryMap[JoystickModule] = createJoystickProcessor;
     factoryMap[Mixer] = createMixerProcessor;
@@ -29,7 +30,8 @@ void initModuleProcessorFactoryMap(std::map<ModuleType, ModuleFactory>& factoryM
 
 void initModuleUIFactoryMap(std::map<ModuleType, ModuleUIFactory>& factoryMap) {
     factoryMap[AudioOutput] = createAudioOutputUI;
-    factoryMap[Oscillator] = createOscillatorUI;
+    factoryMap[OscillatorModule] = createOscillatorUI;
+    factoryMap[OldOscillatorModule] = createOldOscillatorUI;
     factoryMap[Splitter] = createSplitterUI;
     factoryMap[JoystickModule] = createJoystickUI;
     factoryMap[Mixer] = createMixerUI;
@@ -57,6 +59,14 @@ ModuleProcessor* createOscillatorProcessor(int id) {
 }
 ModuleUI* createOscillatorUI(int id, ModuleGrid* mg, PatchCableManager* cables, SharedStateWriter* writer) {
     return new OscillatorUI(id, mg, cables, writer);
+}
+
+ModuleProcessor* createOldOscillatorProcessor(int id) {
+    return new OldOscillatorProcessor(id);
+
+}
+ModuleUI* createOldOscillatorUI(int id, ModuleGrid* mg, PatchCableManager* cables, SharedStateWriter* writer) {
+    return new OldOscillatorUI(id, mg, cables, writer);
 }
 
 ModuleProcessor* createSplitterProcessor(int id) {

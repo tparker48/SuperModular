@@ -14,7 +14,7 @@ private:
 
     enum
     {
-        //bpfIdx,
+        bpfIdx,
         preGainIdx,
         waveshaperIdx,
         postGainIdx,
@@ -23,7 +23,7 @@ private:
     juce::SmoothedValue<float> smoothedGain;
 
     juce::dsp::ProcessorChain<
-        //juce::dsp::StateVariableTPTFilter<float>,
+        juce::dsp::StateVariableTPTFilter<float>,
         juce::dsp::Gain<float>,
         juce::dsp::WaveShaper<float>,
         juce::dsp::Gain<float>> processorChain;
