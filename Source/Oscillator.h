@@ -12,6 +12,21 @@
 
 #include <JuceHeader.h>
 #include <cmath>
+#include <algorithm>
+
+enum WAVETYPE {
+    SIN,
+    TRIANGLE,
+    SAW,
+    PULSE,
+    SQUARE,
+    LFOSAW,
+    LFOTRI,
+    LFOPULSE,
+    LFOSQUARE,
+};
+const int NUM_WAVETYPES = 9;
+
 
 class Oscillator {
 public:
@@ -23,9 +38,8 @@ public:
 
     void prepareToPlay(float sampleRate) {
         this->sampleRate = sampleRate;
-        float cutoff = 5.0;
+        float cutoff = 2.0;
         triR = 1.0f - (2.0 * MathConstants<float>::pi * cutoff) / sampleRate;
-        triLPAlpha = 1.0f - expf(-2.0f * MathConstants<float>::pi * 3000.0 / sampleRate);
     }
 
     void setHz(float hz) {
@@ -39,16 +53,52 @@ public:
         }
     }
 
+    void setPulseDutyCycle(float dutyCycle) {
+        pulseDutyCycle = std::min(std::max(dutyCycle,0.10f), 0.90f);
+    }
+
+    float getSample(WAVETYPE wave) {
+        switch (wave) {
+        case SIN:
+            return getSinSample();
+            break;
+        case TRIANGLE:
+            return getTriangleSample();
+            break;
+        case SAW:
+            return getSawSample();
+            break;
+        case SQUARE:
+            return getSquareSample();
+            break;
+        case PULSE:
+            return getPulseSample();
+            break;
+        case LFOSAW:
+            return getNaiveSawSample();
+            break;
+        case LFOSQUARE:
+            return getNaiveSquareSample();
+            break;
+        case LFOTRI:
+            return getNaiveTriSample();
+            break;
+        case LFOPULSE:
+            return getNaivePulseSample();
+            break;
+        }
+    }
+
     float getSawSample() {
-        float saw = 2.0 * phase - 1.0;
-        return saw - polyBlep(phase, phaseIncrement);
+        return getNaiveSawSample()
+                - polyBlep(phase, phaseIncrement);
     }
 
     float getSquareSample() {
-        float square = phase < 0.5 ? 1.0 : -1.0;
-        square += polyBlep(phase, phaseIncrement);
-        square -= polyBlep(std::fmod(phase + 0.5, 1.0), phaseIncrement);
-        return square;
+        return getNaiveSquareSample()
+                + polyBlep(phase, phaseIncrement)
+                - polyBlep(std::fmod(phase + 0.5, 1.0), phaseIncrement);
+
     }
 
     float getTriangleSample() {
@@ -66,10 +116,26 @@ public:
         return lastTriOutput * 0.9;        
     }
 
-    float getPwmSample(float dutyCycle) {} // use two saw waves and shift phase of one to adjust duty cycle
-    float getLfoTriangleSample() {}
-    float getLfoSquareSample() {}
-    float getLfoSawSample() {}
+    float getPulseSample() {
+        float pulse = getNaivePulseSample();
+        pulse += polyBlep(phase, phaseIncrement);
+        pulse -= polyBlep(std::fmod(phase + (1.0-pulseDutyCycle), 1.0), phaseIncrement);
+        return pulse;
+    }
+
+    float getNaiveSawSample() {
+        return 2.0 * phase - 1.0;
+    }
+    float getNaiveSquareSample() {
+        return phase < 0.5 ? 1.0 : -1.0;
+    }
+    float getNaiveTriSample() {
+        return 4.0 * abs(phase - 0.5) - 1.0;
+    }
+
+    float getNaivePulseSample() {
+        return phase < pulseDutyCycle ? 1.0 : -1.0;
+    }
 
     float getSinSample() {
         return sin(MathConstants<float>::twoPi * phase);
@@ -77,28 +143,29 @@ public:
 
 private:
     float phase, phaseIncrement;
-    float sampleRate;
+    float sampleRate = 0.0;
 
-    float triAccumulator;
+    float triAccumulator = 0.0;
     float lastTriOutput = 0.0;
     float lastTriInput = 0.0;
     float triR;
     float lastSquare = 0.0;
-    float lastLPOut = 0.0;
-    float triLPAlpha = 0.0;
+
+    float lastSyncIn = 0.0;
+
+    float pulseDutyCycle = 0.5;
+
+    float nextBlep = 0.0;
 
     float polyBlep(float t, float dt) {
-        // left edge of a rising edge
         if (t < dt) {
             t = t / dt;
             return t + t - t * t - 1.0;
         }
-        // right edge of the rising edge 
         if (t > 1.0 - dt) {
             t = (t - 1.0) / dt;
             return t * t + t + t + 1.0;
         }
-        // do nothing in the middle
         return 0.0;
     }
 };

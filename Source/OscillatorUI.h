@@ -20,10 +20,7 @@ public:
     static const int hp = 2;
 
     OscillatorUI(int id, ModuleGrid* mg, PatchCableManager* cm, SharedStateWriter* stateWriter) :
-        ModuleUI(id, mg, cm, stateWriter, 1, 1) {
-        hzIn = getCvInputJack(0);
-        waveOut = getCvOutputJack(0);
-
+        ModuleUI(id, mg, cm, stateWriter, 2, 1) {
         hzSlider.setRange(24.0, 12000.0);
         hzSlider.setValue(220.0);
         hzSlider.setSkewFactor(.2);
@@ -38,11 +35,25 @@ public:
         fmSlider.setColours(knobCol, dotCol);
         addAndMakeVisible(fmSlider);
 
+        dutyCycleSlider.setRange(0.25, 0.75);
+        dutyCycleSlider.setValue(0.5);
+        dutyCycleSlider.setTitle("dutyCycle");
+        dutyCycleSlider.setName("dutyCycle");
+        dutyCycleSlider.setColours(knobCol, dotCol);
+        addAndMakeVisible(dutyCycleSlider);
+
+        dutyCycleAmtSlider.setRange(0.0, 0.5);
+        dutyCycleAmtSlider.setValue(0.5);
+        dutyCycleAmtSlider.setTitle("dutyCycleAmt");
+        dutyCycleAmtSlider.setName("dutyCycleAmt");
+        dutyCycleAmtSlider.setColours(knobCol, dotCol);
+        addAndMakeVisible(dutyCycleAmtSlider);
+
         // sin, tri, saw, sq
         waveType.setValue(0);
         waveType.setRange(0, 3, 1);
-        waveType.setTitle("waveSelect");
-        waveType.setName("waveSelect");
+        waveType.setTitle("wave");
+        waveType.setName("wave");
         addAndMakeVisible(waveType);
 
         lfoToggle.setToggleState(false, false);
@@ -51,6 +62,7 @@ public:
         hzSlider.setColours(knobCol, dotCol);
         waveType.setColours(knobCol, dotCol);
         lfoToggle.setColours(knobCol, dotCol);
+
         for (int i = 0; i < getNumCVInputs(); i++) {
             getCvInputJack(i)->setJackColour(cvCol);
         }
@@ -60,15 +72,7 @@ public:
     }
 
     void sliderValueChanged(juce::Slider* slider) override {
-        if (slider == &hzSlider) {
-            stateWriter->setModuleProperty(getId(), "hz", hzSlider.getValue());
-        }
-        if (slider == &waveType) {
-            stateWriter->setModuleProperty(getId(), "wave", waveType.getValue());
-        }
-        if (slider == &fmSlider) {
-            stateWriter->setModuleProperty(getId(), "fmAmt", fmSlider.getValue());
-        }
+        stateWriter->setModuleProperty(getId(), slider->getName(), slider->getValue());
     }
 
     void buttonClicked(juce::Button* button) override {
@@ -82,6 +86,8 @@ public:
         waveType.addListener(this);
         lfoToggle.addListener(this);
         fmSlider.addListener(this);
+        dutyCycleSlider.addListener(this);
+        dutyCycleAmtSlider.addListener(this);
     }
 
     void applyState(ModuleState& moduleState) override {
@@ -98,6 +104,14 @@ public:
         if (!fmAmt.isVoid()) {
             fmSlider.setValue(fmAmt);
         }
+        auto dutyCycle = moduleState.state.getProperty("dutyCycle");
+        if (!dutyCycle.isVoid()) {
+            dutyCycleSlider.setValue(dutyCycle);
+        }
+        auto dutyCycleAmt = moduleState.state.getProperty("dutyCycleAmt");
+        if (!dutyCycleAmt.isVoid()) {
+            dutyCycleAmtSlider.setValue(dutyCycle);
+        }
         auto lfoState = moduleState.state.getProperty("lfo_toggle");
         if (!lfoState.isVoid()) {
             lfoToggle.setToggleState((bool)lfoState, false);
@@ -110,11 +124,13 @@ public:
 
         paintComponentLabel(g, &hzSlider, "hz", TOP, getWidth() * 0.05, textCol);
         paintComponentLabel(g, &lfoToggle, "lfo", TOP, getWidth() * 0.05, textCol);
-        paintComponentLabel(g, hzIn, "hz", TOP, getWidth() * 0.05, textCol);
-        paintComponentLabel(g, waveOut, "out", TOP, getWidth() * 0.05, textCol);
+        paintComponentLabel(g, &dutyCycleSlider, "pulse width", TOP, getWidth() * 0.05, textCol);
+        paintComponentLabel(g, getCvInputJack(0), "pwm", TOP, getWidth() * 0.05, textCol);
+        paintComponentLabel(g, getCvInputJack(1), "hz", TOP, getWidth() * 0.05, textCol);
+        paintComponentLabel(g, getCvOutputJack(0), "out", TOP, getWidth() * 0.05, textCol);
 
         g.setFont(14.0);
-        auto stretch = 0.48;
+        auto stretch = 0.55;
 
         auto bounds = waveType.getBounds();
         bounds.setCentre(bounds.getCentreX() - bounds.getWidth() * stretch, bounds.getCentreY() + bounds.getHeight() * stretch);
@@ -130,7 +146,7 @@ public:
 
         bounds = waveType.getBounds();
         bounds.setCentre(bounds.getCentreX() + bounds.getWidth() * stretch, bounds.getCentreY() + bounds.getHeight() * stretch);
-        g.drawText("sq", bounds, Justification::centred);
+        g.drawText("pulse", bounds, Justification::centred);
     }
 
     void resized() override {
@@ -138,27 +154,33 @@ public:
         auto hzY = getHeight() * 0.1;
         auto cvY = getHeight() * 0.94;
         auto middleX = getWidth() * 0.5;
-        auto paddingY = getHeight() * 0.12;
+        auto paddingY = getHeight() * 0.15;
 
-        hzIn->setCentrePosition(margin, cvY);
-        waveOut->setCentrePosition(getWidth() - margin, cvY);
+        getCvInputJack(0)->setCentrePosition(margin, cvY - paddingY);
+        getCvInputJack(1)->setCentrePosition(margin, cvY);
+        getCvOutputJack(0)->setCentrePosition(getWidth() - margin, cvY);
 
-        hzSlider.setSize(50, 50);
-        hzSlider.setCentrePosition(getWidth() * .3, getHeight() * .20);
+        hzSlider.setSize(40, 40);
+        hzSlider.setCentrePosition(getWidth() * .3, getHeight() * .15);
 
         lfoToggle.setSize(40, 40);
-        lfoToggle.setCentrePosition(getWidth() * .7, getHeight() * .2);
+        lfoToggle.setCentrePosition(getWidth() * .7, getHeight() * .15);
 
-        waveType.setSize(45, 45);
-        waveType.setCentrePosition(getWidth() * .5, getHeight() * .45);
+        waveType.setSize(35, 35);
+        waveType.setCentrePosition(getWidth() * .5, getHeight() * .35);
+
+        dutyCycleSlider.setSize(35, 35);
+        dutyCycleSlider.setCentrePosition(getWidth() * 0.5, getHeight() * 0.62);
 
         fmSlider.setSize(30, 30);
         fmSlider.setCentrePosition(margin + 30, cvY);
+
+        dutyCycleAmtSlider.setSize(30, 30);
+        dutyCycleAmtSlider.setCentrePosition(margin + 30, cvY - paddingY);
     }
 
 private:
-    CVJackComponent* hzIn, * waveOut;
-    Dial hzSlider, fmSlider;
+    Dial hzSlider, fmSlider, dutyCycleSlider, dutyCycleAmtSlider;
     Dial waveType;
     Toggle lfoToggle;
 };
