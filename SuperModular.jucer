@@ -112,18 +112,6 @@
               file="Source/SharedStateWriter.h"/>
       </GROUP>
       <GROUP id="{E02B1082-7AF1-841F-020D-49BB0DCFDFB9}" name="DSP">
-        <GROUP id="{2C904947-C283-6804-7AF6-F92ECB4078DA}" name="Faust">
-          <FILE id="WuMrYx" name="faustLfoTriangle.h" compile="0" resource="0"
-                file="Source/faustLfoTriangle.h"/>
-          <FILE id="vbHz2E" name="faustLfoSquare.h" compile="0" resource="0"
-                file="Source/faustLfoSquare.h"/>
-          <FILE id="UznLcQ" name="faustLfoSaw.h" compile="0" resource="0" file="Source/faustLfoSaw.h"/>
-          <FILE id="NrxHg1" name="faustSin.h" compile="0" resource="0" file="Source/faustSin.h"/>
-          <FILE id="IYBj5n" name="faustSaw.h" compile="0" resource="0" file="Source/faustSaw.h"/>
-          <FILE id="Pep5vI" name="faustTriangle.h" compile="0" resource="0" file="Source/faustTriangle.h"/>
-          <FILE id="mWa1C2" name="faustSquare.h" compile="0" resource="0" file="Source/faustSquare.h"/>
-          <FILE id="a1zWy5" name="faustHeader.h" compile="0" resource="0" file="Source/faustHeader.h"/>
-        </GROUP>
         <FILE id="Yyfmrs" name="Oscillator.cpp" compile="1" resource="0" file="Source/Oscillator.cpp"/>
         <FILE id="i4kvyU" name="Oscillator.h" compile="0" resource="0" file="Source/Oscillator.h"/>
         <FILE id="ypRWrt" name="KellettPinkFilter.cpp" compile="1" resource="0"

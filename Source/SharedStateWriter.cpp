@@ -10,13 +10,19 @@
 
 #include "SharedStateWriter.h"
 
+void SharedStateWriter::startGroupUpdate() {
+    withinGroupUpdate = true;
+}
+
+void SharedStateWriter::sendGroupUpdate() {
+    stateMessageQueue->send_updates(pendingUpdates);
+    pendingUpdates.clear();
+    withinGroupUpdate = false;
+}
+
 void SharedStateWriter::addModule(ModuleState newModule) {
     localState.moduleStates.push_back(newModule);
-
-    stateMessageQueue->send_update(
-        StateChangeMessage(newModule, ADD)
-    );
-
+    sendUpdate(StateChangeMessage(newModule, ADD));
     saveStateToShared();
 }
 
@@ -24,7 +30,7 @@ void SharedStateWriter::setModuleProperty(int moduleId, Identifier propertyName,
     auto module = localState.getModule(moduleId);
     if (module) {
         module->state.setProperty(propertyName, value, nullptr);
-        stateMessageQueue->send_update(StateChangeMessage(*module, UPDATE));
+        sendUpdate(StateChangeMessage(*module, UPDATE));
         saveStateToShared();
     }
 }
@@ -35,7 +41,7 @@ void SharedStateWriter::setModuleProperties(int moduleId, std::vector<std::pair<
         for (auto prop : properties) {
             module->state.setProperty(prop.first, prop.second, nullptr);
         }
-        stateMessageQueue->send_update(StateChangeMessage(*module, UPDATE));
+        sendUpdate(StateChangeMessage(*module, UPDATE));
         saveStateToShared();
     }
 }
@@ -50,7 +56,7 @@ void SharedStateWriter::moveModule(int moduleId, Rectangle<int> newBounds) {
 
 void SharedStateWriter::deleteModule(int moduleId) {
     localState.removeModule(moduleId);
-    stateMessageQueue->send_update(StateChangeMessage(ModuleState(moduleId), DELETE));
+    sendUpdate(StateChangeMessage(ModuleState(moduleId), DELETE));
     saveStateToShared();
 }
 
@@ -67,7 +73,7 @@ void SharedStateWriter::addPatchCable(int inputModuleId, int inputCvId, int outp
         StateChangeMessage(*outputModule, UPDATE)
         });
 
-    stateMessageQueue->send_updates(messages);
+    sendUpdates(messages);
     saveStateToShared();
 }
 
@@ -83,10 +89,30 @@ void SharedStateWriter::removePatchCable(int inputModuleId, int inputCvId, int o
         StateChangeMessage(*inputModule, UPDATE),
         StateChangeMessage(*outputModule, UPDATE)
         });
-    stateMessageQueue->send_updates(messages);
+    sendUpdates(messages);
     saveStateToShared();
 }
 
 void SharedStateWriter::saveStateToShared() {
     stateMessageQueue->writeFullState(localState, false);
+}
+
+
+
+void SharedStateWriter::sendUpdate(StateChangeMessage update) {
+    if (withinGroupUpdate) {
+        pendingUpdates.push_back(update);
+    }
+    else {
+        stateMessageQueue->send_update(update);
+    }
+}
+
+void SharedStateWriter::sendUpdates(std::vector<StateChangeMessage> updates) {
+    if (withinGroupUpdate) {
+        pendingUpdates.insert(pendingUpdates.end(), updates.begin(), updates.end());
+    }
+    else {
+        stateMessageQueue->send_updates(updates);
+    }
 }

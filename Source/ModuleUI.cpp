@@ -70,8 +70,12 @@ void ModuleUI::mouseUp(const MouseEvent& e) {
         m.showMenuAsync(PopupMenu::Options(),
             [this](int result)
             {
+                stateWriter->startGroupUpdate();
+
                 if (result == 1)
                 {
+                    std::vector<StateChangeMessage> changes;
+
                     for (auto cvIn : cvIns) {
                         if (cvIn->isConnected()) {
                             auto other = cvIn->getConnection();
@@ -100,6 +104,8 @@ void ModuleUI::mouseUp(const MouseEvent& e) {
                     }
 
                     stateWriter->deleteModule(getId());
+                    stateWriter->sendGroupUpdate();
+
                     moduleGrid->removeModule(getId());
                     delete this;
                 }

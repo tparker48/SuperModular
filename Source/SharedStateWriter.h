@@ -24,6 +24,10 @@ public:
         return sharedStatePtr->readFullStateIfNew(localState);
     }
 
+    void startGroupUpdate();
+
+    void sendGroupUpdate();
+
     void addModule(ModuleState newModule);
 
     void setModuleProperty(int moduleId, Identifier propertyName, var value);
@@ -47,4 +51,9 @@ public:
 private:
     PluginState localState;
     SharedPluginState* stateMessageQueue;
+    std::vector<StateChangeMessage> pendingUpdates;
+    bool withinGroupUpdate = false;
+
+    void sendUpdate(StateChangeMessage update);
+    void sendUpdates(std::vector<StateChangeMessage> updates);
 };
