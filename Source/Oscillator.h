@@ -38,7 +38,7 @@ public:
 
     void prepareToPlay(float sampleRate) {
         this->sampleRate = sampleRate;
-        float cutoff = 2.0;
+        float cutoff = 5.0;
         triR = 1.0f - (2.0 * MathConstants<float>::pi * cutoff) / sampleRate;
     }
 

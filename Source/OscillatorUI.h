@@ -21,7 +21,7 @@ public:
 
     OscillatorUI(int id, ModuleGrid* mg, PatchCableManager* cm, SharedStateWriter* stateWriter) :
         ModuleUI(id, mg, cm, stateWriter, 2, 1) {
-        hzSlider.setRange(24.0, 12000.0);
+        hzSlider.setRange(24.0, 6000.0);
         hzSlider.setValue(220.0);
         hzSlider.setSkewFactor(.2);
         hzSlider.setTitle("hz");

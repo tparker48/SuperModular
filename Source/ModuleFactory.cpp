@@ -14,8 +14,8 @@
 void initModuleProcessorFactoryMap(std::map<ModuleType, ModuleFactory>& factoryMap)
 {
     factoryMap[AudioOutput] = createAudioOutputProcessor;
+    factoryMap[AudioInput] = createAudioInputProcessor;
     factoryMap[OscillatorModule] = createOscillatorProcessor;
-    factoryMap[OldOscillatorModule] = createOldOscillatorProcessor;
     factoryMap[Splitter] = createSplitterProcessor;
     factoryMap[JoystickModule] = createJoystickProcessor;
     factoryMap[Mixer] = createMixerProcessor;
@@ -30,8 +30,8 @@ void initModuleProcessorFactoryMap(std::map<ModuleType, ModuleFactory>& factoryM
 
 void initModuleUIFactoryMap(std::map<ModuleType, ModuleUIFactory>& factoryMap) {
     factoryMap[AudioOutput] = createAudioOutputUI;
+    factoryMap[AudioInput] = createAudioInputUI;
     factoryMap[OscillatorModule] = createOscillatorUI;
-    factoryMap[OldOscillatorModule] = createOldOscillatorUI;
     factoryMap[Splitter] = createSplitterUI;
     factoryMap[JoystickModule] = createJoystickUI;
     factoryMap[Mixer] = createMixerUI;
@@ -53,6 +53,13 @@ ModuleUI* createAudioOutputUI(int id,  ModuleGrid* mg, PatchCableManager* cables
     return new AudioOutputUI(id, mg, cables, writer);
 }
 
+ModuleProcessor* createAudioInputProcessor(int id) {
+    return new AudioInputProcessor(id);
+}
+ModuleUI* createAudioInputUI(int id, ModuleGrid* mg, PatchCableManager* cables, SharedStateWriter* writer) {
+    return new AudioInputUI(id, mg, cables, writer);
+}
+
 ModuleProcessor* createOscillatorProcessor(int id) {
     return new OscillatorProcessor(id);
 
@@ -61,13 +68,6 @@ ModuleUI* createOscillatorUI(int id, ModuleGrid* mg, PatchCableManager* cables, 
     return new OscillatorUI(id, mg, cables, writer);
 }
 
-ModuleProcessor* createOldOscillatorProcessor(int id) {
-    return new OldOscillatorProcessor(id);
-
-}
-ModuleUI* createOldOscillatorUI(int id, ModuleGrid* mg, PatchCableManager* cables, SharedStateWriter* writer) {
-    return new OldOscillatorUI(id, mg, cables, writer);
-}
 
 ModuleProcessor* createSplitterProcessor(int id) {
     return new SplitterProcessor(id);

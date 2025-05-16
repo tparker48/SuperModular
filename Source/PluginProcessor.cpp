@@ -145,6 +145,13 @@ void SuperModularAudioProcessor::processBlock (AudioBuffer<float>& buffer, MidiB
 {
     applyStateUpdates();
 
+    // read input audio into the audioInput module (if one exists)
+    if (audioInModule) {
+        if (auto inModule = dynamic_cast<AudioInputProcessor*>(audioInModule)) {
+            inModule->processBlock(buffer);
+        }
+    }
+
     for (auto modulePair : modules) {
         modulePair.second->preBlockProcessing();
     }
@@ -155,6 +162,7 @@ void SuperModularAudioProcessor::processBlock (AudioBuffer<float>& buffer, MidiB
         }
     }
 
+    // write output audio to the audioOutput module (if one exists)
     if (audioOutModule) {
         if (auto outModule = dynamic_cast<AudioOutputProcessor*>(audioOutModule)) {
             outModule->processBlock(buffer);
@@ -198,6 +206,7 @@ void SuperModularAudioProcessor::setStateInformation (const void* data, int size
     }
     modules.clear();
     audioOutModule = nullptr;
+    audioInModule = nullptr;
 
     // add all modules
     for (auto module : localState.moduleStates) {
@@ -244,10 +253,17 @@ void SuperModularAudioProcessor::addModule(ModuleState state) {
         }
         else {
             return;
-        }
-        
+        }   
     }
+    else if (type == AudioInput) {
+        if (audioInModule == nullptr) {
+            audioInModule = newModule;
+        }
+        else {
+            return;
+        }
 
+    }
     modules[id] = newModule;
 }
 void SuperModularAudioProcessor::updateModule(ModuleState state) {
@@ -276,6 +292,9 @@ void SuperModularAudioProcessor::deleteModule(ModuleState state) {
     int id = state.getId();
     if (modules[state.getId()] == audioOutModule) {
         audioOutModule = nullptr;
+    }
+    if (modules[state.getId()] == audioInModule) {
+        audioInModule = nullptr;
     }
     delete modules[state.getId()];
     modules.erase(state.getId());

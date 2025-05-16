@@ -131,12 +131,12 @@ void SuperModularAudioProcessorEditor::mouseUp(const MouseEvent& e) {
 
 void SuperModularAudioProcessorEditor::showPopupMenu(const MouseEvent& e) {
     PopupMenu m;
-    m.addItem(AudioOutput, "Audio Out");
+    m.addItem(AudioOutput, "Audio Output");
+    m.addItem(AudioInput, "Audio Input");
     m.addItem(Splitter, "Splitter");
     m.addItem(Mixer, "Mixer");
     m.addItem(Amp, "Amp");
     m.addItem(OscillatorModule, "Oscillator");
-    m.addItem(OldOscillatorModule, "OldOscillator");
     m.addItem(Noise, "Noise");
     m.addItem(Filter, "Filter");
     m.addItem(DelayModule, "Delay");
@@ -151,11 +151,11 @@ void SuperModularAudioProcessorEditor::showPopupMenu(const MouseEvent& e) {
             case AudioOutput:
                 addNewModule<AudioOutputUI>(AudioOutput, e.getPosition());
                 break;
+            case AudioInput:
+                addNewModule<AudioInputUI>(AudioInput, e.getPosition());
+                break;
             case OscillatorModule:
                 addNewModule<OscillatorUI>(OscillatorModule, e.getPosition());
-                break;
-            case OldOscillatorModule:
-                addNewModule<OldOscillatorUI>(OldOscillatorModule, e.getPosition());
                 break;
             case Noise:
                 addNewModule<NoiseUI>(Noise, e.getPosition());
@@ -199,6 +199,14 @@ void SuperModularAudioProcessorEditor::addNewModule(ModuleType typeId, Point<int
         auto localState = stateWriter.dumpLocalState();
         for (auto module : localState.moduleStates) {
             if((ModuleType)module.getTypeId() == AudioOutput) {
+                return;
+            }
+        }
+    }
+    else if (typeId == AudioInput) {
+        auto localState = stateWriter.dumpLocalState();
+        for (auto module : localState.moduleStates) {
+            if ((ModuleType)module.getTypeId() == AudioInput) {
                 return;
             }
         }

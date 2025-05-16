@@ -18,11 +18,11 @@
 #include "AudioOutputProcessor.h"
 #include "AudioOutputUI.h"
 
+#include "AudioInputProcessor.h"
+#include "AudioInputUI.h"
+
 #include "OscillatorProcessor.h"
 #include "OscillatorUI.h"
-
-#include "OldOscillatorProcessor.h"
-#include "OldOscillatorUI.h"
 
 #include "SplitterProcessor.h"
 #include "SplitterUI.h"
@@ -57,8 +57,8 @@
 enum ModuleType {
     TestModule,
     AudioOutput,
+    AudioInput,
     OscillatorModule,
-    OldOscillatorModule,
     Splitter,
     JoystickModule,
     Mixer,
@@ -82,11 +82,11 @@ void initModuleUIFactoryMap(std::map<ModuleType, ModuleUIFactory>& factoryMap);
 ModuleProcessor* createAudioOutputProcessor(int id);
 ModuleUI* createAudioOutputUI(int id, ModuleGrid* mg, PatchCableManager* cables, SharedStateWriter* writer);
 
+ModuleProcessor* createAudioInputProcessor(int id);
+ModuleUI* createAudioInputUI(int id, ModuleGrid* mg, PatchCableManager* cables, SharedStateWriter* writer);
+
 ModuleProcessor* createOscillatorProcessor(int id);
 ModuleUI* createOscillatorUI(int id, ModuleGrid* mg, PatchCableManager* cables, SharedStateWriter* writer);
-
-ModuleProcessor* createOldOscillatorProcessor(int id);
-ModuleUI* createOldOscillatorUI(int id, ModuleGrid* mg, PatchCableManager* cables, SharedStateWriter* writer);
 
 ModuleProcessor* createSplitterProcessor(int id);
 ModuleUI* createSplitterUI(int id, ModuleGrid* mg, PatchCableManager* cables, SharedStateWriter* writer);

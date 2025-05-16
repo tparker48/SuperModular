@@ -74,6 +74,7 @@ private:
     std::map<ModuleType, ModuleFactory> moduleFactories;
     std::unordered_map<int, ModuleProcessor*> modules;
     ModuleProcessor* audioOutModule = nullptr;
+    ModuleProcessor* audioInModule = nullptr;
 
     JUCE_DECLARE_NON_COPYABLE_WITH_LEAK_DETECTOR (SuperModularAudioProcessor)
 };

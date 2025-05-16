@@ -2,7 +2,7 @@
 
 <JUCERPROJECT id="vIN9Mx" name="SuperModular" projectType="audioplug" useAppConfig="0"
               addUsingNamespaceToJuceHeader="1" displaySplashScreen="1" jucerFormatVersion="1"
-              pluginCharacteristicsValue="pluginIsSynth,pluginWantsMidiIn">
+              pluginCharacteristicsValue="pluginWantsMidiIn">
   <MAINGROUP id="Fqzt31" name="SuperModular">
     <GROUP id="{95961942-E874-79E4-359F-43BC6A24E00D}" name="Test">
       <GROUP id="{A9C75932-C219-9FBA-50AC-A6EF203D4B57}" name="Tests">
@@ -76,10 +76,6 @@
           <FILE id="zjN7FH" name="MixerProcessor.h" compile="0" resource="0"
                 file="Source/MixerProcessor.h"/>
           <FILE id="VcyuFS" name="MixerUI.h" compile="0" resource="0" file="Source/MixerUI.h"/>
-          <FILE id="AdqJr0" name="OldOscillatorProcessor.h" compile="0" resource="0"
-                file="Source/OldOscillatorProcessor.h"/>
-          <FILE id="gNYVwY" name="OldOscillatorUI.h" compile="0" resource="0"
-                file="Source/OldOscillatorUI.h"/>
           <FILE id="eA5axH" name="SequencerProcessor.h" compile="0" resource="0"
                 file="Source/SequencerProcessor.h"/>
           <FILE id="DoA6dd" name="SequencerUI.h" compile="0" resource="0" file="Source/SequencerUI.h"/>

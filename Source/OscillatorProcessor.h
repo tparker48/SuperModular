@@ -81,7 +81,7 @@ public:
     }
 
     double getLfoHz(double hz) {
-        return 60.0 * (hz - 23.9) / (20000.0 - 23.9);
+        return 60.0 * (hz - 23.9) / (6000.0 - 23.9);
     }
 
     WAVETYPE getWaveType(WAVETYPE wave) {
