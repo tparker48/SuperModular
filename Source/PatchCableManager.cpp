@@ -11,8 +11,8 @@
 #include "PatchCableManager.h"
 
 PatchCableManager::PatchCableManager() {
-    liveDragCable.setColour(Colour(0x88FFFFFF));
-    liveDragCable.setEndColour(Colour(0xFFFFFFFF));
+    liveDragCable.setColours(Colour(0x66000000), Colour(0x66FFFFFF));
+    liveDragCable.setEndColour(Colour(0xFF000000));
     liveDragCable.setAsDraggerCable();
 }
 

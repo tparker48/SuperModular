@@ -157,33 +157,30 @@ void Joystick::setYValue(double newYValue,
 
 
 void Joystick::paint (Graphics& g)
-{   
-    // clear
-    g.setColour(backgroundColour);
-    g.fillAll ();
-
+{
     // pad
-    g.setColour (padColour);
+    g.setColour (Colours::white);
     g.fillRoundedRectangle(Rectangle<float>(0.0f, 0.0f, getWidth(), getHeight()), 8.0f);
+    
 
     // dot
-    //Image point = ImageCache::getFromMemory(BinaryData::cross_png, BinaryData::cross_pngSize);
-    //g.drawImage(point, Rectangle<float>(draw_x - dot_radius / 2, draw_y - dot_radius / 2, dot_radius, dot_radius));
-    g.setColour(dotColour);
-    // cross
-    //auto crossThickness = dot_radius * 0.2;
-    //g.fillRect(draw_x - dot_radius / 2, draw_y - crossThickness/4, dot_radius, crossThickness);
-    //g.fillRect(draw_x - crossThickness/4, draw_y - dot_radius/2, crossThickness, dot_radius);
-    //g.setColour(dotColour.withAlpha(0.2f));
-    //g.fillRect(0, draw_y - crossThickness / 4, getWidth(), crossThickness);
-    //g.fillRect(draw_x - crossThickness / 4, 0, crossThickness, getHeight());
-    // circle
+    g.setColour(Colours::black);
+    g.fillEllipse(draw_x - dot_radius / 2 + 1, draw_y - dot_radius / 2 + 1, dot_radius, dot_radius);
+
+    g.setColour(Colours::white);
     g.fillEllipse(draw_x - dot_radius / 2, draw_y - dot_radius / 2, dot_radius, dot_radius);
+    g.setColour(Colours::black);
+    g.drawEllipse(draw_x - dot_radius / 2, draw_y - dot_radius / 2, dot_radius, dot_radius, 1.0);
+    auto inner_radius = dot_radius * 0.5;
+    g.fillEllipse(draw_x - inner_radius / 2, draw_y - inner_radius / 2, inner_radius, inner_radius);
 
 
     // cover the point at the border
     g.setColour(backgroundColour);
     g.drawRoundedRectangle(Rectangle<float>(-2.0f, -2.0f, getWidth()+4, getHeight()+4), 8.0f, 3.0f);
+
+    g.setColour(Colours::black);
+    g.drawRoundedRectangle(Rectangle<float>(0.0f, 0.0f, getWidth(), getHeight()), 8.0f, 2.0);
 }
 
 

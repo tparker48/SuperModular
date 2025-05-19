@@ -15,7 +15,7 @@
 
 class OscillatorProcessor : public ModuleProcessor {
 public:
-    OscillatorProcessor(int id) : ModuleProcessor(id, 2, 1) {}
+    OscillatorProcessor(int id) : ModuleProcessor(id, 2, 4) {}
 
     void prepareToPlay(double sampleRate, int samplesPerBlock) override {
         ModuleProcessor::prepareToPlay(sampleRate, samplesPerBlock);

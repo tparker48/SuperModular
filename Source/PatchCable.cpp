@@ -12,36 +12,21 @@
 
 PatchCable::PatchCable() {
     setAlwaysOnTop(true);
-    setRandomColor();
-}
-
-void PatchCable::setRandomColor() {
-    std::vector<Colour> colours = {
-        //Colour(252, 117, 76),
-        Colour(0xFFF29E4C),
-        //Colour(76, 252, 111),
-        //Colour(105, 76, 252),
-        //Colour(252, 76, 117)
-    };
-    Random rand;
-    rand.setSeedRandomly();
-    auto randFloat = rand.nextFloat();
-    int idx = int(randFloat * colours.size());
-    setColour(colours[idx]);
-    setEndColour(colours[idx]);
+    setColours(Colours::black, Colours::white);
+    setEndColour(Colours::black);
 }
 
 void PatchCable::setAsDraggerCable() {
     isDraggerCable = true;
 }
 
-void PatchCable::setColour(Colour c) {
-    cableColor = c;
+void PatchCable::setColours(Colour c1, Colour c2) {
+    this->c1 = c1;
+    this->c2 = c2;
 }
 
 void PatchCable::setEndColour(Colour c) {
     endColor = c;
-
 }
 
 void PatchCable::paint(Graphics& g) {
@@ -65,7 +50,7 @@ void PatchCable::paint(Graphics& g) {
 }
 
 void PatchCable::drawPatchLine(Graphics& g, int x, int y, int w, int h) {
-    g.setColour(cableColor);
+    g.setColour(c1); // c1
     Path path;
     Point<float> point1 = Point<float>(x, y);
     Point<float> point2 = Point<float>(w, h);
@@ -78,10 +63,13 @@ void PatchCable::drawPatchLine(Graphics& g, int x, int y, int w, int h) {
         control1,
         point2);
 
-    g.strokePath(path, PathStrokeType(5));
+    g.setColour(c1);
+    g.strokePath(path, PathStrokeType(4));
+    g.setColour(c2);
+    g.strokePath(path, PathStrokeType(1));
 
-    int radius = 12;
-    g.setColour(endColor);
+    int radius = 10;
+    g.setColour(endColor); // endColor
     g.fillEllipse(x - radius / 2, y - radius / 2, radius, radius);
     g.fillEllipse(w - radius / 2, h - radius / 2, radius, radius);
 }

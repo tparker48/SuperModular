@@ -69,41 +69,16 @@ public:
     }
 
     void paintModule(Graphics& g) override {
-        g.setColour(bgCol);
-        g.fillAll();
+        g.setColour(Colours::white);
+        g.fillRect(0, getHeight() * 0.55, getWidth(), getHeight());
+        g.setColour(Colours::black);
+        g.drawRect(0, getHeight() * 0.55, getWidth(), getHeight(), 2.0);
 
-        g.setColour(textCol);
-        g.setFont(16);
-
-        auto bounds = rate.getBounds();
-        bounds.setY(bounds.getY() - bounds.getHeight());
-        bounds.setWidth(bounds.getWidth() * 2);
-        bounds.setX(bounds.getX() - bounds.getWidth() / 4);
-        g.drawText("s/h rate", bounds, Justification::centredBottom);
-
-        bounds = fine.getBounds();
-        bounds.setY(bounds.getY() - bounds.getHeight());
-        bounds.setWidth(bounds.getWidth() * 2);
-        bounds.setX(bounds.getX() - bounds.getWidth() / 4);
-        g.drawText("fine", bounds, Justification::centredBottom);
-
-        bounds = getCvOutputJack(0)->getBounds();
-        bounds.setY(bounds.getY() - bounds.getHeight());
-        bounds.setWidth(bounds.getWidth() * 2);
-        bounds.setX(bounds.getX() - bounds.getWidth() / 4);
-        g.drawText("pink", bounds, Justification::centredBottom);
-
-        bounds = getCvOutputJack(1)->getBounds();
-        bounds.setY(bounds.getY() - bounds.getHeight());
-        bounds.setWidth(bounds.getWidth() * 2);
-        bounds.setX(bounds.getX() - bounds.getWidth() / 4);
-        g.drawText("white", bounds, Justification::centredBottom);
-
-        bounds = getCvOutputJack(2)->getBounds();
-        bounds.setY(bounds.getY() - bounds.getHeight());
-        bounds.setWidth(bounds.getWidth() * 2);
-        bounds.setX(bounds.getX() - bounds.getWidth() / 4);
-        g.drawText("s/h", bounds, Justification::centredBottom);
+        paintComponentLabel(g, &rate, "s/h hz", ComponentLabelStyle::TOP, getHeight() * 0.03, textCol, true, getWidth() * 0.80);
+        paintComponentLabel(g, &fine, "fine", ComponentLabelStyle::TOP, getHeight() * 0.03, textCol, true, getWidth() * 0.66);
+        paintComponentLabel(g, getCvOutputJack(0), "pink", ComponentLabelStyle::TOP, getHeight() * 0.03, textCol);
+        paintComponentLabel(g, getCvOutputJack(1), "white", ComponentLabelStyle::TOP, getHeight() * 0.03, textCol);
+        paintComponentLabel(g, getCvOutputJack(2), "s/h", ComponentLabelStyle::TOP, getHeight() * 0.03, textCol);
     }
 
     void resized() override {
@@ -116,6 +91,11 @@ public:
         getCvOutputJack(0)->setCentrePosition(getWidth() * .50, getHeight() * .65);
         getCvOutputJack(1)->setCentrePosition(getWidth() * .50, getHeight() * .65 + getCvOutputJack(1)->getWidth()   + getHeight() * 0.08);
         getCvOutputJack(2)->setCentrePosition(getWidth() * .50, getHeight() * .65 + 2*getCvOutputJack(1)->getWidth() + getHeight() * 0.16);
+    }
+
+
+    std::string getName() override {
+        return "Noise";
     }
 
 private:

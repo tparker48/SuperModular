@@ -24,22 +24,16 @@ public:
         gain.setValue(0.68);
         gain.setRange(0.001, 36.0);
         gain.setSkewFactor(0.75);
-        gain.setColours(knobCol, dotCol);
         addAndMakeVisible(gain);
 
         color.setValue(880.0);
         color.setRange(300.0, 2500.0);
         color.setSkewFactor(0.5);
-        color.setColours(knobCol, dotCol);
         addAndMakeVisible(color);
 
         dryWet.setValue(0.5);
         dryWet.setRange(0.0, 1.0);
-        dryWet.setColours(knobCol, dotCol);
         addAndMakeVisible(dryWet);
-
-        getCvInputJack(0)->setJackColour(cvCol);
-        getCvOutputJack(0)->setJackColour(cvCol);
     }
 
     void startListeners() override {
@@ -78,15 +72,13 @@ public:
     }
 
     void paintModule(Graphics& g) override {
-        g.setColour(bgCol);
-        g.fillAll();
+        paintComponentLabel(g, &gain, "gain", TOP, getHeight() * 0.03, textCol, true, getWidth()*0.25);
+        paintComponentLabel(g, &color, "color", TOP, getHeight() * 0.03, textCol, true, getWidth()*0.30);
+        paintComponentLabel(g, &dryWet, "dry/wet", TOP, getHeight() * 0.03, textCol, true, getWidth()*0.40);
 
-        paintComponentLabel(g, &gain, "gain", TOP, getHeight() * 0.03, textCol);
-        paintComponentLabel(g, &color, "color", TOP, getHeight() * 0.03, textCol);
-        paintComponentLabel(g, &dryWet, "dryWet", TOP, getHeight() * 0.03, textCol);
-
-        paintComponentLabel(g, getCvInputJack(0), "in", TOP, getHeight() * 0.03, textCol);
-        paintComponentLabel(g, getCvOutputJack(0), "out", TOP, getHeight() * 0.03, textCol);
+        paintComponentLabel(g, getCvInputJack(1), "color", TOP, getHeight() * 0.03, textCol, true, getWidth()*0.30);
+        paintComponentLabel(g, getCvInputJack(0), "in", TOP, getHeight() * 0.03, textCol, true, getWidth()*0.25);
+        paintComponentLabel(g, getCvOutputJack(0), "out", TOP, getHeight() * 0.03, textCol, true, getWidth()*0.25);
     }
 
     void resized() override {
@@ -94,14 +86,19 @@ public:
         gain.setCentrePosition(getWidth() / 2, getHeight() * 0.25);
 
         color.setSize(40, 40);
-        color.setCentrePosition(getWidth() / 3, getHeight() * 0.45);
+        color.setCentrePosition(getWidth()/2 - getWidth()*0.25, getHeight() * 0.45);
 
         dryWet.setSize(40, 40);
-        dryWet.setCentrePosition(getWidth() * 2/3, getHeight() * 0.45);
+        dryWet.setCentrePosition(getWidth()/2 + getWidth()*0.25, getHeight() * 0.45);
 
-
+        getCvInputJack(1)->setCentrePosition(getWidth() / 2 - getWidth() * 0.3, getHeight() * 0.95 - getHeight()*0.15);
         getCvInputJack(0)->setCentrePosition(getWidth() / 2 - getWidth() * 0.3, getHeight() * 0.95);
         getCvOutputJack(0)->setCentrePosition(getWidth() / 2 + getWidth() * 0.3, getHeight() * 0.95);
+    }
+
+
+    std::string getName() override {
+        return "Distortion";
     }
 
 private:

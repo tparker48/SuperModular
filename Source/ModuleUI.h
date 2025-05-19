@@ -71,7 +71,7 @@ public:
     virtual void paintModule(Graphics& g) = 0;
     virtual void resized() = 0;
 
-    void paintComponentLabel(Graphics& g, Component*, std::string, ComponentLabelStyle, int, Colour = Colour(20, 20, 20), int=14);
+    void paintComponentLabel(Graphics& g, Component*, std::string, ComponentLabelStyle, int, Colour = Colour(20, 20, 20), bool=false, int=0);
 
     CVJackComponent* getCvInputJack(int jackId) {
         if (jackId < 0 || jackId > cvIns.size()) {
@@ -94,18 +94,14 @@ public:
 
     void paint(Graphics& g);
 
+    virtual std::string getName() { return "Default"; }
+
 protected:
     std::vector<CVJackComponent*> cvIns, cvOuts;
     SharedStateWriter* stateWriter;
 
-    // Colour bgCol = Colour(0xFFF5EFE4);
-    // Colour textCol = Colour(0xFF60695C);
-    // Colour knobCol = Colour(0xFF2E1F27);
-    // Colour dotCol = Colour(0xFFF29E4C);
-    // Colour cvCol = Colour(0xFF2E1F27);
-
-    Colour bgCol = Colour(0xFF829191);
-    Colour textCol = Colour(0xFFEFF7CF);
+    Colour bgCol = Colours::white;
+    Colour textCol = Colours::black;
     Colour knobCol = Colour(0xFF2E1F27);
     Colour dotCol = Colour(0xFFF29E4C);
     Colour cvCol = Colour(0xFF2E1F27);

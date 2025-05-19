@@ -52,17 +52,21 @@ public:
     }
 
     void paintModule(Graphics& g) override {
-        g.setColour(bgCol);
+        g.setColour(Colours::white);
         g.fillAll();
-        paintComponentLabel(g, &hz, "rate", TOP, getHeight() * 0.05, textCol);
-        paintComponentLabel(g, getCvOutputJack(0), "out", TOP, getHeight() * 0.05, textCol);
+        paintComponentLabel(g, &hz, "rate", TOP, getHeight() * 0.03, textCol);
+        paintComponentLabel(g, getCvOutputJack(0), "out", TOP, getHeight() * 0.03, textCol);
 
     }
 
     void resized() override {
         hz.setSize(50, 50);
-        hz.setCentrePosition(getWidth() / 2, getHeight() * .20);
-        getCvOutputJack(0)->setCentrePosition(getWidth() * .5, getHeight() * .95);
+        hz.setCentrePosition(getWidth() / 2, getHeight() * .30);
+        getCvOutputJack(0)->setCentrePosition(getWidth() * .5, getHeight() * .93);
+    }
+
+    std::string getName() override {
+        return "Clock";
     }
 
 private:

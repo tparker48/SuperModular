@@ -20,7 +20,7 @@ public:
 
     void setRandomColor();
 
-    void setColour(Colour c);
+    void setColours(Colour c1, Colour c2);
 
     void setEndColour(Colour c);
 
@@ -35,7 +35,7 @@ public:
 private:
     int margin = 200;
     bool isDraggerCable = false;
-    Colour cableColor;
+    Colour c1, c2;
     Colour endColor;
     Point<int> p1, p2;
 

@@ -29,27 +29,35 @@ public:
 
     void paintModule(Graphics& g) override {
         g.setColour(bgCol);
-        g.fillAll();
+        g.fillRect(0, getHeight()*0.33, getWidth(), getHeight());
 
-        paintComponentLabel(g, getCvInputJack(0),  "in",    TOP, getHeight() * 0.03, textCol);
+        g.setColour(Colours::black);
+        g.drawRect(0, getHeight() * 0.33, getWidth(), getHeight(), 2.0);
+
+        paintComponentLabel(g, getCvInputJack(0),  "in",    TOP,  getHeight() * 0.05, textCol, true, getWidth()*0.5);
         paintComponentLabel(g, getCvOutputJack(0), "out 1", TOP, getHeight() * 0.03, textCol);
         paintComponentLabel(g, getCvOutputJack(1), "out 2", TOP, getHeight() * 0.03, textCol);
         paintComponentLabel(g, getCvOutputJack(2), "out 3", TOP, getHeight() * 0.03, textCol);
         paintComponentLabel(g, getCvOutputJack(3), "out 4", TOP, getHeight() * 0.03, textCol);
         paintComponentLabel(g, getCvOutputJack(4), "out 5", TOP, getHeight() * 0.03, textCol);
+
     }
 
     void resized() override {
-        auto cvY = getHeight() * 0.2;
-        auto paddingY = getHeight() * 0.15;
+        auto paddingY = getHeight() * 0.12;
 
-        getCvOutputJack(0)->setCentrePosition(getWidth() / 2, getHeight() * 0.15);
-        getCvOutputJack(1)->setCentrePosition(getWidth() / 2, getHeight() * 0.15 + 1 * paddingY);
-        getCvOutputJack(2)->setCentrePosition(getWidth() / 2, getHeight() * 0.15 + 2 * paddingY);
-        getCvOutputJack(3)->setCentrePosition(getWidth() / 2, getHeight() * 0.15 + 3 * paddingY);
-        getCvOutputJack(4)->setCentrePosition(getWidth() / 2, getHeight() * 0.15 + 4 * paddingY);
+        getCvInputJack(0)->setCentrePosition(getWidth() / 2, getHeight() * 0.25);
 
-        getCvInputJack(0)->setCentrePosition(getWidth() / 2, getHeight()*0.95 - getCvInputJack(0)->getWidth()/2);
+        getCvOutputJack(0)->setCentrePosition(getWidth() * 0.5, getHeight() * 0.45);
+        getCvOutputJack(1)->setCentrePosition(getWidth() * 0.5, getHeight() * 0.45 + 1 * paddingY);
+        getCvOutputJack(2)->setCentrePosition(getWidth() * 0.5, getHeight() * 0.45 + 2 * paddingY);
+        getCvOutputJack(3)->setCentrePosition(getWidth() * 0.5, getHeight() * 0.45 + 3 * paddingY);
+        getCvOutputJack(4)->setCentrePosition(getWidth() * 0.5, getHeight() * 0.45 + 4 * paddingY);
+    }
+
+
+    std::string getName() override {
+        return "Splitter";
     }
     
 private:

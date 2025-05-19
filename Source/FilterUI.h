@@ -87,16 +87,13 @@ public:
     }
 
     void paintModule(Graphics& g) override {
-        g.setColour(bgCol);
-        g.fillAll();
-
-        paintComponentLabel(g, &hz, "cutoff", TOP, getWidth() * 0.05, textCol);
-        paintComponentLabel(g, &q, "res", TOP, getWidth() * 0.05, textCol);
-        paintComponentLabel(g, &drive, "drive", TOP, getWidth() * 0.05, textCol);
-        paintComponentLabel(g, getCvInputJack(0), "input", TOP, getWidth() * 0.08, textCol);
-        paintComponentLabel(g, getCvInputJack(1), "cutoff", TOP, getWidth() * 0.08, textCol);
-        paintComponentLabel(g, getCvOutputJack(0), "lpf", TOP, getWidth() * 0.08, textCol);
-        paintComponentLabel(g, getCvOutputJack(1), "hpf", TOP, getWidth() * 0.08, textCol);
+        paintComponentLabel(g, &hz, "cutoff", TOP, getWidth() * 0.05, textCol, true, getWidth()*0.45);
+        paintComponentLabel(g, &q, "res", TOP, getWidth() * 0.05, textCol, true, getWidth()*0.30);
+        paintComponentLabel(g, &drive, "drive", TOP, getWidth() * 0.05, textCol, true, getWidth()*0.30);
+        paintComponentLabel(g, getCvInputJack(0), "input", TOP, getWidth() * 0.08, textCol, true, getWidth()*0.35);
+        paintComponentLabel(g, getCvInputJack(1), "cutoff", TOP, getWidth() * 0.08, textCol, true, getWidth()*0.35);
+        paintComponentLabel(g, getCvOutputJack(0), "lpf", TOP, getWidth() * 0.08, textCol, true, getWidth()*0.35);
+        paintComponentLabel(g, getCvOutputJack(1), "hpf", TOP, getWidth() * 0.08, textCol, true, getWidth()*0.35);
     }
 
     void resized() override {
@@ -104,19 +101,24 @@ public:
         hz.setCentrePosition(getWidth() * .5, getHeight() * .25);
 
         q.setSize(35, 35);
-        q.setCentrePosition(getWidth() * .66, getHeight() * .45);
+        q.setCentrePosition(getWidth() * .66, getHeight() * .50);
 
         drive.setSize(35, 35);
-        drive.setCentrePosition(getWidth() * .33, getHeight() * .45);
+        drive.setCentrePosition(getWidth() * .33, getHeight() * .50);
 
-
+        auto margin = getWidth() * 0.25;
         auto jackW = getCvInputJack(0)->getWidth();
-        getCvInputJack(0)->setCentrePosition(jackW, getHeight() - jackW / 2 - getHeight() * 0.03);
-        getCvInputJack(1)->setCentrePosition(jackW, getHeight() - jackW / 2 - getHeight() * 0.15);
+        auto jackY = getHeight() * 0.95;
+        auto spacing = getHeight() * 0.1 + jackW;
+        getCvInputJack(0)->setCentrePosition(margin, jackY);
+        getCvInputJack(1)->setCentrePosition(margin, jackY - spacing);
+        getCvOutputJack(0)->setCentrePosition(getWidth() - margin, jackY);
+        getCvOutputJack(1)->setCentrePosition(getWidth() - margin, jackY - spacing);
+    }
 
 
-        getCvOutputJack(0)->setCentrePosition(getWidth() - jackW, getHeight() - jackW/2 - getHeight() * 0.03);
-        getCvOutputJack(1)->setCentrePosition(getWidth() - jackW, getHeight() - jackW/2 - getHeight()  * 0.15);
+    std::string getName() override {
+        return "Filter";
     }
 
 private:

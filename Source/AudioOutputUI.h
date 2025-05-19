@@ -58,26 +58,28 @@ public:
     }
 
     void paintModule(Graphics& g) override {
-        g.setColour(bgCol);
-        g.fillAll();
-
-        paintComponentLabel(g, &gainSlider, "gain", TOP, getHeight() * 0.05, textCol);
-        paintComponentLabel(g, inputLeft, "left", RIGHT, getHeight() * 0.05, textCol);
-        paintComponentLabel(g, inputRight, "right", RIGHT, getHeight() * 0.05, textCol);
-        paintComponentLabel(g, inputMono, "mono", RIGHT, getHeight() * 0.05, textCol);
+        paintComponentLabel(g, &gainSlider, "gain", TOP, getHeight() * 0.03, textCol, true, getWidth()*0.66);
+        paintComponentLabel(g, inputLeft, "left", TOP, getHeight() * 0.05, textCol, true, getWidth()*0.66);
+        paintComponentLabel(g, inputRight, "right", TOP, getHeight() * 0.05, textCol, true, getWidth()*0.66);
+        paintComponentLabel(g, inputMono, "mono", TOP, getHeight() * 0.05, textCol, true, getWidth()*0.66);
     }
 
     void resized() override {
         auto margin = getWidth() * 0.05;
         auto gainY = getHeight() * 0.2;
-        auto cvY = getHeight() * 0.66;
+        auto cvY = getHeight() * 0.75;
         auto middleX = getWidth() * 0.5;
-        auto paddingY = getHeight() * 0.15;
+        auto paddingY = getHeight() * 0.17;
 
-        inputLeft->setBounds(margin, cvY - paddingY, 20, 20);
-        inputRight->setBounds(margin, cvY, 20, 20);
-        inputMono->setBounds(margin, cvY + paddingY, 20, 20);
+        inputLeft->setCentrePosition(getWidth()/2, cvY - paddingY);
+        inputRight->setCentrePosition(getWidth()/2, cvY);
+        inputMono->setCentrePosition(getWidth()/2, cvY + paddingY);
         gainSlider.setBounds(middleX - 25, gainY, 50, 50);
+    }
+
+
+    std::string getName() override {
+        return "A.Out";
     }
 
 private:

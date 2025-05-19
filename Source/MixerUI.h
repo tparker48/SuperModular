@@ -80,18 +80,18 @@ public:
     }
 
     void paintModule(Graphics& g) override {
-        g.setColour(bgCol);
+        g.setColour(Colours::white);
         g.fillAll();
 
         for (int i = 0; i < getNumCVInputs(); i++) {
-            paintComponentLabel(g, getCvInputJack(i), "in " + std::to_string(i), LEFT, getWidth() * 0.1, textCol);
+            paintComponentLabel(g, getCvInputJack(i), "" + std::to_string(i), LEFT, getWidth() * 0.05, textCol);
         }
-        paintComponentLabel(g, getCvOutputJack(0), "out", LEFT, getWidth() * 0.1, textCol);
+        paintComponentLabel(g, getCvOutputJack(0), "out", TOP, getWidth() * 0.05, textCol);
     }
 
     void resized() override {
         auto margin = getWidth() * 0.15;
-        auto cvY = getHeight() * 0.15;
+        auto cvY = getHeight() * 0.20;
         auto cvW = getCvInputJack(0)->getWidth();
         auto cvSpacing = cvW + getHeight() * 0.08;
         for (int i = 0; i < numInputs; i++) {
@@ -106,6 +106,11 @@ public:
             );
         }
         getCvOutputJack(0)->setCentrePosition(getWidth()*0.88, getHeight()*0.95);
+    }
+
+
+    std::string getName() override {
+        return "Mixer";
     }
 
 private:

@@ -112,14 +112,34 @@ void CVJackComponent::mouseDrag(const MouseEvent& e) {
 }
 
 void CVJackComponent::paint(Graphics& g) {
-    float scale = 0.8;
+    float scale = 0.75;
     auto w = getWidth() * scale;
     auto h = getHeight() * scale;
-    g.setColour(jackColour);
+
+    g.setColour(Colours::black);
+    g.fillEllipse(
+        (getWidth() - w) / 2 + 2.0,
+        (getHeight() - h) / 2 + 2.0,
+        w,
+        h
+    );
+
+    g.setColour(Colours::white);
     g.fillEllipse(
         (getWidth() - w) / 2,
         (getHeight() - h) / 2,
         w,
         h
     );
+
+    g.setColour(Colours::black);
+    g.drawEllipse(
+        (getWidth() - w) / 2,
+        (getHeight() - h) / 2,
+        w,
+        h,
+        1.0
+    );
+
+    return;
 }

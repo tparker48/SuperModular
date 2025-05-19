@@ -28,21 +28,22 @@ public:
     }
 
     void paintModule(Graphics& g) override {
-        g.setColour(bgCol);
-        g.fillAll();
-
-        paintComponentLabel(g, getCvOutputJack(0), "left", LEFT, getHeight() * 0.05, textCol);
-        paintComponentLabel(g, getCvOutputJack(1), "right", LEFT, getHeight() * 0.05, textCol);
-        paintComponentLabel(g, getCvOutputJack(2), "mono", LEFT, getHeight() * 0.05, textCol);
+        paintComponentLabel(g, getCvOutputJack(0), "left", TOP, getHeight() * 0.05, textCol, true, getWidth() * 0.66);
+        paintComponentLabel(g, getCvOutputJack(1), "right", TOP, getHeight() * 0.05, textCol, true, getWidth() * 0.66);
+        paintComponentLabel(g, getCvOutputJack(2), "mono", TOP, getHeight() * 0.05, textCol, true, getWidth() * 0.66);
     }
 
     void resized() override {
-        auto margin = getWidth() * 0.05;
-        auto cvY = getHeight() * 0.66;
-        auto paddingY = getHeight() * 0.15;
+        auto cvY = getHeight() * 0.75;
+        auto paddingY = getHeight() * 0.17;
 
-        getCvOutputJack(0)->setBounds(getWidth()- margin - 20, cvY - paddingY, 20, 20);
-        getCvOutputJack(1)->setBounds(getWidth() - margin - 20, cvY, 20, 20);
-        getCvOutputJack(2)->setBounds(getWidth() - margin - 20, cvY + paddingY, 20, 20);
+        getCvOutputJack(0)->setCentrePosition(getWidth() / 2, cvY - paddingY);
+        getCvOutputJack(1)->setCentrePosition(getWidth() / 2, cvY);
+        getCvOutputJack(2)->setCentrePosition(getWidth() / 2, cvY + paddingY);
+    }
+
+
+    std::string getName() override {
+        return "A.In";
     }
 };

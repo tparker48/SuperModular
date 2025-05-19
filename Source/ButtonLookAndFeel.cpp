@@ -8,32 +8,35 @@ void ButtonLookAndFeel::drawToggleButton(Graphics& g, ToggleButton& t, bool shou
 	buttonArea.setSize(buttonArea.getWidth() * .65, buttonArea.getHeight() * .65);
 	buttonArea.setCentre(centre);
 
-	g.setColour(dark);
+
+	g.setColour(Colours::black);
+	g.fillRect(buttonArea.getX()+2.0, buttonArea.getY()+2.0, buttonArea.getWidth(), buttonArea.getHeight());
+
+	g.setColour(Colours::white);
 	g.fillRect(buttonArea);
+	g.setColour(Colours::black);
+	g.drawRect(buttonArea, 1.0);
 
-
+	
 	auto lightUpArea = buttonArea;
-	
-	
-	if (true){ //t.getToggleState()) {
-		lightUpArea.setHeight(buttonArea.getHeight() * .15);
-		lightUpArea.setWidth(buttonArea.getHeight() * .60);
-		lightUpArea.setCentre(buttonArea.getCentreX(), buttonArea.getCentreY() - buttonArea.getHeight() * .17);
-	}
-	else {
-		lightUpArea.setHeight(buttonArea.getHeight() * .15);
-		lightUpArea.setWidth(buttonArea.getHeight() * .40);
-		lightUpArea.setCentre(buttonArea.getCentreX(), buttonArea.getCentreY() + buttonArea.getHeight() * .17);
-	}
-	//g.setColour(light);
-	//g.fillRect(lightUpArea);
+	lightUpArea.setHeight(buttonArea.getHeight() * .3);
+	lightUpArea.setWidth(buttonArea.getHeight() * .60);
+	lightUpArea.setCentre(buttonArea.getCentreX(), buttonArea.getCentreY());
 
 	if (t.getToggleState()) {
-		g.setColour(light);
+		g.setColour(Colours::black);
+		g.drawText("ON", buttonArea, Justification::centred);
+		//g.fillRect(lightUpArea);
 	}
 	else {
-		g.setColour(light.withMultipliedBrightness((.5)));
+		//g.setColour(Colours::white);
+		//g.fillRect(lightUpArea);
+		g.setColour(Colours::black);
+		g.drawText("OFF", buttonArea, Justification::centred);
+	
 	}
-	g.fillRect(lightUpArea);
+	//g.setColour(Colours::black);
+	//g.drawRect(lightUpArea, 1.0);
+	
 	
 }

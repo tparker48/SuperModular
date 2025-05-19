@@ -20,8 +20,6 @@ public:
     JoystickUI(int id, ModuleGrid* mg, PatchCableManager* cm, SharedStateWriter* stateWriter) :
         ModuleUI(id, mg, cm, stateWriter, 0, 2) {
         joystick.setBackgroundColour(Colour(bgCol));
-        joystick.setPadColour(knobCol);
-        joystick.setDotColour(dotCol);
         joystick.setRanges(0.0, 1.0, 0.0, 1.0);
         joystick.setValues(0.5, 0.5, false, false);
         addAndMakeVisible(joystick);
@@ -60,19 +58,18 @@ public:
     }
 
     void paintModule(Graphics& g) override {
-        g.setColour(Colour(bgCol));
-        g.fillAll();
-
-        paintComponentLabel(g, getCvOutputJack(0), "x", BOTTOM, getWidth() * 0.03, textCol);
-        paintComponentLabel(g, getCvOutputJack(1), "y", BOTTOM, getWidth() * 0.03, textCol);
+        g.setColour(Colours::white);
+        //g.fillAll();
+        paintComponentLabel(g, getCvOutputJack(0), "x", BOTTOM, getWidth() * 0.05, textCol, true, getWidth()*0.10);
+        paintComponentLabel(g, getCvOutputJack(1), "y", BOTTOM, getWidth() * 0.05, textCol, true, getWidth()*0.10);
     }
 
     void resized() override {
         int cvSize = getCvOutputJack(0)->getWidth();;
-        int cvY = getHeight() * 0.80;
+        int cvY = getHeight() * 0.85;
         int margin = getWidth() * 0.1;
         int joySize = getWidth() * 0.8;
-        joystick.setBounds(margin, margin, joySize, joySize);
+        joystick.setBounds(margin, getHeight()*0.15, joySize, joySize);
         joystick.setDotRadius(getWidth()*0.05);
 
         getCvOutputJack(0)->setCentrePosition(
@@ -83,6 +80,11 @@ public:
             getWidth() - cvSize - margin, 
             cvY
         );
+    }
+
+
+    std::string getName() override {
+        return "Joystick";
     }
 
 private:

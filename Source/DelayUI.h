@@ -87,23 +87,21 @@ public:
     }
 
     void paintModule(Graphics& g) override {
-        g.setColour(bgCol);
-        g.fillAll();
-        paintComponentLabel(g, &lengthSlider, "delay", TOP, getHeight() * 0.03, textCol);
-        paintComponentLabel(g, &feedbackSlider, "feedback", TOP, getHeight() * 0.03, textCol);
-        paintComponentLabel(g, &dryWetSlider, "dry/wet", TOP, getHeight() * 0.03, textCol);
-        paintComponentLabel(g, getCvInputJack(0), "delay", TOP, getHeight() * 0.03, textCol);
-        paintComponentLabel(g, getCvInputJack(1), "in", TOP, getHeight() * 0.03, textCol);
-        paintComponentLabel(g, getCvOutputJack(0), "out", TOP, getHeight() * 0.03, textCol);
-        paintComponentLabel(g, getCvOutputJack(1), "wet", TOP, getHeight() * 0.03, textCol);
+        paintComponentLabel(g, &lengthSlider, "delay", TOP, getHeight() * 0.03, textCol, true, getWidth()*0.35);
+        paintComponentLabel(g, &feedbackSlider, "fdback", TOP, getHeight() * 0.03, textCol, true, getWidth()*0.35);
+        paintComponentLabel(g, &dryWetSlider, "dry/wet", TOP, getHeight() * 0.03, textCol, true, getWidth()*0.50);
+        paintComponentLabel(g, getCvInputJack(0), "delay", TOP, getHeight() * 0.03, textCol, true, getWidth()*0.33);
+        paintComponentLabel(g, getCvInputJack(1), "in", TOP, getHeight() * 0.03, textCol, true, getWidth()*0.33);
+        paintComponentLabel(g, getCvOutputJack(0), "out", TOP, getHeight() * 0.03, textCol, true, getWidth()*0.33);
+        paintComponentLabel(g, getCvOutputJack(1), "wet", TOP, getHeight() * 0.03, textCol, true, getWidth()*0.33);
     }
 
     void resized() override {
         lengthSlider.setSize(45, 45);
-        lengthSlider.setCentrePosition(getWidth() * 0.3, getHeight()*0.20);
+        lengthSlider.setCentrePosition(getWidth() * 0.3, getHeight()*0.25);
 
         feedbackSlider.setSize(45, 45);
-        feedbackSlider.setCentrePosition(getWidth() * 0.7, getHeight() * 0.20);
+        feedbackSlider.setCentrePosition(getWidth() * 0.7, getHeight() * 0.25);
 
         dryWetSlider.setSize(40, 40);
         dryWetSlider.setCentrePosition(getWidth() / 2, getHeight() * 0.5);
@@ -112,6 +110,11 @@ public:
         getCvOutputJack(1)->setCentrePosition(getWidth() * 0.8, getHeight() * .80 + 25 + 15);
         getCvInputJack(0)->setCentrePosition(getWidth() * 0.2, getHeight() * .80);
         getCvInputJack(1)->setCentrePosition(getWidth() * 0.2, getHeight() * .80 + 25 + 15);
+    }
+
+
+    std::string getName() override {
+        return "Delay";
     }
 
 private:

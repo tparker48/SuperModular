@@ -88,21 +88,25 @@ void SuperModularAudioProcessorEditor::clearState() {
 //==============================================================================
 void SuperModularAudioProcessorEditor::paint (Graphics& g)
 {
-    g.fillAll(Colour(0xff121212));
+    g.setColour(Colour(0xff969696));
+    g.fillAll();
+
+    auto checker = ImageCache::getFromMemory(BinaryData::checker_png, BinaryData::checker_pngSize);
+    //g.drawImage(checker, Rectangle<float>(0, 0, getWidth(), getHeight()), RectanglePlacement::doNotResize, false);
+    
 
     for (int i = 0; i < numRows+1; i++) {
         int moduleHeight = getHeight() / numRows;
-        int barH = getHeight() * 0.02;
+        int barH = moduleHeight * 0.08;
         int barY = i * moduleHeight;
 
-        g.setColour(Colour(0xff1f1f1f));
+        g.setColour(Colour(0xffffffff));
         g.fillRect(0, barY, getWidth(), barH);
         g.fillRect(0, barY + moduleHeight - barH, getWidth(), barH);
 
-        if (i < numRows) {
-            g.setColour(Colour(0xff050505));
-            g.fillRect(0, barY - 1, getWidth(), 2);
-        }
+        g.setColour(Colours::black);
+        g.drawRect(-5, barY, getWidth()+10, barH, 1.0);
+        g.drawRect(-5, barY + moduleHeight - barH, getWidth()+10, barH, 1.0);
 
         int hpWidth = getWidth() / hpPerRow;
         int holeRadius = getHeight() / 400;
@@ -113,6 +117,25 @@ void SuperModularAudioProcessorEditor::paint (Graphics& g)
             g.fillEllipse(j * hpWidth/2 + hpWidth/4, holeY + moduleHeight - barH, holeDiam, holeDiam);
         }
     }
+    return;
+    Rectangle<int> centerTextArea, shadowArea;
+    centerTextArea.setWidth(getWidth() * 0.1);
+    centerTextArea.setHeight(getHeight() * 0.1);
+    centerTextArea.setCentre(getWidth() / 2, getHeight() / 2);
+
+    shadowArea = centerTextArea;
+    shadowArea.setCentre(getWidth() / 2 + 2.0, getHeight() / 2 + 2.0);
+
+    g.setColour(Colours::black);
+    g.fillRect(shadowArea);
+
+    g.setColour(Colours::white);
+    g.fillRect(centerTextArea);
+
+    g.setColour(Colours::black);
+    g.drawRect(centerTextArea, 1.0);
+
+    g.drawText("SuperModular", centerTextArea, Justification::centred);
 }
 
 void SuperModularAudioProcessorEditor::resized()

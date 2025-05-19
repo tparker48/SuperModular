@@ -94,15 +94,17 @@ public:
     }
 
     void paintModule(Graphics& g) override {
-        g.setColour(bgCol);
+        g.setColour(Colours::white);
         g.fillAll();
 
-        paintComponentLabel(g, getCvInputJack(0), "sync", TOP, getHeight() * 0.02, textCol);
-        paintComponentLabel(g, getCvOutputJack(0), "out", TOP, getHeight() * 0.02, textCol);
+        paintComponentLabel(g, getCvInputJack(0), "sync", TOP, getHeight() * 0.03, textCol);
+        paintComponentLabel(g, getCvOutputJack(0), "out", TOP, getHeight() * 0.03, textCol);
 
-        for (int i = 0; i < MAX_STEPS; i++) {
-            paintComponentLabel(g, &stepSliders[i], std::to_string(i), TOP, getHeight() * 0.02, textCol);
-
+        for (int i = 0; i < MAX_STEPS/2; i++) {
+            paintComponentLabel(g, &stepSliders[i], std::to_string(i), LEFT, getHeight() * 0.02, textCol);
+        }
+        for (int i = MAX_STEPS/2; i < MAX_STEPS; i++) {
+            paintComponentLabel(g, &stepSliders[i], std::to_string(i), RIGHT, getHeight() * 0.02, textCol);
         }
 
         paintComponentLabel(g, &rateSlider, "rate", TOP, getHeight() * 0.02, textCol);
@@ -111,11 +113,11 @@ public:
 
     void resized() override {
         int margin = getHeight() * 0.03;
-        int knobY = getHeight() * 0.08;
-        int marginY = getHeight() * 0.3;
-        int spacing = getHeight() * 0.17;
+        int knobY = getHeight() * 0.15;
+        int marginY = getHeight() * 0.33;
+        int spacing = getHeight() * 0.15;
         int steKnobSize = getWidth() * 0.22;
-        int knobSize = getWidth() * 0.25;
+        int knobSize = getWidth() * 0.22;
 
         rateSlider.setBounds(margin, knobY, knobSize, knobSize);
         numStepsSlider.setBounds(getWidth()-margin - knobSize, knobY, knobSize, knobSize);
@@ -131,6 +133,11 @@ public:
 
         getCvOutputJack(0)->setCentrePosition(getWidth() - margin - getCvOutputJack(0)->getWidth()/2, getHeight() * 0.95);
         getCvInputJack(0)->setCentrePosition(0 + margin + getCvOutputJack(0)->getWidth() / 2, getHeight() * 0.95);
+    }
+
+
+    std::string getName() override {
+        return "Sequencer";
     }
 
 private:

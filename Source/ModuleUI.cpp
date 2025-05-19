@@ -181,8 +181,27 @@ void ModuleUI::applyState(ModuleState& state) {
 }
 
 void ModuleUI::paint(Graphics& g) {
+    auto checker = ImageCache::getFromMemory(BinaryData::checker2_png, BinaryData::checker2_pngSize);
+    g.drawImage(checker, Rectangle<float>(0, 0, getWidth(), getHeight()), RectanglePlacement::doNotResize, false);
+    //g.setColour(Colours::white);
+    //g.fillAll();
+
     paintModule(g);
-    shadeEdges(g);
+
+    g.setColour(Colours::black);
+    g.drawRect(0,0, getWidth(), getHeight(), 2.0);
+
+    g.setColour(Colours::black);
+    g.fillRect(0, 0, getWidth(), getHeight() * 0.08);
+
+
+    g.setColour(Colours::white);
+    auto font = g.getCurrentFont();
+    font.setBold(true);
+    g.setFont(font);
+    g.drawText(getName(), 0, 0, getWidth(), getHeight() * 0.08, Justification::centred);
+    font.setBold(false);
+    g.setFont(font);
 }
 
 void ModuleUI::shadeEdges(Graphics& g) {
@@ -208,18 +227,21 @@ void ModuleUI::paintComponentLabel(
     ComponentLabelStyle style, 
     int padding,
     Colour color,
-    int fontHeight
+    bool paintBorder,
+    int borderWidth
 ) {
     if (comp == nullptr) {
         return;
     }
+    auto fontHeight = 14;
+
     // paint label
     g.setColour(color);
     g.setFont(fontHeight);
 
     auto bounds = Rectangle<int>(0, 0, 0, 0);
     bounds.setHeight(fontHeight);
-    bounds.setWidth(txt.size() * fontHeight);
+    bounds.setWidth(txt.size() * fontHeight * 0.7);
 
     int compTop = comp->getBounds().getTopLeft().getY();
     int compBottom = comp->getBounds().getBottom();
@@ -243,6 +265,20 @@ void ModuleUI::paintComponentLabel(
         break;
     }
 
-    //g.drawRect(bounds);
+    if (paintBorder) {
+        auto borderBounds = bounds;
+        borderBounds.setWidth(borderWidth);
+        borderBounds.setCentre(bounds.getCentre());
+
+        g.setColour(Colours::black);
+        g.fillRect(Rectangle<float>(borderBounds.getX() + 1, borderBounds.getY() + 1, borderBounds.getWidth(), borderBounds.getHeight()));
+
+        g.setColour(Colours::white);
+        g.fillRect(borderBounds);
+
+        g.setColour(Colours::black);
+        g.drawRect(borderBounds, 1.0);
+    }
+
     g.drawText(txt, bounds, Justification::centred);
 }
