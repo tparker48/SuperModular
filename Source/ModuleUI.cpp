@@ -181,18 +181,22 @@ void ModuleUI::applyState(ModuleState& state) {
 }
 
 void ModuleUI::paint(Graphics& g) {
+    //g.setColour(Colours::black);
+    //fill(g);
     auto checker = ImageCache::getFromMemory(BinaryData::checker2_png, BinaryData::checker2_pngSize);
-    g.drawImage(checker, Rectangle<float>(0, 0, getWidth(), getHeight()), RectanglePlacement::doNotResize, false);
+    auto test = checker.getClippedImage(Rectangle<int>(0,0,getWidth(), getHeight()-1));
+    g.drawImage(test, Rectangle<float>(0, 0, getWidth(), getHeight()), RectanglePlacement::doNotResize, false);
     //g.setColour(Colours::white);
-    //g.fillAll();
+    //fillRect(g,2,2,getWidth()-4, getHeight()-4);
 
     paintModule(g);
 
     g.setColour(Colours::black);
-    g.drawRect(0,0, getWidth(), getHeight(), 2.0);
+
+    drawRect(g,0.0f, 0.0f, (float)getWidth(), (float)getHeight(), 2.0f);
 
     g.setColour(Colours::black);
-    g.fillRect(0, 0, getWidth(), getHeight() * 0.08);
+    fillRect(g,0.0f, 0.0f, (float)getWidth(), (float)getHeight() * 0.08);
 
 
     g.setColour(Colours::white);
@@ -207,17 +211,17 @@ void ModuleUI::paint(Graphics& g) {
 void ModuleUI::shadeEdges(Graphics& g) {
     int thickness = 3;
     g.setColour(Colour(0x1D000000));
-    g.fillRect(0, 0, thickness, getHeight());
-    g.fillRect(thickness, 0, getWidth()-2*thickness, thickness);
-    g.fillRect(getWidth()-thickness, 0, thickness, getHeight());
-    g.fillRect(thickness, getHeight()-thickness, getWidth()-2*thickness, thickness);
+    fillRect(g,0, 0, thickness, getHeight());
+    fillRect(g,thickness, 0, getWidth()-2*thickness, thickness);
+    fillRect(g,getWidth()-thickness, 0, thickness, getHeight());
+    fillRect(g,thickness, getHeight()-thickness, getWidth()-2*thickness, thickness);
 
     thickness = 1;
     g.setColour(Colour(0x40000000));
-    g.fillRect(0, 0, thickness, getHeight());
-    g.fillRect(thickness, 0, getWidth() - 2 * thickness, thickness);
-    g.fillRect(getWidth() - thickness, 0, thickness, getHeight());
-    g.fillRect(thickness, getHeight() - thickness, getWidth() - 2 * thickness, thickness);
+    fillRect(g,0, 0, thickness, getHeight());
+    fillRect(g,thickness, 0, getWidth() - 2 * thickness, thickness);
+    fillRect(g,getWidth() - thickness, 0, thickness, getHeight());
+    fillRect(g,thickness, getHeight() - thickness, getWidth() - 2 * thickness, thickness);
 }
 
 void ModuleUI::paintComponentLabel(
@@ -271,13 +275,13 @@ void ModuleUI::paintComponentLabel(
         borderBounds.setCentre(bounds.getCentre());
 
         g.setColour(Colours::black);
-        g.fillRect(Rectangle<float>(borderBounds.getX() + 1, borderBounds.getY() + 1, borderBounds.getWidth(), borderBounds.getHeight()));
+        fillRect(g,Rectangle<float>(borderBounds.getX() + 1, borderBounds.getY() + 1, borderBounds.getWidth(), borderBounds.getHeight()));
 
         g.setColour(Colours::white);
-        g.fillRect(borderBounds);
+        fillRect(g,borderBounds.toFloat());
 
         g.setColour(Colours::black);
-        g.drawRect(borderBounds, 1.0);
+        drawRect(g,borderBounds.toFloat(), 1.0);
     }
 
     g.drawText(txt, bounds, Justification::centred);

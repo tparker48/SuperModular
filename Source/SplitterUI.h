@@ -28,11 +28,11 @@ public:
     }
 
     void paintModule(Graphics& g) override {
+        auto sectionH = getHeight() * 0.65;
         g.setColour(bgCol);
-        g.fillRect(0, getHeight()*0.33, getWidth(), getHeight());
-
+        fillRect(g, 0, getHeight()-sectionH, getWidth(), sectionH);
         g.setColour(Colours::black);
-        g.drawRect(0, getHeight() * 0.33, getWidth(), getHeight(), 2.0);
+        drawRect(g, 0, getHeight()-sectionH, getWidth(), sectionH, 2.0);
 
         paintComponentLabel(g, getCvInputJack(0),  "in",    TOP,  getHeight() * 0.05, textCol, true, getWidth()*0.5);
         paintComponentLabel(g, getCvOutputJack(0), "out 1", TOP, getHeight() * 0.03, textCol);

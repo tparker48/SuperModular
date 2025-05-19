@@ -95,7 +95,7 @@ public:
 
     void paintModule(Graphics& g) override {
         g.setColour(Colours::white);
-        g.fillAll();
+        fill(g);
 
         paintComponentLabel(g, getCvInputJack(0), "sync", TOP, getHeight() * 0.03, textCol);
         paintComponentLabel(g, getCvOutputJack(0), "out", TOP, getHeight() * 0.03, textCol);

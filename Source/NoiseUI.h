@@ -69,10 +69,11 @@ public:
     }
 
     void paintModule(Graphics& g) override {
-        g.setColour(Colours::white);
-        g.fillRect(0, getHeight() * 0.55, getWidth(), getHeight());
+        auto sectionH = getHeight() * 0.45;
+        g.setColour(bgCol);
+        fillRect(g, 0, getHeight() - sectionH, getWidth(), sectionH);
         g.setColour(Colours::black);
-        g.drawRect(0, getHeight() * 0.55, getWidth(), getHeight(), 2.0);
+        drawRect(g, 0, getHeight() - sectionH, getWidth(), sectionH, 2.0);
 
         paintComponentLabel(g, &rate, "s/h hz", ComponentLabelStyle::TOP, getHeight() * 0.03, textCol, true, getWidth() * 0.80);
         paintComponentLabel(g, &fine, "fine", ComponentLabelStyle::TOP, getHeight() * 0.03, textCol, true, getWidth() * 0.66);

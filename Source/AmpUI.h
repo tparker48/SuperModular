@@ -63,7 +63,6 @@ public:
     }
 
     void paintModule(Graphics& g) override {
-
         paintComponentLabel(g, &gain, "gain", TOP, getHeight() * 0.03, textCol, true, getWidth()*0.50);
         paintComponentLabel(g, getCvInputJack(1), "mod", TOP, getHeight() * 0.04, textCol, true, getWidth() * 0.50);
         paintComponentLabel(g, getCvInputJack(0), "in", TOP, getHeight() * 0.03, textCol, true, getWidth()*0.38);

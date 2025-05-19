@@ -81,7 +81,7 @@ public:
 
     void paintModule(Graphics& g) override {
         g.setColour(Colours::white);
-        g.fillAll();
+        fill(g);
 
         for (int i = 0; i < getNumCVInputs(); i++) {
             paintComponentLabel(g, getCvInputJack(i), "" + std::to_string(i), LEFT, getWidth() * 0.05, textCol);

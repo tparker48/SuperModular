@@ -91,7 +91,7 @@ void SuperModularAudioProcessorEditor::paint (Graphics& g)
     g.setColour(Colour(0xff969696));
     g.fillAll();
 
-    auto checker = ImageCache::getFromMemory(BinaryData::checker_png, BinaryData::checker_pngSize);
+    //auto checker = ImageCache::getFromMemory(BinaryData::checker_png, BinaryData::checker_pngSize);
     //g.drawImage(checker, Rectangle<float>(0, 0, getWidth(), getHeight()), RectanglePlacement::doNotResize, false);
     
 
@@ -100,7 +100,7 @@ void SuperModularAudioProcessorEditor::paint (Graphics& g)
         int barH = moduleHeight * 0.08;
         int barY = i * moduleHeight;
 
-        g.setColour(Colour(0xffffffff));
+        g.setColour(Colours::white);
         g.fillRect(0, barY, getWidth(), barH);
         g.fillRect(0, barY + moduleHeight - barH, getWidth(), barH);
 

@@ -106,11 +106,12 @@ public:
     }
 
     void paintModule(Graphics& g) override {
+        auto sectionH = (float)getHeight() * 0.333;
         g.setColour(Colours::white);
-        g.fillRect(0, getHeight()*.66, getWidth(), getHeight());
+        fillRect(g,0.0f, (float)getHeight()-sectionH, (float)getWidth(), sectionH);
 
         g.setColour(Colours::black);
-        g.drawRect(0, getHeight() * .66, getWidth(), getHeight(), 2.0);
+        drawRect(g,0.0f, (float)getHeight()-sectionH, (float)getWidth(), sectionH, 2.0f);
 
         paintComponentLabel(g, &hzSlider, "hz", TOP, getWidth() * 0.05, textCol, true, getWidth()*0.3);
         paintComponentLabel(g, &lfoToggle, "lfo", TOP, getWidth() * 0.05, textCol, true, getWidth() * 0.3);

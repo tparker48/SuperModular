@@ -94,6 +94,33 @@ public:
 
     void paint(Graphics& g);
 
+    void fill(Graphics& g) { g.fillRect(0.0f, 0.0f, (float)getWidth(), (float)getHeight()); }
+
+    void drawRect(Graphics& g, int x, int y, int w, int h, float thickness) {
+        g.drawRect(Rectangle<float>(x, y, w, h), thickness);
+    }
+    void drawRect(Graphics& g, float x, float y, float w, float h, float thickness) {
+        g.drawRect(Rectangle<float>(x, y, w, h), thickness);
+    }
+    void drawRect(Graphics& g, Rectangle<int> bounds, float thickness) {
+        g.drawRect(bounds.toFloat(), thickness);
+    }
+    void drawRect(Graphics& g, Rectangle<float> bounds, float thickness) {
+        g.drawRect(bounds, thickness);
+    }
+    void fillRect(Graphics& g, int x, int y, int w, int h) {
+        g.fillRect(Rectangle<float>(x, y, w, h));
+    }
+    void fillRect(Graphics& g, float x, float y, float w, float h) {
+        g.fillRect(Rectangle<float>(x, y, w, h));
+    }
+    void fillRect(Graphics& g, Rectangle<int> bounds) {
+        g.fillRect(bounds.toFloat());
+    }
+    void fillRect(Graphics& g, Rectangle<float> bounds) {
+        g.fillRect(bounds);
+    }
+
     virtual std::string getName() { return "Default"; }
 
 protected:

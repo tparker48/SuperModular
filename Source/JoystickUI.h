@@ -59,7 +59,7 @@ public:
 
     void paintModule(Graphics& g) override {
         g.setColour(Colours::white);
-        //g.fillAll();
+        //fill(g);
         paintComponentLabel(g, getCvOutputJack(0), "x", BOTTOM, getWidth() * 0.05, textCol, true, getWidth()*0.10);
         paintComponentLabel(g, getCvOutputJack(1), "y", BOTTOM, getWidth() * 0.05, textCol, true, getWidth()*0.10);
     }
