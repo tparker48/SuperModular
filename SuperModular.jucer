@@ -137,6 +137,10 @@
                 file="Source/DialLookAndFeel.cpp"/>
           <FILE id="SEH4RI" name="DialLookAndFeel.h" compile="0" resource="0"
                 file="Source/DialLookAndFeel.h"/>
+          <FILE id="jUaVO9" name="MenuLookAndFeel.cpp" compile="1" resource="0"
+                file="Source/MenuLookAndFeel.cpp"/>
+          <FILE id="fqBM5c" name="MenuLookAndFeel.h" compile="0" resource="0"
+                file="Source/MenuLookAndFeel.h"/>
           <FILE id="MXhG1M" name="SliderLookAndFeel.cpp" compile="1" resource="0"
                 file="Source/SliderLookAndFeel.cpp"/>
           <FILE id="XV50s5" name="SliderLookAndFeel.h" compile="0" resource="0"

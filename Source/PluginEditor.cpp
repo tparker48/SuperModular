@@ -8,6 +8,7 @@
 
 #include "PluginProcessor.h"
 #include "PluginEditor.h"
+#include "MenuLookAndFeel.h"
 
 //==============================================================================
 
@@ -88,7 +89,7 @@ void SuperModularAudioProcessorEditor::clearState() {
 //==============================================================================
 void SuperModularAudioProcessorEditor::paint (Graphics& g)
 {
-    g.setColour(Colour(0xff969696));
+    g.setColour(Colour(0xff303030));
     g.fillAll();
 
     //auto checker = ImageCache::getFromMemory(BinaryData::checker_png, BinaryData::checker_pngSize);
@@ -101,12 +102,12 @@ void SuperModularAudioProcessorEditor::paint (Graphics& g)
         int barY = i * moduleHeight;
 
         g.setColour(Colours::white);
-        g.fillRect(0, barY, getWidth(), barH);
-        g.fillRect(0, barY + moduleHeight - barH, getWidth(), barH);
+        g.fillRect(Rectangle<float>(0, barY, getWidth(), barH));
+        g.fillRect(Rectangle<float>(0, barY + moduleHeight - barH, getWidth(), barH));
 
         g.setColour(Colours::black);
-        g.drawRect(-5, barY, getWidth()+10, barH, 1.0);
-        g.drawRect(-5, barY + moduleHeight - barH, getWidth()+10, barH, 1.0);
+        g.drawRect(Rectangle<float>(-5, barY, getWidth()+10, barH), 1.0);
+        g.drawRect(Rectangle<float>(-5, barY + moduleHeight - barH, getWidth()+10, barH), 1.0);
 
         int hpWidth = getWidth() / hpPerRow;
         int holeRadius = getHeight() / 400;
@@ -117,6 +118,7 @@ void SuperModularAudioProcessorEditor::paint (Graphics& g)
             g.fillEllipse(j * hpWidth/2 + hpWidth/4, holeY + moduleHeight - barH, holeDiam, holeDiam);
         }
     }
+
     return;
     Rectangle<int> centerTextArea, shadowArea;
     centerTextArea.setWidth(getWidth() * 0.1);
@@ -154,6 +156,7 @@ void SuperModularAudioProcessorEditor::mouseUp(const MouseEvent& e) {
 
 void SuperModularAudioProcessorEditor::showPopupMenu(const MouseEvent& e) {
     PopupMenu m;
+    m.setLookAndFeel(&menuLookAndFeel);
     m.addItem(AudioOutput, "Audio Output");
     m.addItem(AudioInput, "Audio Input");
     m.addItem(Splitter, "Splitter");

@@ -20,7 +20,7 @@ public:
 
         // Initialize Gain Knob
         gain.setValue(0.68);
-        gain.setRange(0.001, 1.3);
+        gain.setRange(0.001, 2.0);
         gain.setSkewFactor(0.75);
         gain.setColours(knobCol, dotCol);
         addAndMakeVisible(gain);

@@ -16,6 +16,7 @@
 #include "PatchCableManager.h"
 #include "PatchCable.h"
 #include "ModuleGrid.h"
+#include "MenuLookAndFeel.h"
 
 enum ComponentLabelStyle {
     TOP, BOTTOM, LEFT, RIGHT
@@ -139,6 +140,8 @@ private:
     ComponentDragger myDragger;
     ModuleDragRules moduleDragRules;
     PatchCableManager* cableManager;
+
+    MenuLookAndFeel menuLookAndFeel;
 
     void shadeEdges(Graphics& g);
 };

@@ -159,8 +159,11 @@ void Joystick::setYValue(double newYValue,
 void Joystick::paint (Graphics& g)
 {
     // pad
-    g.setColour (Colours::white);
-    g.fillRoundedRectangle(Rectangle<float>(0.0f, 0.0f, getWidth(), getHeight()), 8.0f);
+    auto checker = ImageCache::getFromMemory(BinaryData::checker2_png, BinaryData::checker2_pngSize);
+    checker = checker.getClippedImage(Rectangle<int>(0, 0, getWidth(), getHeight()));
+    g.drawImage(checker, Rectangle<float>(0, 0, getWidth(), getHeight()), RectanglePlacement::doNotResize, false);
+    //g.setColour (Colours::white);
+    //g.fillRoundedRectangle(Rectangle<float>(0.0f, 0.0f, getWidth(), getHeight()), 8.0f);
     
 
     // dot
@@ -176,7 +179,7 @@ void Joystick::paint (Graphics& g)
 
 
     // cover the point at the border
-    g.setColour(backgroundColour);
+    g.setColour(Colours::black);
     g.drawRoundedRectangle(Rectangle<float>(-2.0f, -2.0f, getWidth()+4, getHeight()+4), 8.0f, 3.0f);
 
     g.setColour(Colours::black);
@@ -190,14 +193,10 @@ void Joystick::mouseDown(const MouseEvent& e)
 
     if (!isEnabled()) return;
 
-    if (e.mods.isLeftButtonDown()
-             || e.mods.isMiddleButtonDown())
-    {
-        startPressX = e.x;
-        startPressY = e.y;
+    startPressX = e.x;
+    startPressY = e.y;
 
-        mouseDrag (e);
-    }
+    mouseDrag(e);
 
     grabKeyboardFocus();   
 }

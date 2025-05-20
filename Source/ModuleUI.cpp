@@ -66,6 +66,7 @@ void ModuleUI::mouseUp(const MouseEvent& e) {
     if (e.mods.isRightButtonDown()) {
         // right click
         PopupMenu m;
+        m.setLookAndFeel(&menuLookAndFeel);
         m.addItem(1, "delete");
         m.showMenuAsync(PopupMenu::Options(),
             [this](int result)
@@ -184,8 +185,8 @@ void ModuleUI::paint(Graphics& g) {
     //g.setColour(Colours::black);
     //fill(g);
     auto checker = ImageCache::getFromMemory(BinaryData::checker2_png, BinaryData::checker2_pngSize);
-    auto test = checker.getClippedImage(Rectangle<int>(0,0,getWidth(), getHeight()-1));
-    g.drawImage(test, Rectangle<float>(0, 0, getWidth(), getHeight()), RectanglePlacement::doNotResize, false);
+    checker = checker.getClippedImage(Rectangle<int>(0,0,getWidth(), getHeight()-1));
+    g.drawImage(checker, Rectangle<float>(0, 0, getWidth(), getHeight()-1), RectanglePlacement::doNotResize, false);
     //g.setColour(Colours::white);
     //fillRect(g,2,2,getWidth()-4, getHeight()-4);
 
@@ -197,7 +198,6 @@ void ModuleUI::paint(Graphics& g) {
 
     g.setColour(Colours::black);
     fillRect(g,0.0f, 0.0f, (float)getWidth(), (float)getHeight() * 0.08);
-
 
     g.setColour(Colours::white);
     auto font = g.getCurrentFont();

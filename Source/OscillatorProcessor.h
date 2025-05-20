@@ -73,7 +73,19 @@ public:
         osc.incrementPhase();
         osc.setHz(hzSmooth.getCurrentValue() + (cvInputs[1].read() * fmAmt * hzSmooth.getCurrentValue()));
         osc.setPulseDutyCycle(dcSmooth.getCurrentValue() + (dutyCycleAmt * cvInputs[0].read()));
-        cvOutputs[0].write(osc.getSample(waveType));
+
+        if (cvOutputs[0].isConnected()) {
+            cvOutputs[0].write(osc.getSample(getWaveType(SIN)));
+        }
+        if (cvOutputs[1].isConnected()) {
+            cvOutputs[1].write(osc.getSample(getWaveType(TRIANGLE)));
+        }
+        if (cvOutputs[2].isConnected()) {
+            cvOutputs[2].write(osc.getSample(getWaveType(SAW)));
+        }
+        if (cvOutputs[3].isConnected()) {
+            cvOutputs[3].write(osc.getSample(getWaveType(PULSE)));
+        }
     }
 
     void setHz(double newHz) {

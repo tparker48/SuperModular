@@ -285,6 +285,19 @@ void SuperModularAudioProcessor::updateModule(ModuleState state) {
         else {
             auto other = modules[otherModuleId];
             module->getCVInputJack(cvId)->wirePtr(other->getCVOutputJack(otherCvId)->getPtr());
+            other->getCVOutputJack(otherCvId)->setConnected(true);
+        }
+    }
+    // update output cv
+    for (int cvId = 0; cvId < state.getNumCvOutputs(); cvId++) {
+        auto otherModuleId = state.getOutputCvConnection(cvId).first;
+        auto otherCvId = state.getOutputCvConnection(cvId).second;
+
+        if (otherModuleId == -1 || otherCvId == -1) {
+            module->getCVOutputJack(cvId)->setConnected(false);
+        }
+        else {
+            module->getCVOutputJack(cvId)->setConnected(true);
         }
     }
 }

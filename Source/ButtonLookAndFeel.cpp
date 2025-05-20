@@ -10,12 +10,12 @@ void ButtonLookAndFeel::drawToggleButton(Graphics& g, ToggleButton& t, bool shou
 
 
 	g.setColour(Colours::black);
-	g.fillRect(buttonArea.getX()+2.0, buttonArea.getY()+2.0, buttonArea.getWidth(), buttonArea.getHeight());
+	g.fillRect(Rectangle<float>(buttonArea.getX()+2.0, buttonArea.getY()+2.0, buttonArea.getWidth(), buttonArea.getHeight()));
 
 	g.setColour(Colours::white);
-	g.fillRect(buttonArea);
+	g.fillRect(buttonArea.toFloat());
 	g.setColour(Colours::black);
-	g.drawRect(buttonArea, 1.0);
+	g.drawRect(buttonArea.toFloat(), 1.0);
 
 	
 	auto lightUpArea = buttonArea;

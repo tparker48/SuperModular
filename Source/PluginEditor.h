@@ -13,6 +13,7 @@
 #include "PluginProcessor.h"
 #include "ModuleUI.h"
 #include "SharedStateWriter.h"
+#include "MenuLookAndFeel.h"
 
 //==============================================================================
 /**
@@ -67,6 +68,8 @@ private:
     void addNewModule(ModuleType type, Point<int> location);
 
     std::map<ModuleType, ModuleUIFactory> moduleFactories;
+
+    MenuLookAndFeel menuLookAndFeel;
 
     JUCE_DECLARE_NON_COPYABLE_WITH_LEAK_DETECTOR (SuperModularAudioProcessorEditor)
 };
