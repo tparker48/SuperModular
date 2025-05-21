@@ -19,10 +19,11 @@ SuperModularAudioProcessorEditor::SuperModularAudioProcessorEditor (SuperModular
     initModuleUIFactoryMap(moduleFactories);
     double ratio = double(hpPerRow) / (double(numRows) * 5.0);
     double size = hpPerRow * 60.0;
+    setSize(size, size / ratio);
+
     hpWidth = (float)getWidth() / (float)hpPerRow;
     moduleHeight = (float)getHeight() / (float)numRows;
     
-    setSize(size, size / ratio);
     setLookAndFeel(&customLookAndFeel);
     addAndMakeVisible(cableManager.getDragCable());
 
@@ -89,12 +90,8 @@ void SuperModularAudioProcessorEditor::clearState() {
 //==============================================================================
 void SuperModularAudioProcessorEditor::paint (Graphics& g)
 {
-    g.setColour(Colour(0xff303030));
+    g.setColour(Colour(0xff202020));
     g.fillAll();
-
-    //auto checker = ImageCache::getFromMemory(BinaryData::checker_png, BinaryData::checker_pngSize);
-    //g.drawImage(checker, Rectangle<float>(0, 0, getWidth(), getHeight()), RectanglePlacement::doNotResize, false);
-    
 
     for (int i = 0; i < numRows+1; i++) {
         int moduleHeight = getHeight() / numRows;
@@ -114,30 +111,10 @@ void SuperModularAudioProcessorEditor::paint (Graphics& g)
         int holeDiam = holeRadius * 2;
         int holeY = barY + barH / 2 - holeRadius;
         for (int j = 0; j < hpPerRow * 2; j++) {
-            g.fillEllipse(j * hpWidth/2 + hpWidth/4, holeY, holeDiam, holeDiam);
-            g.fillEllipse(j * hpWidth/2 + hpWidth/4, holeY + moduleHeight - barH, holeDiam, holeDiam);
+            g.drawEllipse(j * hpWidth/2 + hpWidth/4, holeY, holeDiam, holeDiam, 1.0);
+            g.drawEllipse(j * hpWidth/2 + hpWidth/4, holeY + moduleHeight - barH, holeDiam, holeDiam, 1.0);
         }
     }
-
-    return;
-    Rectangle<int> centerTextArea, shadowArea;
-    centerTextArea.setWidth(getWidth() * 0.1);
-    centerTextArea.setHeight(getHeight() * 0.1);
-    centerTextArea.setCentre(getWidth() / 2, getHeight() / 2);
-
-    shadowArea = centerTextArea;
-    shadowArea.setCentre(getWidth() / 2 + 2.0, getHeight() / 2 + 2.0);
-
-    g.setColour(Colours::black);
-    g.fillRect(shadowArea);
-
-    g.setColour(Colours::white);
-    g.fillRect(centerTextArea);
-
-    g.setColour(Colours::black);
-    g.drawRect(centerTextArea, 1.0);
-
-    g.drawText("SuperModular", centerTextArea, Justification::centred);
 }
 
 void SuperModularAudioProcessorEditor::resized()

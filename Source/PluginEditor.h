@@ -58,7 +58,7 @@ private:
     SharedStateWriter stateWriter;
 
     int hpPerRow = 20;
-    int numRows = 3;
+    int numRows = 2;
     int hpWidth = 0;
     int moduleHeight = 0;
 

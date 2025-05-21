@@ -171,6 +171,7 @@
     </GROUP>
     <GROUP id="{A5144A17-F70C-C56C-DA4C-B305CEFDA19B}" name="Images">
       <FILE id="jDQoSn" name="knobClip.png" compile="0" resource="1" file="Images/knobClip.png"/>
+      <FILE id="v4Fz4m" name="checker3.png" compile="0" resource="1" file="Images/checker3.png"/>
       <FILE id="aGv046" name="checker2.png" compile="0" resource="1" file="Images/checker2.png"/>
       <FILE id="Go9mDS" name="checker.png" compile="0" resource="1" file="Images/checker.png"/>
     </GROUP>

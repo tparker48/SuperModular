@@ -14,12 +14,16 @@
 
 
 typedef Rectangle<int> ModuleBounds;
+typedef Rectangle<int> RackSlot;
+
 typedef int MODULE_ID;
 
 class ModuleGrid {
 public:
     ModuleGrid() {}
     ~ModuleGrid() {}
+
+
 
     void setRackDimensions(int rackCount, int moduleHeight, int hpSize, int hpPerRow);
     
@@ -28,10 +32,9 @@ public:
     Component* getModule(MODULE_ID id);
 
     bool moduleIsPlaced(MODULE_ID id);
+    bool moduleExists(MODULE_ID id) { return modules.find(id) != modules.end();  }
     void placeModule(MODULE_ID id, ModuleBounds bounds);
     void yankModule(MODULE_ID id);
-
-    bool moduleExists(MODULE_ID id) { return modules.find(id) != modules.end();  }
 
     void clearAllModules();
 
