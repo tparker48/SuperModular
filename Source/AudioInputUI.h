@@ -33,7 +33,7 @@ public:
         paintComponentLabel(g, getCvOutputJack(2), "mono", TOP, getHeight() * 0.05, textCol, true, getWidth() * 0.66);
     }
 
-    void resized() override {
+    void resizeModule() override {
         auto cvY = getHeight() * 0.75;
         auto paddingY = getHeight() * 0.17;
 

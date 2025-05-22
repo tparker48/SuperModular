@@ -89,7 +89,7 @@ public:
         paintComponentLabel(g, getCvOutputJack(0), "out", TOP, getWidth() * 0.05, textCol);
     }
 
-    void resized() override {
+    void resizeModule() override {
         auto margin = getWidth() * 0.15;
         auto cvY = getHeight() * 0.20;
         auto cvW = getCvInputJack(0)->getWidth();

@@ -64,7 +64,7 @@ public:
         paintComponentLabel(g, inputMono, "mono", TOP, getHeight() * 0.05, textCol, true, getWidth()*0.66);
     }
 
-    void resized() override {
+    void resizeModule() override {
         auto margin = getWidth() * 0.05;
         auto gainY = getHeight() * 0.2;
         auto cvY = getHeight() * 0.75;

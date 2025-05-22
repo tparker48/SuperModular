@@ -69,7 +69,7 @@ public:
         paintComponentLabel(g, getCvOutputJack(0), "out", TOP, getHeight() * 0.03, textCol, true, getWidth()*0.38);
     }
 
-    void resized() override {
+    void resizeModule() override {
         gain.setSize(40, 40);
         gain.setCentrePosition(getWidth() / 2, getHeight() * 0.3);
         getCvInputJack(1)->setCentrePosition(getWidth()/2, getHeight() * 0.50);

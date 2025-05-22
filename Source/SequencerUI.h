@@ -111,7 +111,7 @@ public:
         paintComponentLabel(g, &numStepsSlider, "steps", TOP, getHeight() * 0.02, textCol);
     }
 
-    void resized() override {
+    void resizeModule() override {
         int margin = getHeight() * 0.03;
         int knobY = getHeight() * 0.15;
         int marginY = getHeight() * 0.33;

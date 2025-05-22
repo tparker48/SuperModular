@@ -43,7 +43,7 @@ public:
 
     }
 
-    void resized() override {
+    void resizeModule() override {
         auto paddingY = getHeight() * 0.12;
 
         getCvInputJack(0)->setCentrePosition(getWidth() / 2, getHeight() * 0.25);

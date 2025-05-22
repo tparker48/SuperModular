@@ -62,6 +62,8 @@ private:
     int hpWidth = 0;
     int moduleHeight = 0;
 
+    double aspectRatio;
+
     void showPopupMenu(const MouseEvent& e);
 
     template <typename M>

@@ -96,7 +96,7 @@ public:
         paintComponentLabel(g, getCvOutputJack(1), "wet", TOP, getHeight() * 0.03, textCol, true, getWidth()*0.33);
     }
 
-    void resized() override {
+    void resizeModule() override {
         lengthSlider.setSize(45, 45);
         lengthSlider.setCentrePosition(getWidth() * 0.3, getHeight()*0.25);
 

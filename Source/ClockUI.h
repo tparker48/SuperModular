@@ -59,7 +59,7 @@ public:
 
     }
 
-    void resized() override {
+    void resizeModule() override {
         hz.setSize(50, 50);
         hz.setCentrePosition(getWidth() / 2, getHeight() * .30);
         getCvOutputJack(0)->setCentrePosition(getWidth() * .5, getHeight() * .93);

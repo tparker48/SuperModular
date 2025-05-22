@@ -96,7 +96,7 @@ public:
         paintComponentLabel(g, getCvOutputJack(1), "hpf", TOP, getWidth() * 0.08, textCol, true, getWidth()*0.35);
     }
 
-    void resized() override {
+    void resizeModule() override {
         hz.setSize(50, 50);
         hz.setCentrePosition(getWidth() * .5, getHeight() * .25);
 

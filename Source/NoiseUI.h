@@ -82,7 +82,7 @@ public:
         paintComponentLabel(g, getCvOutputJack(2), "s/h", ComponentLabelStyle::TOP, getHeight() * 0.03, textCol);
     }
 
-    void resized() override {
+    void resizeModule() override {
         rate.setSize(50,50);
         rate.setCentrePosition(getWidth() / 2, getHeight() * 0.25);
 

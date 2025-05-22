@@ -22,6 +22,7 @@ bool ModuleGrid::addModule(MODULE_ID id, Component* module) {
     if (bounds.getX() != -1) {
         module->setBounds(bounds);
         modules[id] = module;
+        rackPositions[id] = getRackPosition(module->getBounds());
         placed[id] = true;
         return true;
     }
@@ -30,6 +31,7 @@ bool ModuleGrid::addModule(MODULE_ID id, Component* module) {
 
 void ModuleGrid::removeModule(MODULE_ID id) {
     modules.erase(id);
+    rackPositions.erase(id);
     placed.erase(id);
 }
 
@@ -46,6 +48,7 @@ void ModuleGrid::placeModule(MODULE_ID id, ModuleBounds bounds) {
     if (!isOverlap(bounds) && (!moduleIsPlaced(id))) {
         placed[id] = true;
         modules[id]->setBounds(bounds);
+        rackPositions[id] = getRackPosition(modules[id]->getBounds());
     }
 }
 
@@ -103,5 +106,29 @@ bool ModuleGrid::isOverlap(ModuleBounds bounds) {
 
 void ModuleGrid::clearAllModules() {
     modules.clear();
+    rackPositions.clear();
     placed.clear();
+}
+
+RackPosition ModuleGrid::getRackPosition(ModuleBounds bounds) {
+    int slot = bounds.getX() / hpWidth;
+    int row = bounds.getY() / rackHeight;
+    int hp = bounds.getWidth() / hpWidth;
+    return RackPosition(slot, row, hp, 0);
+}
+
+ModuleBounds ModuleGrid::getBoundsFromRackPosition(RackPosition position) {
+    int x = position.getX() * hpWidth;
+    int y = position.getY() * rackHeight;
+    int w = position.getWidth() * hpWidth;
+    int h = rackHeight;
+    return ModuleBounds(x, y, w, h);
+}
+
+void ModuleGrid::resized() {
+    for (auto pair : modules) {
+        int id = pair.first;
+        auto newBounds = getBoundsFromRackPosition(rackPositions[id]);
+        pair.second->setBounds(newBounds);
+    }
 }

@@ -115,7 +115,7 @@ void ModuleUI::mouseUp(const MouseEvent& e) {
     else {
         // left click
         moduleGrid->placeModule(id, getBounds());
-        stateWriter->moveModule(getId(), getBounds());
+        stateWriter->moveModule(getId(), moduleGrid->getRackPosition(getBounds()));
     }
 
 }
@@ -136,13 +136,13 @@ void ModuleUI::mouseDrag(const MouseEvent& e) {
 
 void ModuleUI::applyState(ModuleState& state) {
     // Load Bounds
-    auto bounds = state.getBounds();
+    auto bounds = moduleGrid->getBoundsFromRackPosition(state.getBounds());
     if (moduleGrid->moduleIsPlaced(getId())) {
         moduleGrid->yankModule(getId());
     }
     auto closest = moduleGrid->closestAvailablePosition(bounds);
     moduleGrid->placeModule(getId(), closest);
-    stateWriter->moveModule(getId(), getBounds());
+    stateWriter->moveModule(getId(), moduleGrid->getRackPosition(getBounds()));
 
     // Wire CV inputs
     auto numCvInputs = state.getNumCvInputs();
@@ -181,6 +181,19 @@ void ModuleUI::applyState(ModuleState& state) {
     }
 }
 
+void ModuleUI::resized() {
+    resizeModule();
+    for (auto child : getChildren()) {
+        auto jack = dynamic_cast<CVJackComponent*>(child);
+        if (jack) {
+            jack->refreshCablePosition();
+            if (jack->isConnected()) {
+                jack->getConnection()->refreshCablePosition();
+            }
+        }
+    }
+}
+
 void ModuleUI::paint(Graphics& g) {
     //g.setColour(Colours::black);
     //fill(g);
@@ -197,13 +210,13 @@ void ModuleUI::paint(Graphics& g) {
     drawRect(g,0.0f, 0.0f, (float)getWidth(), (float)getHeight(), 2.0f);
 
     g.setColour(Colours::black);
-    fillRect(g,0.0f, 0.0f, (float)getWidth(), (float)getHeight() * 0.08);
+    fillRect(g,0.0f, 0.0f, (float)getWidth(), (float)getHeight() * 0.06);
 
     g.setColour(Colours::white);
     auto font = g.getCurrentFont();
     font.setBold(true);
     g.setFont(font);
-    g.drawText(getName(), 0, 0, getWidth(), getHeight() * 0.08, Justification::centred);
+    g.drawText(getName(), 0, 0, getWidth(), getHeight() * 0.06, Justification::centred);
     font.setBold(false);
     g.setFont(font);
 }

@@ -14,7 +14,7 @@
 
 
 typedef Rectangle<int> ModuleBounds;
-typedef Rectangle<int> RackSlot;
+typedef Rectangle<int> RackPosition;
 
 typedef int MODULE_ID;
 
@@ -22,8 +22,6 @@ class ModuleGrid {
 public:
     ModuleGrid() {}
     ~ModuleGrid() {}
-
-
 
     void setRackDimensions(int rackCount, int moduleHeight, int hpSize, int hpPerRow);
     
@@ -40,10 +38,16 @@ public:
 
     ModuleBounds closestAvailablePosition(ModuleBounds bounds);
 
+    RackPosition getRackPosition(ModuleBounds bounds);
+    ModuleBounds getBoundsFromRackPosition(RackPosition position);
+
+    void resized();
+
 private:
     bool isOverlap(ModuleBounds bounds);
 
     std::map<MODULE_ID, Component*> modules;
+    std::map<MODULE_ID, RackPosition> rackPositions;
     std::map<MODULE_ID, bool> placed;
 
     int rackHeight = -1;

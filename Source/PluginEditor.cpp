@@ -17,15 +17,20 @@ static int nextModuleId = 0;
 SuperModularAudioProcessorEditor::SuperModularAudioProcessorEditor (SuperModularAudioProcessor& p, SharedPluginState* sharedStatePtr)
     : AudioProcessorEditor (&p), audioProcessor (p), sharedState(sharedStatePtr), stateWriter(sharedStatePtr) {
     initModuleUIFactoryMap(moduleFactories);
-    double ratio = double(hpPerRow) / (double(numRows) * 5.0);
-    double size = hpPerRow * 60.0;
-    setSize(size, size / ratio);
+    aspectRatio = double(hpPerRow) / (double(numRows) * 5.0);
+    double size = 1200;
+    setSize(size, size / aspectRatio);
 
     hpWidth = (float)getWidth() / (float)hpPerRow;
     moduleHeight = (float)getHeight() / (float)numRows;
     
     setLookAndFeel(&customLookAndFeel);
     addAndMakeVisible(cableManager.getDragCable());
+
+
+    setResizeLimits(1000, 1000 / aspectRatio, 1800, 1800/aspectRatio);
+    getConstrainer()->setFixedAspectRatio(aspectRatio);
+    setResizable(false, true);
 
     loadState();
     startTimerHz(3);
@@ -57,7 +62,7 @@ void SuperModularAudioProcessorEditor::loadState() {
         int id = moduleState.getId();
         int moduleTypeId = moduleState.getTypeId();
         modules[id] = moduleFactories[(ModuleType)moduleTypeId](id, &moduleGrid, &cableManager, &stateWriter);
-        modules[id]->setBounds(moduleState.getBounds());
+        modules[id]->setBounds(moduleGrid.getBoundsFromRackPosition(moduleState.getBounds()));
         moduleGrid.addModule(id, modules[id]);
         addAndMakeVisible(modules[id]);
         maxId = std::max(id, maxId);
@@ -95,7 +100,7 @@ void SuperModularAudioProcessorEditor::paint (Graphics& g)
 
     for (int i = 0; i < numRows+1; i++) {
         int moduleHeight = getHeight() / numRows;
-        int barH = moduleHeight * 0.08;
+        int barH = moduleHeight * 0.06;
         int barY = i * moduleHeight;
 
         g.setColour(Colours::white);
@@ -119,9 +124,10 @@ void SuperModularAudioProcessorEditor::paint (Graphics& g)
 
 void SuperModularAudioProcessorEditor::resized()
 {
-    hpWidth = (float)getWidth() / (float)hpPerRow;
+    hpWidth = round((float)getWidth() / (float)hpPerRow);
     moduleHeight = (float)getHeight() / (float)numRows;
     moduleGrid.setRackDimensions(numRows, moduleHeight, hpWidth, hpPerRow);
+    moduleGrid.resized();
 }
 
 void SuperModularAudioProcessorEditor::mouseUp(const MouseEvent& e) {
@@ -227,7 +233,7 @@ void SuperModularAudioProcessorEditor::addNewModule(ModuleType typeId, Point<int
         auto module = ModuleState(
             newModule->getId(), 
             typeId,
-            bounds, 
+            moduleGrid.getRackPosition(bounds), 
             newModule->getNumCVInputs(),
             newModule->getNumCVOutputs()
         );

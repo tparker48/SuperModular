@@ -70,7 +70,7 @@ public:
 
     // Must implement per Module type
     virtual void paintModule(Graphics& g) = 0;
-    virtual void resized() = 0;
+    virtual void resizeModule() = 0;
 
     void paintComponentLabel(Graphics& g, Component*, std::string, ComponentLabelStyle, int, Colour = Colour(20, 20, 20), bool=false, int=0);
 
@@ -94,6 +94,7 @@ public:
     }
 
     void paint(Graphics& g);
+    void resized();
 
     void fill(Graphics& g) { g.fillRect(0.0f, 0.0f, (float)getWidth(), (float)getHeight()); }
 

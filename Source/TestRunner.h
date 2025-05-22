@@ -33,7 +33,7 @@ public:
         CVJackComponentTest cvJackComponent;
         PatchCableManagerTest patchCableManager;
 
-        setAssertOnFailure(false);
+        //setAssertOnFailure(false);
         UnitTestRunner::runAllTests();
 
         // Throw exception if we failed a test

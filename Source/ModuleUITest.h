@@ -26,7 +26,7 @@ public:
     ) : ModuleUI(id, mg, cm, stateWriter, numCvIns, numCvOuts) {}
 
     void paintModule(Graphics& g) {}
-    void resized() {}
+    void resizeModule() {}
 };
 
 class ModuleUITest : public UnitTest {
@@ -60,7 +60,7 @@ public:
         testGrid.addModule(testMod.getId(), &testMod);
         expect(testMod.getBounds() == startingBounds);
 
-        Rectangle<int> targetBounds(500, 500, 20, 10);
+        Rectangle<int> targetBounds = testGrid.getRackPosition(ModuleBounds(500, 500, 20, 10));
         Rectangle<int> expectedBounds(80, 0, 20, 10);
         ModuleState newBoundsState(0, 0, targetBounds, 0, 0);
         testMod.applyState(newBoundsState);
