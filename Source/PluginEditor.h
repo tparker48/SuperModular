@@ -61,6 +61,7 @@ private:
     int numRows = 2;
     int hpWidth = 0;
     int moduleHeight = 0;
+    int headerOffset = 0;
 
     double aspectRatio;
 

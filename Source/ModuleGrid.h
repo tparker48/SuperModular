@@ -23,7 +23,7 @@ public:
     ModuleGrid() {}
     ~ModuleGrid() {}
 
-    void setRackDimensions(int rackCount, int moduleHeight, int hpSize, int hpPerRow);
+    void setRackDimensions(int rackCount, int moduleHeight, int hpSize, int hpPerRow, int headerOffset);
     
     bool addModule(MODULE_ID id, Component* module);
     void removeModule(MODULE_ID id);
@@ -54,4 +54,5 @@ private:
     int hpWidth = -1;
     int numRacks = -1;
     int hpPerRack = -1;
+    int offset = -1;
 };

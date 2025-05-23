@@ -17,16 +17,18 @@ static int nextModuleId = 0;
 SuperModularAudioProcessorEditor::SuperModularAudioProcessorEditor (SuperModularAudioProcessor& p, SharedPluginState* sharedStatePtr)
     : AudioProcessorEditor (&p), audioProcessor (p), sharedState(sharedStatePtr), stateWriter(sharedStatePtr) {
     initModuleUIFactoryMap(moduleFactories);
-    aspectRatio = double(hpPerRow) / (double(numRows) * 5.0);
+
+    headerOffset = getHeight() * 0.03;
+    aspectRatio = double(hpPerRow) / (double(numRows)*5.0);
+
     double size = 1200;
     setSize(size, size / aspectRatio);
 
     hpWidth = (float)getWidth() / (float)hpPerRow;
-    moduleHeight = (float)getHeight() / (float)numRows;
+    moduleHeight = (float)(getHeight() - headerOffset) / (float)numRows;
     
     setLookAndFeel(&customLookAndFeel);
     addAndMakeVisible(cableManager.getDragCable());
-
 
     setResizeLimits(1000, 1000 / aspectRatio, 1800, 1800/aspectRatio);
     getConstrainer()->setFixedAspectRatio(aspectRatio);
@@ -98,10 +100,14 @@ void SuperModularAudioProcessorEditor::paint (Graphics& g)
     g.setColour(Colour(0xff202020));
     g.fillAll();
 
+    //g.setColour(Colours::white);
+    //g.fillRect(Rectangle<float>(0, 0, getWidth(), headerOffset));
+    g.setColour(Colours::black);
+    g.fillRect(Rectangle<float>(2, 2, getWidth()-4, headerOffset - 4));
+
     for (int i = 0; i < numRows+1; i++) {
-        int moduleHeight = getHeight() / numRows;
         int barH = moduleHeight * 0.06;
-        int barY = i * moduleHeight;
+        int barY = i * moduleHeight + headerOffset;
 
         g.setColour(Colours::white);
         g.fillRect(Rectangle<float>(0, barY, getWidth(), barH));
@@ -124,9 +130,11 @@ void SuperModularAudioProcessorEditor::paint (Graphics& g)
 
 void SuperModularAudioProcessorEditor::resized()
 {
+    headerOffset = getHeight() * 0.03;
     hpWidth = round((float)getWidth() / (float)hpPerRow);
-    moduleHeight = (float)getHeight() / (float)numRows;
-    moduleGrid.setRackDimensions(numRows, moduleHeight, hpWidth, hpPerRow);
+    moduleHeight = (float)(getHeight() - headerOffset) / (float)numRows;
+
+    moduleGrid.setRackDimensions(numRows, moduleHeight, hpWidth, hpPerRow, headerOffset);
     moduleGrid.resized();
 }
 

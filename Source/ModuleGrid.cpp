@@ -10,11 +10,12 @@
 
 #include "ModuleGrid.h"
 
-void ModuleGrid::setRackDimensions(int rackCount, int moduleHeight, int hpSize, int hpPerRow) {
+void ModuleGrid::setRackDimensions(int rackCount, int moduleHeight, int hpSize, int hpPerRow, int headerOffset) {
     numRacks = rackCount;
     rackHeight = moduleHeight;
     hpWidth = hpSize;
     hpPerRack = hpPerRow;
+    offset = headerOffset;
 }
 
 bool ModuleGrid::addModule(MODULE_ID id, Component* module) {
@@ -69,7 +70,7 @@ ModuleBounds ModuleGrid::closestAvailablePosition(ModuleBounds bounds) {
     int max_x = (hpWidth * hpPerRack) - bounds.getWidth();
     int max_y = numRacks * rackHeight;
     for (int x = 0; x <= max_x; x+=hpWidth) {
-        for (int y = 0; y < max_y; y+=rackHeight) {
+        for (int y = 0+offset; y < max_y+offset; y+=rackHeight) {
             auto testBounds = ModuleBounds(x, y, bounds.getWidth(), bounds.getHeight());
             if (!isOverlap(testBounds)) {
                 possibleBounds.push_back(testBounds);
@@ -112,14 +113,14 @@ void ModuleGrid::clearAllModules() {
 
 RackPosition ModuleGrid::getRackPosition(ModuleBounds bounds) {
     int slot = bounds.getX() / hpWidth;
-    int row = bounds.getY() / rackHeight;
+    int row = (bounds.getY()-offset) / rackHeight;
     int hp = bounds.getWidth() / hpWidth;
     return RackPosition(slot, row, hp, 0);
 }
 
 ModuleBounds ModuleGrid::getBoundsFromRackPosition(RackPosition position) {
     int x = position.getX() * hpWidth;
-    int y = position.getY() * rackHeight;
+    int y = offset + position.getY() * rackHeight;
     int w = position.getWidth() * hpWidth;
     int h = rackHeight;
     return ModuleBounds(x, y, w, h);

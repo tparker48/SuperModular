@@ -38,7 +38,7 @@ public:
         PatchCableManager cableManager;
         SharedPluginState sharedState;
         SharedStateWriter stateWriter(&sharedState);
-        moduleGrid.setRackDimensions(1, 100, 20, 5);
+        moduleGrid.setRackDimensions(1, 100, 20, 5, 0);
         auto bounds = Rectangle<int>(100, 100, 20, 100);
 
         beginTest("Constructor");
@@ -56,7 +56,7 @@ public:
         Rectangle<int> startingBounds(0, 0, 20, 10);
         
         testMod.setBounds(startingBounds);
-        testGrid.setRackDimensions(1, 10, 10, 10);
+        testGrid.setRackDimensions(1, 10, 10, 10, 0);
         testGrid.addModule(testMod.getId(), &testMod);
         expect(testMod.getBounds() == startingBounds);
 
