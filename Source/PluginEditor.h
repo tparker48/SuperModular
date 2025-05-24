@@ -14,6 +14,7 @@
 #include "ModuleUI.h"
 #include "SharedStateWriter.h"
 #include "MenuLookAndFeel.h"
+#include "PushButton.h"
 
 //==============================================================================
 /**
@@ -73,6 +74,8 @@ private:
     std::map<ModuleType, ModuleUIFactory> moduleFactories;
 
     MenuLookAndFeel menuLookAndFeel;
+
+    PushButton plusRowsButton, minusRowsButton;
 
     JUCE_DECLARE_NON_COPYABLE_WITH_LEAK_DETECTOR (SuperModularAudioProcessorEditor)
 };

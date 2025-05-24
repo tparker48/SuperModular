@@ -13,15 +13,12 @@
 
 #include <JuceHeader.h>
 
-#include "ButtonLookAndFeel.h"
+#include "ToggleButtonLookAndFeel.h"
 
 class Toggle : public ToggleButton {
 public:
     Toggle() : ToggleButton() {
-        auto dark = Colour(35, 35, 35);
-        auto light = Colour(230, 230, 230);
-
-        blf = new ButtonLookAndFeel(dark, light);
+        blf = new ToggleButtonLookAndFeel();
         this->setLookAndFeel(blf);
     }
 
@@ -29,15 +26,7 @@ public:
         this->setLookAndFeel(nullptr);
         delete blf;
     }
-
-    void setColours(Colour dark, Colour light) {
-        setLookAndFeel(nullptr);
-        delete blf;
-        blf = new ButtonLookAndFeel(dark, light);
-        setLookAndFeel(blf);
-    }
-
     
 private:
-    ButtonLookAndFeel* blf;
+    ToggleButtonLookAndFeel* blf;
 };

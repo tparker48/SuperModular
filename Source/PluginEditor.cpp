@@ -17,22 +17,24 @@ static int nextModuleId = 0;
 SuperModularAudioProcessorEditor::SuperModularAudioProcessorEditor (SuperModularAudioProcessor& p, SharedPluginState* sharedStatePtr)
     : AudioProcessorEditor (&p), audioProcessor (p), sharedState(sharedStatePtr), stateWriter(sharedStatePtr) {
     initModuleUIFactoryMap(moduleFactories);
-
+    double size = 1200;
     headerOffset = getHeight() * 0.03;
     aspectRatio = double(hpPerRow) / (double(numRows)*5.0);
-
-    double size = 1200;
     setSize(size, size / aspectRatio);
 
     hpWidth = (float)getWidth() / (float)hpPerRow;
     moduleHeight = (float)(getHeight() - headerOffset) / (float)numRows;
-    
-    setLookAndFeel(&customLookAndFeel);
-    addAndMakeVisible(cableManager.getDragCable());
-
     setResizeLimits(1000, 1000 / aspectRatio, 1800, 1800/aspectRatio);
     getConstrainer()->setFixedAspectRatio(aspectRatio);
     setResizable(false, true);
+
+    setLookAndFeel(&customLookAndFeel);
+    addAndMakeVisible(cableManager.getDragCable());
+
+    addAndMakeVisible(plusRowsButton);
+    addAndMakeVisible(minusRowsButton);
+    plusRowsButton.setButtonText("+");
+    minusRowsButton.setButtonText("-");
 
     loadState();
     startTimerHz(3);
@@ -102,40 +104,41 @@ void SuperModularAudioProcessorEditor::paint (Graphics& g)
 
     //g.setColour(Colours::white);
     //g.fillRect(Rectangle<float>(0, 0, getWidth(), headerOffset));
-    g.setColour(Colours::black);
-    g.fillRect(Rectangle<float>(2, 2, getWidth()-4, headerOffset - 4));
+    g.setColour(Colours::white);
+    g.fillRect(Rectangle<float>(0, 0, getWidth(), headerOffset));
 
     for (int i = 0; i < numRows+1; i++) {
-        int barH = moduleHeight * 0.06;
+        int barH = moduleHeight * 0.08;
         int barY = i * moduleHeight + headerOffset;
 
-        g.setColour(Colours::white);
-        g.fillRect(Rectangle<float>(0, barY, getWidth(), barH));
-        g.fillRect(Rectangle<float>(0, barY + moduleHeight - barH, getWidth(), barH));
+        auto checker = ImageCache::getFromMemory(BinaryData::checker3_png, BinaryData::checker3_pngSize);
+        checker = checker.getClippedImage(Rectangle<int>(0, barY, getWidth(), barH));
+        g.drawImage(checker, Rectangle<float>(0, barY, getWidth(), barH), RectanglePlacement::doNotResize, false);
+        g.drawImage(checker, Rectangle<float>(0, barY + moduleHeight - barH, getWidth(), barH), RectanglePlacement::doNotResize, false);
 
         g.setColour(Colours::black);
         g.drawRect(Rectangle<float>(-5, barY, getWidth()+10, barH), 1.0);
         g.drawRect(Rectangle<float>(-5, barY + moduleHeight - barH, getWidth()+10, barH), 1.0);
-
-        int hpWidth = getWidth() / hpPerRow;
-        int holeRadius = getHeight() / 400;
-        int holeDiam = holeRadius * 2;
-        int holeY = barY + barH / 2 - holeRadius;
-        for (int j = 0; j < hpPerRow * 2; j++) {
-            g.drawEllipse(j * hpWidth/2 + hpWidth/4, holeY, holeDiam, holeDiam, 1.0);
-            g.drawEllipse(j * hpWidth/2 + hpWidth/4, holeY + moduleHeight - barH, holeDiam, holeDiam, 1.0);
-        }
     }
+
+    auto buttonWidth = plusRowsButton.getWidth();
+    auto center = (plusRowsButton.getX() + minusRowsButton.getX()) / 2 + buttonWidth / 2;
+    g.setColour(Colours::black);
+    g.drawText("Rows", Rectangle<float>(center - buttonWidth, 0, 2 * buttonWidth, buttonWidth), Justification::centred, true);
 }
 
 void SuperModularAudioProcessorEditor::resized()
 {
-    headerOffset = getHeight() * 0.03;
+    headerOffset = 23;//getHeight() * 0.035;
     hpWidth = round((float)getWidth() / (float)hpPerRow);
     moduleHeight = (float)(getHeight() - headerOffset) / (float)numRows;
 
     moduleGrid.setRackDimensions(numRows, moduleHeight, hpWidth, hpPerRow, headerOffset);
     moduleGrid.resized();
+
+    auto buttonSize = headerOffset;
+    minusRowsButton.setBounds(0, 0, buttonSize, buttonSize);
+    plusRowsButton.setBounds(buttonSize*3, 0, buttonSize, buttonSize);
 }
 
 void SuperModularAudioProcessorEditor::mouseUp(const MouseEvent& e) {

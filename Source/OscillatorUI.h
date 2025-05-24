@@ -53,7 +53,6 @@ public:
         addAndMakeVisible(lfoToggle);
 
         hzSlider.setColours(knobCol, dotCol);
-        lfoToggle.setColours(knobCol, dotCol);
 
         for (int i = 0; i < getNumCVInputs(); i++) {
             getCvInputJack(i)->setJackColour(cvCol);

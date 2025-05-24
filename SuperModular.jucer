@@ -129,10 +129,10 @@
       </GROUP>
       <GROUP id="{524557C3-C6DD-0D97-416F-17A7AE1D4227}" name="UI">
         <GROUP id="{206E0541-4C5F-B1FC-DF45-01326EBB2B7C}" name="LookAndFeels">
-          <FILE id="XfFwNk" name="ButtonLookAndFeel.cpp" compile="1" resource="0"
-                file="Source/ButtonLookAndFeel.cpp"/>
-          <FILE id="RkDC8K" name="ButtonLookAndFeel.h" compile="0" resource="0"
-                file="Source/ButtonLookAndFeel.h"/>
+          <FILE id="I65gVm" name="PushButtonLookAndFeel.h" compile="0" resource="0"
+                file="Source/PushButtonLookAndFeel.h"/>
+          <FILE id="RkDC8K" name="ToggleButtonLookAndFeel.h" compile="0" resource="0"
+                file="Source/ToggleButtonLookAndFeel.h"/>
           <FILE id="mj0nsb" name="DialLookAndFeel.cpp" compile="1" resource="0"
                 file="Source/DialLookAndFeel.cpp"/>
           <FILE id="SEH4RI" name="DialLookAndFeel.h" compile="0" resource="0"
@@ -146,6 +146,7 @@
         </GROUP>
         <FILE id="ESsHY5" name="Dial.h" compile="0" resource="0" file="Source/Dial.h"/>
         <FILE id="bfXiwo" name="Toggle.h" compile="0" resource="0" file="Source/Toggle.h"/>
+        <FILE id="m27UUN" name="PushButton.h" compile="0" resource="0" file="Source/PushButton.h"/>
         <FILE id="vkPQE2" name="Joystick.cpp" compile="1" resource="0" file="Source/Joystick.cpp"/>
         <FILE id="kyKxEa" name="Joystick.h" compile="0" resource="0" file="Source/Joystick.h"/>
         <FILE id="LQ9lvC" name="PatchCableManager.cpp" compile="1" resource="0"
@@ -170,7 +171,7 @@
             file="Source/PluginProcessor.h"/>
     </GROUP>
     <GROUP id="{A5144A17-F70C-C56C-DA4C-B305CEFDA19B}" name="Images">
-      <FILE id="v4Fz4m" name="checker3.png" compile="0" resource="1" file="Images/checker3.png"/>
+      <FILE id="Rkjcfo" name="checker3.png" compile="0" resource="1" file="Images/checker3.png"/>
       <FILE id="aGv046" name="checker2.png" compile="0" resource="1" file="Images/checker2.png"/>
       <FILE id="Go9mDS" name="checker.png" compile="0" resource="1" file="Images/checker.png"/>
     </GROUP>
