@@ -93,10 +93,14 @@ void SharedStateWriter::removePatchCable(int inputModuleId, int inputCvId, int o
     saveStateToShared();
 }
 
+void SharedStateWriter::setNumRows(int newNumRows) {
+    localState.setNumRows(newNumRows);
+    saveStateToShared();
+}
+
 void SharedStateWriter::saveStateToShared() {
     stateMessageQueue->writeFullState(localState, false);
 }
-
 
 
 void SharedStateWriter::sendUpdate(StateChangeMessage update) {

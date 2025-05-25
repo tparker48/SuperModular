@@ -60,8 +60,13 @@ void SuperModularAudioProcessorEditor::timerCallback() {
 
 void SuperModularAudioProcessorEditor::loadState() {
     auto state = stateWriter.dumpLocalState();
-    auto maxId = -1;
 
+    if (state.numRows >= 1 && state.numRows < MAX_ROWS) {
+        numRows = state.numRows;
+        initAspectRatio();
+    }
+
+    auto maxId = -1;
     std::map<int, ModuleUI*> modules;
     for (auto moduleState : state.moduleStates) {
         int id = moduleState.getId();
@@ -78,7 +83,7 @@ void SuperModularAudioProcessorEditor::loadState() {
         modules[id]->startListeners();
     }
 
-    nextModuleId = maxId + 1;
+    nextModuleId = maxId + 1;    
 }
 
 void SuperModularAudioProcessorEditor::clearState() {
@@ -264,6 +269,7 @@ void SuperModularAudioProcessorEditor::removeRow() {
     }
 
     numRows--;
+    stateWriter.setNumRows(numRows);
     initAspectRatio();
 }
 
@@ -274,6 +280,7 @@ void SuperModularAudioProcessorEditor::addRow() {
     }
 
     numRows++;
+    stateWriter.setNumRows(numRows);
     initAspectRatio();
 }
 

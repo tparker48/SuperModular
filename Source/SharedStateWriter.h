@@ -42,6 +42,8 @@ public:
 
     void removePatchCable(int inputModuleId, int inputCvId, int outputModuleId, int outputCvId);
 
+    void setNumRows(int newNumRows);
+
     void saveStateToShared();
 
     PluginState& dumpLocalState() {

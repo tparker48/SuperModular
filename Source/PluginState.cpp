@@ -19,6 +19,8 @@ PluginState::PluginState(XmlElement* xml) {
             moduleStates.push_back(ModuleState(*element));
         }
     }
+
+    numRows = xml->getIntAttribute("numRows", 2);
 }
 
 XmlElement* PluginState::toXml() {
@@ -28,6 +30,7 @@ XmlElement* PluginState::toXml() {
         modules->addChildElement(moduleState.toXml());
     }
     xml->addChildElement(modules);
+    xml->setAttribute("numRows", numRows);
     return xml;
 }
 
