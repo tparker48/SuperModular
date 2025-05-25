@@ -65,6 +65,7 @@ private:
     int headerOffset = 0;
 
     double aspectRatio;
+    void initAspectRatio();
 
     void showPopupMenu(const MouseEvent& e);
 
@@ -76,6 +77,9 @@ private:
     MenuLookAndFeel menuLookAndFeel;
 
     PushButton plusRowsButton, minusRowsButton;
+    void removeRow();
+    void addRow();
+    static const int MAX_ROWS = 4;
 
     JUCE_DECLARE_NON_COPYABLE_WITH_LEAK_DETECTOR (SuperModularAudioProcessorEditor)
 };

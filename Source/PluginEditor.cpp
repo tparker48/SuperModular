@@ -17,16 +17,15 @@ static int nextModuleId = 0;
 SuperModularAudioProcessorEditor::SuperModularAudioProcessorEditor (SuperModularAudioProcessor& p, SharedPluginState* sharedStatePtr)
     : AudioProcessorEditor (&p), audioProcessor (p), sharedState(sharedStatePtr), stateWriter(sharedStatePtr) {
     initModuleUIFactoryMap(moduleFactories);
+
     double size = 1200;
-    headerOffset = getHeight() * 0.03;
-    aspectRatio = double(hpPerRow) / (double(numRows)*5.0);
-    setSize(size, size / aspectRatio);
+    setSize(size, 1);
+    initAspectRatio();
+    setResizeLimits(1000, 1, 1800, 100000);
+    setResizable(false, true);
 
     hpWidth = (float)getWidth() / (float)hpPerRow;
     moduleHeight = (float)(getHeight() - headerOffset) / (float)numRows;
-    setResizeLimits(1000, 1000 / aspectRatio, 1800, 1800/aspectRatio);
-    getConstrainer()->setFixedAspectRatio(aspectRatio);
-    setResizable(false, true);
 
     setLookAndFeel(&customLookAndFeel);
     addAndMakeVisible(cableManager.getDragCable());
@@ -35,6 +34,8 @@ SuperModularAudioProcessorEditor::SuperModularAudioProcessorEditor (SuperModular
     addAndMakeVisible(minusRowsButton);
     plusRowsButton.setButtonText("+");
     minusRowsButton.setButtonText("-");
+    minusRowsButton.onClick = [this] { removeRow(); };
+    plusRowsButton.onClick = [this] { addRow(); };
 
     loadState();
     startTimerHz(3);
@@ -252,4 +253,38 @@ void SuperModularAudioProcessorEditor::addNewModule(ModuleType typeId, Point<int
         newModule->startListeners();
         addAndMakeVisible(newModule);
     }
+}
+
+void SuperModularAudioProcessorEditor::removeRow() {
+    if (!moduleGrid.canReduceRows()) {
+        return;
+    }
+    if (numRows == 1) {
+        return;
+    }
+
+    numRows--;
+    initAspectRatio();
+}
+
+
+void SuperModularAudioProcessorEditor::addRow() {
+    if (numRows == MAX_ROWS) {
+        return;
+    }
+
+    numRows++;
+    initAspectRatio();
+}
+
+void SuperModularAudioProcessorEditor::initAspectRatio() {
+    double w = getWidth(); // width is just what it is
+    // height = 5*w*numRows + header
+    double h = 5 * (w/hpPerRow) * numRows + headerOffset;
+    double r = w/h;
+    
+    aspectRatio = r;
+    getConstrainer()->setFixedAspectRatio(aspectRatio);
+    setSize(getWidth(), getWidth() / aspectRatio);
+    setResizable(false, true);
 }

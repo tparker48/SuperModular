@@ -10,8 +10,8 @@
 
 #include "ModuleGrid.h"
 
-void ModuleGrid::setRackDimensions(int rackCount, int moduleHeight, int hpSize, int hpPerRow, int headerOffset) {
-    numRacks = rackCount;
+void ModuleGrid::setRackDimensions(int rowCount, int moduleHeight, int hpSize, int hpPerRow, int headerOffset) {
+    numRows = rowCount;
     rackHeight = moduleHeight;
     hpWidth = hpSize;
     hpPerRack = hpPerRow;
@@ -68,7 +68,7 @@ ModuleBounds ModuleGrid::closestAvailablePosition(ModuleBounds bounds) {
     jassert(bounds.getWidth() > 0 && bounds.getHeight() > 0);
     std::vector<ModuleBounds> possibleBounds;
     int max_x = (hpWidth * hpPerRack) - bounds.getWidth();
-    int max_y = numRacks * rackHeight;
+    int max_y = numRows * rackHeight;
     for (int x = 0; x <= max_x; x+=hpWidth) {
         for (int y = 0+offset; y < max_y+offset; y+=rackHeight) {
             auto testBounds = ModuleBounds(x, y, bounds.getWidth(), bounds.getHeight());
@@ -132,4 +132,14 @@ void ModuleGrid::resized() {
         auto newBounds = getBoundsFromRackPosition(rackPositions[id]);
         pair.second->setBounds(newBounds);
     }
+}
+
+bool ModuleGrid::canReduceRows() {
+    // return false if there are modules on the bottom row
+    for (auto pair : rackPositions) {
+        if (pair.second.getY() == numRows - 1) {
+            return false;
+        }
+    }
+    return true;
 }
