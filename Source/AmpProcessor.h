@@ -38,7 +38,7 @@ public:
     void processSample() {
         effectiveGain = gainSmooth.getNextValue();
         effectiveGain = effectiveGain + (effectiveGain * modAmt *getCVInputJack(1)->read());
-        effectiveGain = std::min(1.0f, effectiveGain);
+        //effectiveGain = std::min(1.0f, effectiveGain);
         getCVOutputJack(0)->write(getCVInputJack(0)->read() * effectiveGain);
     }
 
