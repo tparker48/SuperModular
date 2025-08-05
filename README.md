@@ -1,3 +1,3 @@
 ### SuperModular
 
-![](https://github.com/tparker48/SuperModular/blob/main/screenshot.PNG)
+<img src="https://github.com/tparker48/SuperModular/blob/main/screenshot.PNG" width="100" height="100">
