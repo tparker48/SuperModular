@@ -59,7 +59,7 @@ void SuperModularAudioProcessorEditor::timerCallback() {
 void SuperModularAudioProcessorEditor::loadState() {
     auto state = stateWriter.dumpLocalState();
 
-    if (state.numRows >= 1 && state.numRows < MAX_ROWS) {
+    if (state.numRows >= 1 && state.numRows <= MAX_ROWS) {
         numRows = state.numRows;
         initAspectRatio();
     }

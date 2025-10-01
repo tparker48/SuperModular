@@ -185,6 +185,7 @@ AudioProcessorEditor* SuperModularAudioProcessor::createEditor()
 void SuperModularAudioProcessor::getStateInformation (MemoryBlock& destData)
 {
     sharedState.readFullState(localState);
+    DBG(localState.numRows);
     std::unique_ptr<XmlElement> xml(localState.toXml());
     copyXmlToBinary(*xml, destData);
 }
