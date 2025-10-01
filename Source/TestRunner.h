@@ -24,7 +24,7 @@
 class TestRunner : public UnitTestRunner {
 public:
     void runAllTests() {
-        SharedPluginStateTest sharedState;
+        //SharedPluginStateTest sharedState;
         PluginStateTest pluginState;
         ModuleStateTest moduleState;
         StateChangeMessageTest stateChangeMessage;

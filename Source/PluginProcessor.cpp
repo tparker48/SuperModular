@@ -178,7 +178,7 @@ bool SuperModularAudioProcessor::hasEditor() const
 
 AudioProcessorEditor* SuperModularAudioProcessor::createEditor()
 {
-    return new SuperModularAudioProcessorEditor(*this, &sharedState);
+    return new SuperModularAudioProcessorEditor(*this, &messageBuffer ,&sharedState);
 }
 
 //==============================================================================
@@ -225,7 +225,7 @@ void SuperModularAudioProcessor::setStateInformation (const void* data, int size
 
 void SuperModularAudioProcessor::applyStateUpdates() {
     std::vector<StateChangeMessage> messages;
-    sharedState.recieve_updates(messages);
+    messageBuffer.consumeMessages(messages);
     for (auto message : messages) {
         switch (message.op) {
         case ADD:
@@ -236,6 +236,8 @@ void SuperModularAudioProcessor::applyStateUpdates() {
             break;
         case DELETE:
             deleteModule(message.state);
+            break;
+        case NOOP:
             break;
         }
     }

@@ -10,7 +10,7 @@
 
 #include <JuceHeader.h>
 
-#include "SharedPluginState.h"
+#include "CircularMessageBuffer.h"
 #include "ModuleProcessor.h"
 #include "ModuleFactory.h"
 #include "AudioOutputProcessor.h"
@@ -68,8 +68,9 @@ public:
 
 private:
     //==============================================================================
-    SharedPluginState sharedState;
+    SharedState sharedState;
     PluginState localState;
+    CircularMessageBuffer messageBuffer;
 
     std::map<ModuleType, ModuleFactory> moduleFactories;
     std::unordered_map<int, ModuleProcessor*> modules;

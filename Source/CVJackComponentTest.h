@@ -21,8 +21,9 @@ public:
     void runTest() {
         beginTest("Test");
         PatchCableManager cm;
-        SharedPluginState state;
-        SharedStateWriter writer(&state);
+        CircularMessageBuffer buf;
+        SharedState state;
+        SharedStateWriter writer(&buf, &state);
         CVJackComponent jack1(CVInput, 0, 1, &cm, &writer);
         CVJackComponent jack2(CVOutput, 0, 1, &cm, &writer);
         Component parentComponent;

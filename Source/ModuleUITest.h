@@ -36,8 +36,9 @@ public:
     virtual void runTest() override {
         ModuleGrid moduleGrid;
         PatchCableManager cableManager;
-        SharedPluginState sharedState;
-        SharedStateWriter stateWriter(&sharedState);
+        SharedState sharedState;
+        CircularMessageBuffer messageBuffer;
+        SharedStateWriter stateWriter(&messageBuffer, &sharedState);
         moduleGrid.setRackDimensions(1, 100, 20, 5, 0);
         auto bounds = Rectangle<int>(100, 100, 20, 100);
 

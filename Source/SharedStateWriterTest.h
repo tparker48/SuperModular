@@ -16,6 +16,6 @@
 class SharedStateWriterTest : public UnitTest {
     SharedStateWriterTest() : UnitTest("SharedStateWriter test") {}
 
-    void startTest() {
+    void runTest() {
     }
 };

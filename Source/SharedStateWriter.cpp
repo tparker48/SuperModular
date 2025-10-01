@@ -15,7 +15,7 @@ void SharedStateWriter::startGroupUpdate() {
 }
 
 void SharedStateWriter::sendGroupUpdate() {
-    stateMessageQueue->send_updates(pendingUpdates);
+    messageBuffer->sendMessages(pendingUpdates);
     pendingUpdates.clear();
     withinGroupUpdate = false;
 }
@@ -99,7 +99,7 @@ void SharedStateWriter::setNumRows(int newNumRows) {
 }
 
 void SharedStateWriter::saveStateToShared() {
-    stateMessageQueue->writeFullState(localState, false);
+    sharedState->writeFullState(localState, false);
 }
 
 
@@ -108,7 +108,7 @@ void SharedStateWriter::sendUpdate(StateChangeMessage update) {
         pendingUpdates.push_back(update);
     }
     else {
-        stateMessageQueue->send_update(update);
+        messageBuffer->sendMessage(update);
     }
 }
 
@@ -117,6 +117,6 @@ void SharedStateWriter::sendUpdates(std::vector<StateChangeMessage> updates) {
         pendingUpdates.insert(pendingUpdates.end(), updates.begin(), updates.end());
     }
     else {
-        stateMessageQueue->send_updates(updates);
+        messageBuffer->sendMessages(updates);
     }
 }

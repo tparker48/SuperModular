@@ -11,17 +11,19 @@
 #pragma once
 
 #include <JuceHeader.h>
-#include "SharedPluginState.h"
+#include "CircularMessageBuffer.h"
 
 
 class SharedStateWriter {
 public:
-    SharedStateWriter(SharedPluginState* sharedStatePtr) : stateMessageQueue(sharedStatePtr) {
-        sharedStatePtr->readFullState(localState);
+    SharedStateWriter(CircularMessageBuffer* messageBufferPtr, SharedState* sharedStatePtr)
+        : messageBuffer(messageBufferPtr), sharedState(sharedStatePtr)
+    {
+        sharedState->readFullState(localState);
     }
 
-    bool reload(SharedPluginState* sharedStatePtr) {
-        return sharedStatePtr->readFullStateIfNew(localState);
+    bool reload(SharedState* sharedStatePtr) {
+        return sharedStatePtr->readFullState(localState, true);
     }
 
     void startGroupUpdate();
@@ -52,7 +54,8 @@ public:
 
 private:
     PluginState localState;
-    SharedPluginState* stateMessageQueue;
+    CircularMessageBuffer* messageBuffer;
+    SharedState* sharedState;
     std::vector<StateChangeMessage> pendingUpdates;
     bool withinGroupUpdate = false;
 

@@ -33,7 +33,7 @@ public:
 class SuperModularAudioProcessorEditor  : public AudioProcessorEditor, public Timer
 {
 public:
-    SuperModularAudioProcessorEditor (SuperModularAudioProcessor&, SharedPluginState* sharedStatePtr);
+    SuperModularAudioProcessorEditor (SuperModularAudioProcessor&, CircularMessageBuffer* messageBufferPtr, SharedState* sharedStatePtr);
     ~SuperModularAudioProcessorEditor() override;
     void timerCallback();
     void loadState();
@@ -55,8 +55,8 @@ private:
     ModuleGrid moduleGrid;
     PatchCableManager cableManager;
 
-    SharedPluginState* sharedState;
     SharedStateWriter stateWriter;
+    SharedState* pluginState;
 
     int hpPerRow = 20;
     int numRows = 2;

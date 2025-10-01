@@ -98,10 +98,10 @@
         <FILE id="hJ9y5S" name="ModuleState.h" compile="0" resource="0" file="Source/ModuleState.h"/>
         <FILE id="v0hxaC" name="PluginState.cpp" compile="1" resource="0" file="Source/PluginState.cpp"/>
         <FILE id="NxlOGj" name="PluginState.h" compile="0" resource="0" file="Source/PluginState.h"/>
-        <FILE id="JRuCCQ" name="SharedPluginState.cpp" compile="1" resource="0"
-              file="Source/SharedPluginState.cpp"/>
-        <FILE id="eibtMo" name="SharedPluginState.h" compile="0" resource="0"
-              file="Source/SharedPluginState.h"/>
+        <FILE id="JRuCCQ" name="CircularMessageBuffer.cpp" compile="1" resource="0"
+              file="Source/CircularMessageBuffer.cpp"/>
+        <FILE id="eibtMo" name="CircularMessageBuffer.h" compile="0" resource="0"
+              file="Source/CircularMessageBuffer.h"/>
         <FILE id="oVMI5F" name="StateChangeMessage.cpp" compile="1" resource="0"
               file="Source/StateChangeMessage.cpp"/>
         <FILE id="M7swRD" name="StateChangeMessage.h" compile="0" resource="0"

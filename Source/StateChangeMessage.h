@@ -16,12 +16,23 @@
 enum PLUGIN_STATE_MESSAGE_OP_CODE {
     ADD,
     UPDATE,
-    DELETE
+    DELETE,
+    NOOP
 };
 
 // Contains a list of changes to make
 class StateChangeMessage {
 public:
+    StateChangeMessage() {
+        op = NOOP;
+        state = ModuleState();
+    }
+
+    StateChangeMessage(const StateChangeMessage& other) {
+        op = other.op;
+        state = other.state;
+    }
+
     StateChangeMessage(ModuleState& state, PLUGIN_STATE_MESSAGE_OP_CODE opCode) {
         op = opCode;
         this->state = state;

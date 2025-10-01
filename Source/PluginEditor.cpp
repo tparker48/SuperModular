@@ -14,8 +14,8 @@
 
 static int nextModuleId = 0;
 
-SuperModularAudioProcessorEditor::SuperModularAudioProcessorEditor (SuperModularAudioProcessor& p, SharedPluginState* sharedStatePtr)
-    : AudioProcessorEditor (&p), audioProcessor (p), sharedState(sharedStatePtr), stateWriter(sharedStatePtr) {
+SuperModularAudioProcessorEditor::SuperModularAudioProcessorEditor (SuperModularAudioProcessor& p, CircularMessageBuffer* messageBufferPtr, SharedState* sharedStatePtr)
+    : AudioProcessorEditor (&p), audioProcessor (p), pluginState(sharedStatePtr), stateWriter(messageBufferPtr, sharedStatePtr) {
     initModuleUIFactoryMap(moduleFactories);
 
     double size = 1200;
@@ -49,12 +49,10 @@ SuperModularAudioProcessorEditor::~SuperModularAudioProcessorEditor()
 }
 
 void SuperModularAudioProcessorEditor::timerCallback() {
-    if (stateWriter.reload(sharedState)) {
+    if (stateWriter.reload(pluginState)) {
         clearState();
         loadState();
     }
-
-    sharedState->switchWriteIdx();
 }
 
 
